@@ -38,6 +38,18 @@ On first launch, Seal asks you to choose English or Simplified Chinese. The inte
 
 ![First launch](./docs/onboarding.png)
 
+## Batch signing
+
+Drop multiple files at once, or open **Batch** from the top bar. Seal keeps a queue, inspects every item, and can re-sign the whole queue sequentially with the selected identity and options.
+
+- Inspect all / Sign all / Stop
+- Per-item status, signature state, and error message
+- Retry, reveal, open in single-file view, or remove individual items
+- Clear completed items or the whole queue
+- Progress and activity summary
+
+![Batch signing](./docs/preview-batch.png)
+
 ## Install
 
 Download the latest universal DMG or ZIP from the [Releases page](https://github.com/Dirty-Octopus/seal/releases/latest).
@@ -70,6 +82,7 @@ For plugin bundles, Seal reads the bundle's `Info.plist`, displays the signature
 
 ## Features
 
+- Batch queue for inspecting and re-signing multiple apps, plugins, or binaries.
 - First-run English / Simplified Chinese onboarding.
 - Settings for interface language and window size presets.
 - Resizable window with a responsive two-column / stacked layout.
@@ -91,6 +104,7 @@ For plugin bundles, Seal reads the bundle's `Info.plist`, displays the signature
 3. Check the signature status and verification result on the left.
 4. Open **Re-sign**, select an identity, adjust the options, and click **Quick Re-sign**.
 5. Open **Extended Attributes** to inspect or remove xattr entries.
+6. Use **Batch** to add multiple files, inspect them, and sign the queue.
 
 ## FAQ
 

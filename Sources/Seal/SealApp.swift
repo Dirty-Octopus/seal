@@ -29,7 +29,8 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         // Development aid: render the app's own window to PNG without screen-recording access.
         if let index = args.firstIndex(of: "--snapshot"), args.indices.contains(index + 1) {
             let output = args[index + 1]
-            DispatchQueue.main.asyncAfter(deadline: .now() + 4.5) {
+            let delay: TimeInterval = args.contains("--batch") ? 10.0 : 4.5
+            DispatchQueue.main.asyncAfter(deadline: .now() + delay) {
                 let window = NSApp.windows.first(where: { $0.isSheet && $0.isVisible })
                     ?? NSApp.keyWindow
                     ?? NSApp.windows.first

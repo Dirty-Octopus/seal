@@ -26,7 +26,10 @@ struct ContentView: View {
                             .transition(.move(edge: .top).combined(with: .opacity))
                         }
 
-                        if store.target == nil {
+                        if store.showBatch {
+                            BatchWorkspaceView(store: store)
+                                .transition(.opacity.combined(with: .scale(scale: 0.99)))
+                        } else if store.target == nil {
                             EmptyLandingView(store: store)
                                 .transition(.opacity.combined(with: .scale(scale: 0.985)))
                         } else {
@@ -43,8 +46,8 @@ struct ContentView: View {
                 .scrollBounceBehavior(.basedOnSize)
             }
 
-            if store.isDropTargeted, store.target != nil {
-                DropOverlay()
+            if store.isDropTargeted, store.target != nil || store.showBatch {
+                DropOverlay(isBatch: store.showBatch)
                     .transition(.opacity)
                     .allowsHitTesting(false)
             }
@@ -65,7 +68,7 @@ struct ContentView: View {
             of: [UTType.fileURL],
             delegate: FileDropDelegate(
                 isTargeted: $store.isDropTargeted,
-                onURL: { store.select(url: $0) }
+                onURLs: { store.handleDrop(urls: $0) }
             )
         )
         .onReceive(NotificationCenter.default.publisher(for: .sealOpenPanel)) { _ in
@@ -122,7 +125,7 @@ struct ContentView: View {
 
 struct FileDropDelegate: DropDelegate {
     @Binding var isTargeted: Bool
-    let onURL: (URL) -> Void
+    let onURLs: ([URL]) -> Void
 
     func validateDrop(info: DropInfo) -> Bool {
         info.hasItemsConforming(to: [UTType.fileURL.identifier])
@@ -148,20 +151,35 @@ struct FileDropDelegate: DropDelegate {
         withAnimation(.spring(response: 0.34, dampingFraction: 0.82)) {
             isTargeted = false
         }
-        guard let provider = info.itemProviders(for: [.fileURL]).first else { return false }
-        provider.loadItem(forTypeIdentifier: UTType.fileURL.identifier, options: nil) { item, _ in
-            var url: URL?
-            if let data = item as? Data {
-                url = URL(dataRepresentation: data, relativeTo: nil)
-            } else if let itemURL = item as? URL {
-                url = itemURL
-            } else if let string = item as? String {
-                url = URL(string: string)
+        let providers = info.itemProviders(for: [.fileURL])
+        guard !providers.isEmpty else { return false }
+
+        let group = DispatchGroup()
+        let lock = NSLock()
+        var urls: [URL] = []
+
+        for provider in providers {
+            group.enter()
+            provider.loadItem(forTypeIdentifier: UTType.fileURL.identifier, options: nil) { item, _ in
+                var url: URL?
+                if let data = item as? Data {
+                    url = URL(dataRepresentation: data, relativeTo: nil)
+                } else if let itemURL = item as? URL {
+                    url = itemURL
+                } else if let string = item as? String {
+                    url = URL(string: string)
+                }
+                if let url {
+                    lock.lock()
+                    urls.append(url)
+                    lock.unlock()
+                }
+                group.leave()
             }
-            guard let url else { return }
-            DispatchQueue.main.async {
-                onURL(url)
-            }
+        }
+
+        group.notify(queue: .main) {
+            onURLs(urls)
         }
         return true
     }
@@ -189,7 +207,15 @@ private struct TopBar: View {
                     .foregroundStyle(theme.textTertiary)
             }
 
-            if let target = store.target {
+            if store.showBatch {
+                Text("/")
+                    .font(.system(size: 17, weight: .light, design: .rounded))
+                    .foregroundStyle(theme.textTertiary.opacity(0.5))
+                    .padding(.horizontal, 2)
+                Text(L10n.t("批量"))
+                    .font(.system(size: 12.5, weight: .semibold, design: .rounded))
+                    .foregroundStyle(theme.textSecondary)
+            } else if let target = store.target {
                 Text("/")
                     .font(.system(size: 17, weight: .light, design: .rounded))
                     .foregroundStyle(theme.textTertiary.opacity(0.5))
@@ -204,7 +230,14 @@ private struct TopBar: View {
 
             Spacer(minLength: 12)
 
-            if let signature = store.signature {
+            if store.showBatch {
+                StatusBadge(
+                    text: L10n.t("%d 项", store.batchItems.count),
+                    symbol: "square.stack.3d.up.fill",
+                    color: Palette.violet,
+                    compact: true
+                )
+            } else if let signature = store.signature {
                 StatusBadge(
                     text: signature.status.shortTitle,
                     symbol: signature.status.symbol,
@@ -214,34 +247,48 @@ private struct TopBar: View {
                 .transition(.opacity.combined(with: .scale(scale: 0.9)))
             }
 
-            HStack(spacing: 5) {
-                LiveDot(color: Palette.mint)
-                Text("LOCAL")
-                    .font(.system(size: 9.5, weight: .bold, design: .rounded))
-                    .tracking(0.6)
-                    .foregroundStyle(theme.textSecondary)
-            }
-            .padding(.horizontal, 10)
-            .frame(height: 26)
-            .background(Capsule().fill(theme.surface.opacity(0.72)))
-            .overlay(Capsule().strokeBorder(theme.outline, lineWidth: 1))
-
             Button {
                 store.openFilePanel()
             } label: {
                 Label("打开文件", systemImage: "folder")
             }
             .buttonStyle(TonalPillStyle(compact: true))
+            .disabled(store.batchRunning)
+
+            Button {
+                store.toggleBatchMode()
+            } label: {
+                HStack(spacing: 6) {
+                    Image(systemName: "square.stack.3d.up.fill")
+                        .font(.system(size: 11, weight: .semibold))
+                    Text(L10n.t("批量"))
+                        .font(.system(size: 12.5, weight: .semibold, design: .rounded))
+                    if !store.batchItems.isEmpty {
+                        Text("\(store.batchItems.count)")
+                            .font(.system(size: 9.5, weight: .bold, design: .monospaced))
+                            .padding(.horizontal, 5)
+                            .padding(.vertical, 2)
+                            .background(Capsule().fill(theme.primary.opacity(0.16)))
+                    }
+                }
+            }
+            .buttonStyle(TonalPillStyle(compact: true, tint: store.showBatch ? Palette.violet : Palette.sky))
+            .disabled(store.batchRunning)
 
             IconCircleButton(symbol: "arrow.clockwise", help: "刷新检查", size: 34) {
-                store.refresh()
+                store.refreshCurrent()
             }
-            .disabled(store.target == nil)
-            .opacity(store.target == nil ? 0.45 : 1)
+            .disabled(store.showBatch ? store.batchItems.isEmpty : store.target == nil)
+            .opacity((store.showBatch ? store.batchItems.isEmpty : store.target == nil) ? 0.45 : 1)
 
             IconCircleButton(symbol: "gearshape", help: "设置", size: 34, action: onSettings)
 
-            if store.target != nil {
+            if store.showBatch {
+                IconCircleButton(symbol: "xmark", help: "关闭批量视图", size: 34) {
+                    store.closeBatch()
+                }
+                .disabled(store.batchRunning)
+            } else if store.target != nil {
                 IconCircleButton(symbol: "xmark", help: "关闭当前文件", size: 34) {
                     store.clearSelection()
                 }
@@ -281,7 +328,7 @@ private struct EmptyLandingView: View {
                     .foregroundStyle(theme.textPrimary)
                     .multilineTextAlignment(.center)
 
-                Text("拖入 App、Framework、插件或 Mach-O 二进制，读取签名、验证状态与扩展属性。")
+                Text("拖入 App、Framework、插件或 Mach-O 二进制，读取签名、验证状态与扩展属性。可一次拖入多个文件进行批量签名。")
                     .font(.system(size: 14, weight: .medium, design: .rounded))
                     .foregroundStyle(theme.textSecondary)
                     .multilineTextAlignment(.center)
@@ -625,7 +672,7 @@ private struct FileHeroCard: View {
     }
 }
 
-private struct FileIcon: View {
+struct FileIcon: View {
     let url: URL
     let size: CGFloat
     @Environment(\.colorScheme) private var colorScheme
@@ -753,6 +800,7 @@ private struct ToastView: View {
 }
 
 private struct DropOverlay: View {
+    let isBatch: Bool
     @Environment(\.colorScheme) private var colorScheme
 
     var body: some View {
@@ -768,7 +816,7 @@ private struct DropOverlay: View {
                     .foregroundStyle(.white)
                     .frame(width: 52, height: 52)
                     .background(Circle().fill(theme.primaryGradient))
-                Text("松开以检查这个文件")
+                Text(L10n.t(isBatch ? "松开以加入批量队列" : "松开以检查这个文件"))
                     .font(.system(size: 15, weight: .bold, design: .rounded))
                     .foregroundStyle(theme.textPrimary)
                     .padding(.horizontal, 18)

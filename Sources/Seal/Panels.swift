@@ -510,7 +510,7 @@ struct ResignPanel: View {
     }
 }
 
-private struct IdentityMenu: View {
+struct IdentityMenu: View {
     @ObservedObject var store: AppStore
     @Environment(\.colorScheme) private var colorScheme
 
@@ -589,7 +589,7 @@ private struct IdentityMenu: View {
     }
 }
 
-private struct EntitlementsRow: View {
+struct EntitlementsRow: View {
     @ObservedObject var store: AppStore
     @Environment(\.colorScheme) private var colorScheme
 
@@ -609,7 +609,7 @@ private struct EntitlementsRow: View {
                 Text(store.options.entitlementsPath?.lastPathComponent ?? L10n.t("未选择 · 保留现有 entitlements"))
                     .font(.system(size: 9.5, weight: .medium, design: .monospaced))
                     .foregroundStyle(theme.textTertiary)
-                    .lineLimit(1)
+                    .lineLimit(2)
                     .truncationMode(.middle)
             }
 

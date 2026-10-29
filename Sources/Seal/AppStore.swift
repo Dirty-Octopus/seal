@@ -24,6 +24,11 @@ final class AppStore: ObservableObject {
     @Published var activity: [LogEntry] = []
     @Published var lastUpdated: Date?
     @Published var clearAllConfirmation = false
+    @Published var batchItems: [BatchItem] = []
+    @Published var showBatch = false
+    @Published var batchRunning = false
+    @Published var batchStopRequested = false
+    @Published var batchProgress: Double = 0
 
     private var inspectionID = UUID()
     private var hasLoadedIdentities = false
@@ -61,6 +66,22 @@ final class AppStore: ObservableObject {
         return target.canCodesign && signature.status != .unsupported && !isSigning && !isLoading
     }
 
+    var batchSignedCount: Int { batchItems.filter { $0.state == .signed }.count }
+    var batchFailedCount: Int { batchItems.filter { $0.state == .failed }.count }
+    var batchSkippedCount: Int { batchItems.filter { $0.state == .skipped }.count }
+    var batchReadyCount: Int { batchItems.filter { $0.state == .ready }.count }
+    var batchPendingCount: Int { batchItems.filter { !$0.state.isCompleted && $0.state != .ready }.count }
+    var batchEligibleCount: Int {
+        batchItems.filter { $0.target.canCodesign && $0.state != .skipped }.count
+    }
+    var batchCanInspect: Bool { !batchItems.isEmpty && !batchRunning }
+    var batchCanSign: Bool { !batchItems.isEmpty && !batchRunning && batchEligibleCount > 0 }
+    var batchFraction: Double {
+        guard !batchItems.isEmpty else { return 0 }
+        let done = batchItems.filter { $0.state.isCompleted }.count
+        return Double(done) / Double(batchItems.count)
+    }
+
     init() {
         activity = [
             LogEntry(level: .info, message: L10n.t("Seal 已就绪"), command: nil)
@@ -81,6 +102,19 @@ final class AppStore: ObservableObject {
             }
         }
 
+        let batchPaths = args.indices.compactMap { index -> String? in
+            guard args[index] == "--batch", args.indices.contains(index + 1) else { return nil }
+            return args[index + 1]
+        }
+        let batchURLs = batchPaths.map { URL(fileURLWithPath: $0) }.filter {
+            FileManager.default.fileExists(atPath: $0.path)
+        }
+        if !batchURLs.isEmpty {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
+                self?.addToBatch(batchURLs)
+            }
+        }
+
         if let index = args.firstIndex(of: "--tab"), args.indices.contains(index + 1),
            let tab = InspectorTab(rawValue: args[index + 1]) {
             DispatchQueue.main.asyncAfter(deadline: .now() + 1.2) { [weak self] in
@@ -92,10 +126,11 @@ final class AppStore: ObservableObject {
     // MARK: - Selection
 
     func select(url: URL) {
-        guard !isSigning else {
+        guard !isSigning, !batchRunning else {
             showToast(L10n.t("签名进行中，请稍候"), style: .info)
             return
         }
+        showBatch = false
         let standardized = url.standardizedFileURL
         do {
             let info = try TargetInfo.make(url: standardized, calculateDirectorySize: false)
@@ -130,7 +165,7 @@ final class AppStore: ObservableObject {
     }
 
     func clearSelection() {
-        guard !isSigning else { return }
+        guard !isSigning, !batchRunning else { return }
         inspectionID = UUID()
         withAnimation(.spring(response: 0.4, dampingFraction: 0.82)) {
             target = nil
@@ -146,6 +181,288 @@ final class AppStore: ObservableObject {
         inspectionID = UUID()
         let id = inspectionID
         Task { await refreshAll(expected: id) }
+    }
+
+    func refreshCurrent() {
+        if showBatch {
+            inspectBatch()
+        } else {
+            refresh()
+        }
+    }
+
+    // MARK: - Batch
+
+    var batchProgressValue: Double {
+        batchFraction
+    }
+
+    func toggleBatchMode() {
+        guard !batchRunning else { return }
+        withAnimation(.spring(response: 0.38, dampingFraction: 0.82)) {
+            showBatch.toggle()
+        }
+    }
+
+    func closeBatch() {
+        guard !batchRunning else { return }
+        withAnimation(.spring(response: 0.38, dampingFraction: 0.82)) {
+            showBatch = false
+        }
+    }
+
+    func handleDrop(urls: [URL]) {
+        guard !urls.isEmpty else { return }
+        if urls.count > 1 || showBatch {
+            addToBatch(urls)
+        } else {
+            select(url: urls[0])
+        }
+    }
+
+    func addToBatch(_ urls: [URL]) {
+        guard !batchRunning else {
+            showToast(L10n.t("批量操作进行中，请稍候"), style: .info)
+            return
+        }
+        let existing = Set(batchItems.map { $0.target.url.path })
+        var addedIDs: [UUID] = []
+        var seen = existing
+
+        for url in urls {
+            let standardized = url.standardizedFileURL
+            guard !seen.contains(standardized.path) else { continue }
+            do {
+                let target = try TargetInfo.make(url: standardized, calculateDirectorySize: false)
+                seen.insert(standardized.path)
+                let item = BatchItem(target: target)
+                batchItems.append(item)
+                addedIDs.append(item.id)
+
+                if target.isDirectory {
+                    Task {
+                        let size = await Task.detached(priority: .utility) {
+                            TargetInfo.directorySize(of: target.url)
+                        }.value
+                        guard let index = self.batchItems.firstIndex(where: { $0.id == item.id }) else { return }
+                        self.batchItems[index].target.byteSize = size
+                    }
+                }
+            } catch {
+                log(L10n.t("无法读取文件：%@", standardized.path), level: .error)
+            }
+        }
+
+        guard !addedIDs.isEmpty else {
+            showBatch = true
+            showToast(L10n.t("没有新增文件"), style: .info)
+            return
+        }
+
+        withAnimation(.spring(response: 0.38, dampingFraction: 0.82)) {
+            showBatch = true
+        }
+        batchProgress = 0
+        Task { await runInspection(ids: addedIDs) }
+    }
+
+    func inspectBatch() {
+        guard batchCanInspect else { return }
+        let ids = batchItems.map(\.id)
+        Task { await runInspection(ids: ids) }
+    }
+
+    private func runInspection(ids: [UUID]) async {
+        guard !ids.isEmpty, !batchRunning else { return }
+        batchRunning = true
+        batchStopRequested = false
+        batchProgress = 0
+        var processed = 0
+        let total = ids.count
+        log(L10n.t("批量检查开始 · %d 项", total), level: .info)
+
+        for id in ids {
+            if batchStopRequested { break }
+            guard let index = batchItems.firstIndex(where: { $0.id == id }) else {
+                processed += 1
+                continue
+            }
+            batchItems[index].state = .inspecting
+            batchItems[index].message = L10n.t("正在读取签名…")
+            let target = batchItems[index].target
+            let report = await SignatureInspector.inspect(target: target)
+
+            guard let freshIndex = batchItems.firstIndex(where: { $0.id == id }) else {
+                processed += 1
+                continue
+            }
+            batchItems[freshIndex].report = report
+            batchItems[freshIndex].state = report.status == .unsupported ? .skipped : .ready
+            batchItems[freshIndex].message = report.status.title
+            batchItems[freshIndex].lastUpdated = Date()
+            processed += 1
+            batchProgress = Double(processed) / Double(total)
+        }
+
+        let stopped = batchStopRequested
+        batchRunning = false
+        batchStopRequested = false
+        batchProgress = Double(processed) / Double(max(total, 1))
+
+        if stopped {
+            log(L10n.t("批量检查已停止"), level: .warning)
+            showToast(L10n.t("批量检查已停止"), style: .info)
+        } else {
+            log(L10n.t("批量检查完成"), level: .success)
+            showToast(L10n.t("批量检查完成"), style: .success)
+        }
+    }
+
+    func signBatch() {
+        guard batchCanSign else { return }
+        let ids = batchItems
+            .filter { $0.target.canCodesign && $0.state != .skipped }
+            .map(\.id)
+        guard !ids.isEmpty else {
+            showToast(L10n.t("没有可签名的项目"), style: .info)
+            return
+        }
+        Task { await runSigning(ids: ids) }
+    }
+
+    func signBatchItem(_ id: UUID) {
+        guard !batchRunning, let item = batchItems.first(where: { $0.id == id }), item.target.canCodesign else { return }
+        Task { await runSigning(ids: [id]) }
+    }
+
+    private func runSigning(ids: [UUID]) async {
+        guard !ids.isEmpty, !batchRunning else { return }
+        let identity = selectedIdentity
+        let optionsSnapshot = options
+        batchRunning = true
+        batchStopRequested = false
+        batchProgress = 0
+        var processed = 0
+        var successCount = 0
+        var failureCount = 0
+        let total = ids.count
+        log(L10n.t("批量签名开始 · %d 项", total), level: .info)
+
+        for id in ids {
+            if batchStopRequested { break }
+            guard let index = batchItems.firstIndex(where: { $0.id == id }) else {
+                processed += 1
+                continue
+            }
+            guard batchItems[index].target.canCodesign else {
+                batchItems[index].state = .skipped
+                batchItems[index].message = L10n.t("不可签名")
+                processed += 1
+                batchProgress = Double(processed) / Double(total)
+                continue
+            }
+
+            let target = batchItems[index].target
+            let name = target.displayName
+            let existing = batchItems[index].report?.status.isSigned == true
+            batchItems[index].state = .signing
+            batchItems[index].message = L10n.t("正在签名…")
+            batchItems[index].lastUpdated = Date()
+
+            let result = await QuickSigner.sign(
+                target: target,
+                identity: identity,
+                options: optionsSnapshot,
+                hasExistingSignature: existing
+            )
+
+            if result.succeeded {
+                if optionsSnapshot.removeQuarantine {
+                    do {
+                        try XattrService.remove(name: "com.apple.quarantine", at: target.url)
+                    } catch {
+                        log(L10n.t("移除隔离属性失败：%@", error.localizedDescription), level: .warning)
+                    }
+                }
+
+                let report = await SignatureInspector.inspect(target: target)
+                guard let freshIndex = batchItems.firstIndex(where: { $0.id == id }) else {
+                    processed += 1
+                    continue
+                }
+                batchItems[freshIndex].report = report
+                batchItems[freshIndex].lastUpdated = Date()
+                if report.status.isSigned {
+                    batchItems[freshIndex].state = .signed
+                    batchItems[freshIndex].message = report.status.title
+                    successCount += 1
+                    log(L10n.t("签名完成：%@", name), level: .success)
+                } else {
+                    batchItems[freshIndex].state = .failed
+                    batchItems[freshIndex].message = report.verificationOutput.isEmpty
+                        ? L10n.t("签名后校验失败")
+                        : report.verificationOutput
+                    failureCount += 1
+                    log(L10n.t("签名后校验失败：%@", name), level: .error)
+                }
+            } else {
+                guard let freshIndex = batchItems.firstIndex(where: { $0.id == id }) else {
+                    processed += 1
+                    continue
+                }
+                batchItems[freshIndex].state = .failed
+                batchItems[freshIndex].message = friendlySignError(result)
+                batchItems[freshIndex].lastUpdated = Date()
+                failureCount += 1
+                log(L10n.t("签名失败：%@", name), command: result.combined, level: .error)
+            }
+
+            processed += 1
+            batchProgress = Double(processed) / Double(total)
+        }
+
+        let stopped = batchStopRequested
+        batchRunning = false
+        batchStopRequested = false
+        batchProgress = Double(processed) / Double(max(total, 1))
+
+        if stopped {
+            log(L10n.t("批量签名已停止"), level: .warning)
+            showToast(L10n.t("批量签名已停止"), style: .info)
+        } else {
+            log(L10n.t("批量签名完成 · 成功 %d / 失败 %d", successCount, failureCount), level: .success)
+            showToast(L10n.t("批量签名完成 · 成功 %d / 失败 %d", successCount, failureCount), style: .success)
+        }
+    }
+
+    func stopBatch() {
+        guard batchRunning else { return }
+        batchStopRequested = true
+        log(L10n.t("正在停止批量操作…"), level: .warning)
+        showToast(L10n.t("正在停止批量操作…"), style: .info)
+    }
+
+    func removeBatchItem(_ id: UUID) {
+        guard !batchRunning else { return }
+        batchItems.removeAll { $0.id == id }
+        if batchItems.isEmpty { batchProgress = 0 }
+    }
+
+    func clearBatch(completedOnly: Bool = false) {
+        guard !batchRunning else { return }
+        withAnimation(.spring(response: 0.38, dampingFraction: 0.82)) {
+            if completedOnly {
+                batchItems.removeAll { $0.state == .signed || $0.state == .failed || $0.state == .skipped }
+            } else {
+                batchItems.removeAll()
+            }
+            if batchItems.isEmpty { batchProgress = 0 }
+        }
+    }
+
+    func openBatchItemInSingleView(_ id: UUID) {
+        guard !batchRunning, let item = batchItems.first(where: { $0.id == id }) else { return }
+        select(url: item.target.url)
     }
 
     private func refreshAll(expected id: UUID) async {
@@ -414,24 +731,34 @@ final class AppStore: ObservableObject {
     // MARK: - Panels & clipboard
 
     func openFilePanel() {
-        guard !isSigning else { return }
+        guard !isSigning, !batchRunning else { return }
         let panel = NSOpenPanel()
         panel.title = L10n.t("选择要检查的文件")
-        panel.message = L10n.t("拖入 App、Framework、插件或任意 Mach-O 二进制，也可以选择普通文件查看 xattr。")
-        panel.prompt = L10n.t("检查")
+        panel.message = L10n.t("支持多选；选择多个文件会加入批量队列。")
+        panel.prompt = showBatch ? L10n.t("添加") : L10n.t("检查")
         panel.canChooseFiles = true
         panel.canChooseDirectories = true
-        panel.allowsMultipleSelection = false
+        panel.allowsMultipleSelection = true
         panel.treatsFilePackagesAsDirectories = false
         NSApp.activate(ignoringOtherApps: true)
-        if panel.runModal() == .OK, let url = panel.url {
-            select(url: url)
+        if panel.runModal() == .OK {
+            let urls = panel.urls
+            if urls.count > 1 || showBatch {
+                addToBatch(urls)
+            } else if let url = urls.first {
+                select(url: url)
+            }
         }
     }
 
     func revealInFinder() {
         guard let target else { return }
         NSWorkspace.shared.activateFileViewerSelecting([target.url])
+    }
+
+    func revealBatchItem(_ id: UUID) {
+        guard let item = batchItems.first(where: { $0.id == id }) else { return }
+        NSWorkspace.shared.activateFileViewerSelecting([item.target.url])
     }
 
     func copyCommand() {

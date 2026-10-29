@@ -472,6 +472,55 @@ struct SignOptions {
     var entitlementsPath: URL?
 }
 
+// MARK: - Batch
+
+enum BatchState: String {
+    case pending
+    case inspecting
+    case ready
+    case signing
+    case signed
+    case failed
+    case skipped
+
+    var title: String {
+        switch self {
+        case .pending: return L10n.t("待检查")
+        case .inspecting: return L10n.t("检查中")
+        case .ready: return L10n.t("待签名")
+        case .signing: return L10n.t("签名中")
+        case .signed: return L10n.t("已完成")
+        case .failed: return L10n.t("失败")
+        case .skipped: return L10n.t("已跳过")
+        }
+    }
+
+    var symbol: String {
+        switch self {
+        case .pending: return "clock"
+        case .inspecting: return "magnifyingglass"
+        case .ready: return "checkmark.circle"
+        case .signing: return "signature"
+        case .signed: return "checkmark.seal.fill"
+        case .failed: return "xmark.octagon.fill"
+        case .skipped: return "minus.circle"
+        }
+    }
+
+    var isCompleted: Bool {
+        self == .signed || self == .failed || self == .skipped
+    }
+}
+
+struct BatchItem: Identifiable {
+    let id = UUID()
+    var target: TargetInfo
+    var report: SignatureReport?
+    var state: BatchState = .pending
+    var message: String = ""
+    var lastUpdated: Date?
+}
+
 // MARK: - UI / activity models
 
 enum InspectorTab: String, CaseIterable, Identifiable {
