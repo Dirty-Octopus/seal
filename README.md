@@ -41,8 +41,6 @@ codesign --force --deep --sign - /Applications/Seal.app
 open /Applications/Seal.app
 ```
 
-> 由于本软件是开源项目且开发者未向苹果缴纳99美元保护费，安装后请手动执行上述命令。或者，你可以用 Seal 来管理你自己的签名（如果你有证书的话）。
-
 Because this project is open source and the developer has not paid Apple's $99 developer program fee, run the commands above after installation. Alternatively, use Seal to manage your own signature if you have a certificate.
 
 The release is ad-hoc signed, not notarized by Apple. The commands remove the quarantine flag and apply an ad-hoc signature. This is intended for local use; ad-hoc signatures are not a substitute for Developer ID signing or notarization.
