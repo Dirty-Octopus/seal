@@ -30,7 +30,10 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         if let index = args.firstIndex(of: "--snapshot"), args.indices.contains(index + 1) {
             let output = args[index + 1]
             DispatchQueue.main.asyncAfter(deadline: .now() + 4.5) {
-                if let window = NSApp.windows.first, let view = window.contentView {
+                let window = NSApp.windows.first(where: { $0.isSheet && $0.isVisible })
+                    ?? NSApp.keyWindow
+                    ?? NSApp.windows.first
+                if let window, let view = window.contentView {
                     let bounds = view.bounds
                     if let rep = view.bitmapImageRepForCachingDisplay(in: bounds) {
                         view.cacheDisplay(in: bounds, to: rep)
@@ -58,31 +61,49 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
 @main
 struct SealApp: App {
     @NSApplicationDelegateAdaptor(AppDelegate.self) private var appDelegate
+    @StateObject private var settings = AppSettings()
 
     var body: some Scene {
         WindowGroup {
-            ContentView()
-                .frame(minWidth: 1040, minHeight: 720)
+            RootView()
+                .environmentObject(settings)
+                .environment(\.locale, settings.language.locale)
+                .frame(minWidth: 1040, minHeight: 680)
         }
         .defaultSize(width: 1180, height: 820)
         .windowStyle(.hiddenTitleBar)
         .windowResizability(.contentMinSize)
         .commands {
             CommandGroup(replacing: .newItem) {
-                Button("打开文件…") {
+                Button {
                     NotificationCenter.default.post(name: .sealOpenPanel, object: nil)
+                } label: {
+                    Text(L10n.t("打开文件…"))
                 }
                 .keyboardShortcut("o", modifiers: .command)
 
-                Button("刷新检查") {
+                Button {
                     NotificationCenter.default.post(name: .sealRefresh, object: nil)
+                } label: {
+                    Text(L10n.t("刷新检查"))
                 }
                 .keyboardShortcut("r", modifiers: .command)
             }
 
-            CommandMenu("签名") {
-                Button("快速重新签名") {
+            CommandGroup(replacing: .appSettings) {
+                Button {
+                    NotificationCenter.default.post(name: .sealOpenSettings, object: nil)
+                } label: {
+                    Text(L10n.t("设置…"))
+                }
+                .keyboardShortcut(",", modifiers: .command)
+            }
+
+            CommandMenu(LocalizedStringKey(L10n.t("签名"))) {
+                Button {
                     NotificationCenter.default.post(name: .sealResign, object: nil)
+                } label: {
+                    Text(L10n.t("快速重新签名"))
                 }
                 .keyboardShortcut(.return, modifiers: [.command, .shift])
             }

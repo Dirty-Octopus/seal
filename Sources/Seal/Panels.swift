@@ -90,7 +90,7 @@ struct SignatureCard: View {
                                     } else {
                                         Image(systemName: "checkmark.shield")
                                     }
-                                    Text(store.isVerifying ? "验证中…" : "再次验证")
+                                    Text(LocalizedStringKey(store.isVerifying ? "验证中…" : "再次验证"))
                                 }
                             }
                             .buttonStyle(TonalPillStyle(compact: true))
@@ -226,7 +226,7 @@ private struct NoticeLine: View {
                 .font(.system(size: 11, weight: .semibold))
                 .foregroundStyle(tint)
                 .padding(.top, 1)
-            Text(text)
+            Text(LocalizedStringKey(text))
                 .font(.system(size: 10.5, weight: .medium, design: .rounded))
                 .foregroundStyle(theme.textSecondary)
                 .lineSpacing(2)
@@ -481,7 +481,7 @@ struct ResignPanel: View {
                             } else {
                                 Image(systemName: "signature")
                             }
-                            Text(store.isSigning ? "正在签名…" : "快速重新签名")
+                            Text(LocalizedStringKey(store.isSigning ? "正在签名…" : "快速重新签名"))
                         }
                     }
                     .buttonStyle(PrimaryPillStyle())
@@ -498,7 +498,7 @@ struct ResignPanel: View {
                     Spacer(minLength: 0)
 
                     if let target = store.target {
-                        Text(target.isCodeBundle ? "包含嵌套组件" : "仅当前对象")
+                        Text(LocalizedStringKey(target.isCodeBundle ? "包含嵌套组件" : "仅当前对象"))
                             .font(.system(size: 9.5, weight: .medium, design: .rounded))
                             .foregroundStyle(theme.textTertiary)
                     }
@@ -549,13 +549,13 @@ private struct IdentityMenu: View {
                     )
 
                 VStack(alignment: .leading, spacing: 2) {
-                    Text(store.selectedIdentity.name)
+                    Text(store.selectedIdentity.displayName)
                         .font(.system(size: 12.5, weight: .semibold, design: .rounded))
                         .foregroundStyle(theme.textPrimary)
                         .lineLimit(1)
-                    Text(store.selectedIdentity.isAdHoc
+                    Text(LocalizedStringKey(store.selectedIdentity.isAdHoc
                          ? "无需证书 · 仅在本机有效"
-                         : "SHA-1 \(store.selectedIdentity.id.prefix(12))…")
+                         : "SHA-1 \(store.selectedIdentity.id.prefix(12))…"))
                         .font(.system(size: 9.5, weight: .medium, design: .monospaced))
                         .foregroundStyle(theme.textTertiary)
                 }
@@ -606,7 +606,7 @@ private struct EntitlementsRow: View {
                 Text("Entitlements")
                     .font(.system(size: 10.5, weight: .semibold, design: .rounded))
                     .foregroundStyle(theme.textPrimary)
-                Text(store.options.entitlementsPath?.lastPathComponent ?? "未选择 · 保留现有 entitlements")
+                Text(store.options.entitlementsPath?.lastPathComponent ?? L10n.t("未选择 · 保留现有 entitlements"))
                     .font(.system(size: 9.5, weight: .medium, design: .monospaced))
                     .foregroundStyle(theme.textTertiary)
                     .lineLimit(1)
@@ -689,7 +689,7 @@ struct XattrPanel: View {
                 HStack(alignment: .top, spacing: 12) {
                     SectionTitle(
                         "扩展属性",
-                        subtitle: "\(store.xattrs.count) 项 · 顶层 xattr"
+                        subtitle: L10n.t("%d 项 · 顶层 xattr", store.xattrs.count)
                     )
                     Spacer()
                     if quarantine != nil {
@@ -720,7 +720,7 @@ struct XattrPanel: View {
                             Text("检测到 quarantine")
                                 .font(.system(size: 11.5, weight: .bold, design: .rounded))
                                 .foregroundStyle(theme.textPrimary)
-                            Text("\(quarantine.summary)。移除后 macOS 不会再对该对象显示“已下载”的隔离提示。")
+                            Text(L10n.t("%@。移除后 macOS 不会再对该对象显示“已下载”的隔离提示。", quarantine.summary))
                                 .font(.system(size: 10.5, weight: .medium, design: .rounded))
                                 .foregroundStyle(theme.textSecondary)
                                 .lineSpacing(2)
@@ -852,7 +852,7 @@ private struct XattrRow: View {
                         Button {
                             NSPasteboard.general.clearContents()
                             NSPasteboard.general.setString(item.copyText, forType: .string)
-                            store.showToast("已复制 xattr 内容", style: .info)
+                            store.showToast(L10n.t("已复制 xattr 内容"), style: .info)
                         } label: {
                             Label("复制", systemImage: "doc.on.doc")
                         }

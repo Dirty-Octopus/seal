@@ -37,12 +37,12 @@ final class AppStore: ObservableObject {
     }
 
     var signatureStateText: String {
-        guard let signature else { return "签名尚未读取" }
+        guard let signature else { return L10n.t("签名尚未读取") }
         switch signature.status {
-        case .signed, .adHoc: return "保留 entitlements / flags，重建设计要求"
-        case .unsigned: return "当前无现有签名"
-        case .invalid: return "现有签名无效，将重建"
-        case .unsupported: return "不适用"
+        case .signed, .adHoc: return L10n.t("保留 entitlements / flags，重建设计要求")
+        case .unsigned: return L10n.t("当前无现有签名")
+        case .invalid: return L10n.t("现有签名无效，将重建")
+        case .unsupported: return L10n.t("不适用")
         }
     }
 
@@ -63,7 +63,7 @@ final class AppStore: ObservableObject {
 
     init() {
         activity = [
-            LogEntry(level: .info, message: "Seal 已就绪", command: nil)
+            LogEntry(level: .info, message: L10n.t("Seal 已就绪"), command: nil)
         ]
         Task { await loadIdentities(silent: true) }
 
@@ -93,7 +93,7 @@ final class AppStore: ObservableObject {
 
     func select(url: URL) {
         guard !isSigning else {
-            showToast("签名进行中，请稍候", style: .info)
+            showToast(L10n.t("签名进行中，请稍候"), style: .info)
             return
         }
         let standardized = url.standardizedFileURL
@@ -125,7 +125,7 @@ final class AppStore: ObservableObject {
             Task { await refreshAll(expected: id) }
         } catch {
             errorMessage = error.localizedDescription
-            showToast("无法读取这个文件", style: .error)
+            showToast(L10n.t("无法读取这个文件"), style: .error)
         }
     }
 
@@ -176,7 +176,7 @@ final class AppStore: ObservableObject {
                 self.xattrs = items
             case .failure(let error):
                 self.xattrs = []
-                self.log("扩展属性读取失败：\(error.localizedDescription)", level: .warning)
+                self.log(L10n.t("扩展属性读取失败：%@", error.localizedDescription), level: .warning)
             }
             self.lastUpdated = Date()
         }
@@ -212,7 +212,7 @@ final class AppStore: ObservableObject {
             if let message = result.message {
                 showToast(message, style: .info)
             } else {
-                showToast("已刷新签名证书", style: .success)
+                showToast(L10n.t("已刷新签名证书"), style: .success)
             }
         }
     }
@@ -239,7 +239,7 @@ final class AppStore: ObservableObject {
 
         isSigning = true
         errorMessage = nil
-        log("开始重新签名 · \(identity.isAdHoc ? "Ad-hoc" : identity.name)", command: command, level: .info)
+        log(L10n.t("开始重新签名 · %@", identity.displayName), command: command, level: .info)
 
         Task {
             let result = await QuickSigner.sign(
@@ -250,26 +250,26 @@ final class AppStore: ObservableObject {
             )
 
             if result.succeeded {
-                log("codesign 完成", command: nil, level: .success)
+                log(L10n.t("codesign 完成"), command: nil, level: .success)
 
                 if optionsSnapshot.removeQuarantine {
                     do {
                         try XattrService.remove(name: "com.apple.quarantine", at: target.url)
-                        log("已移除 com.apple.quarantine", level: .info)
+                        log(L10n.t("已移除 com.apple.quarantine"), level: .info)
                     } catch {
-                        log("移除隔离属性失败：\(error.localizedDescription)", level: .warning)
+                        log(L10n.t("移除隔离属性失败：%@", error.localizedDescription), level: .warning)
                     }
                 }
 
                 await refreshAll(expected: inspectionID)
                 isSigning = false
-                showToast("重新签名完成", style: .success)
+                showToast(L10n.t("重新签名完成"), style: .success)
             } else {
                 let message = friendlySignError(result)
                 errorMessage = message
                 log(friendlySignError(result), command: result.combined, level: .error)
                 isSigning = false
-                showToast("签名失败", style: .error)
+                showToast(L10n.t("签名失败"), style: .error)
             }
         }
     }
@@ -281,7 +281,7 @@ final class AppStore: ObservableObject {
             "/usr/bin/codesign",
             ["--verify", "--deep", "--strict", "--verbose=4", target.url.path]
         )
-        log("验证签名", command: command, level: .info)
+        log(L10n.t("验证签名"), command: command, level: .info)
 
         Task {
             let result = await CommandRunner.run(
@@ -289,12 +289,12 @@ final class AppStore: ObservableObject {
                 ["--verify", "--deep", "--strict", "--verbose=4", target.url.path]
             )
             if result.succeeded {
-                log("codesign 校验通过", level: .success)
-                showToast("签名校验通过", style: .success)
+                log(L10n.t("codesign 校验通过"), level: .success)
+                showToast(L10n.t("签名校验通过"), style: .success)
             } else {
-                log("codesign 校验失败：\(result.combined)", level: .error)
-                errorMessage = result.combined.isEmpty ? "签名校验失败。" : result.combined
-                showToast("签名校验未通过", style: .error)
+                log(L10n.t("codesign 校验失败：%@", result.combined), level: .error)
+                errorMessage = result.combined.isEmpty ? L10n.t("签名校验失败。") : result.combined
+                showToast(L10n.t("签名校验未通过"), style: .error)
             }
             await refreshAll(expected: inspectionID)
             isVerifying = false
@@ -304,15 +304,15 @@ final class AppStore: ObservableObject {
     private func friendlySignError(_ result: CommandResult) -> String {
         let output = result.combined
         if output.localizedCaseInsensitiveContains("resource fork, Finder information, or similar detritus not allowed") {
-            return "codesign 发现文件带有阻断签名的扩展属性（FinderInfo 或资源分支）。请到「扩展属性」页移除后再试。"
+            return L10n.t("codesign 发现文件带有阻断签名的扩展属性（FinderInfo 或资源分支）。请到「扩展属性」页移除后再试。")
         }
         if output.localizedCaseInsensitiveContains("no identity found") {
-            return "没有找到可用的签名身份。请检查钥匙串中的代码签名证书。"
+            return L10n.t("没有找到可用的签名身份。请检查钥匙串中的代码签名证书。")
         }
         if output.localizedCaseInsensitiveContains("code object is not signed at all") {
             return output
         }
-        return output.isEmpty ? "codesign 执行失败（退出码 \(result.status)）。" : output
+        return output.isEmpty ? L10n.t("codesign 执行失败（退出码 %d）。", result.status) : output
     }
 
     // MARK: - xattr operations
@@ -322,13 +322,13 @@ final class AppStore: ObservableObject {
         isWorkingXattrs = true
         do {
             try XattrService.remove(name: item.name, at: target.url)
-            log("已移除扩展属性 \(item.name)", level: .success)
+            log(L10n.t("已移除扩展属性 %@", item.name), level: .success)
             refreshXattrs()
-            showToast("已移除 \(item.name)", style: .success)
+            showToast(L10n.t("已移除 %@", item.name), style: .success)
         } catch {
             errorMessage = error.localizedDescription
             log(error.localizedDescription, level: .error)
-            showToast("移除失败", style: .error)
+            showToast(L10n.t("移除失败"), style: .error)
         }
         isWorkingXattrs = false
     }
@@ -338,13 +338,13 @@ final class AppStore: ObservableObject {
         isWorkingXattrs = true
         do {
             try XattrService.remove(name: "com.apple.quarantine", at: target.url)
-            log("已移除隔离属性", level: .success)
+            log(L10n.t("已移除隔离属性"), level: .success)
             refreshXattrs()
-            showToast("已移除隔离属性", style: .success)
+            showToast(L10n.t("已移除隔离属性"), style: .success)
         } catch {
             errorMessage = error.localizedDescription
             log(error.localizedDescription, level: .error)
-            showToast("移除失败", style: .error)
+            showToast(L10n.t("移除失败"), style: .error)
         }
         isWorkingXattrs = false
     }
@@ -365,12 +365,12 @@ final class AppStore: ObservableObject {
                 return
             }
             if summary.errors.isEmpty {
-                self.log("已清除 \(summary.removed) 个扩展属性", level: .success)
-                self.showToast("已清除 \(summary.removed) 个扩展属性", style: .success)
+                self.log(L10n.t("已清除 %d 个扩展属性", summary.removed), level: .success)
+                self.showToast(L10n.t("已清除 %d 个扩展属性", summary.removed), style: .success)
             } else {
                 self.errorMessage = summary.errors.prefix(4).joined(separator: "\n")
-                self.log("清除扩展属性时遇到问题：\(summary.errors.joined(separator: "；"))", level: .warning)
-                self.showToast("部分扩展属性未能移除", style: .error)
+                self.log(L10n.t("清除扩展属性时遇到问题：%@", summary.errors.joined(separator: "；")), level: .warning)
+                self.showToast(L10n.t("部分扩展属性未能移除"), style: .error)
             }
             self.refreshXattrs()
             self.isWorkingXattrs = false
@@ -386,7 +386,7 @@ final class AppStore: ObservableObject {
                 lastUpdated = Date()
             }
         } catch {
-            log("扩展属性刷新失败：\(error.localizedDescription)", level: .warning)
+            log(L10n.t("扩展属性刷新失败：%@", error.localizedDescription), level: .warning)
         }
     }
 
@@ -394,16 +394,16 @@ final class AppStore: ObservableObject {
 
     func chooseEntitlements() {
         let panel = NSOpenPanel()
-        panel.title = "选择 Entitlements 文件"
-        panel.message = "选择一个 .plist 或 .entitlements 文件，签名时会传给 codesign。"
-        panel.prompt = "使用"
+        panel.title = L10n.t("选择 Entitlements 文件")
+        panel.message = L10n.t("选择一个 .plist 或 .entitlements 文件，签名时会传给 codesign。")
+        panel.prompt = L10n.t("使用")
         panel.canChooseFiles = true
         panel.canChooseDirectories = false
         panel.allowsMultipleSelection = false
         NSApp.activate(ignoringOtherApps: true)
         if panel.runModal() == .OK, let url = panel.url {
             options.entitlementsPath = url
-            log("已选择 Entitlements：\(url.path)", level: .info)
+            log(L10n.t("已选择 Entitlements：%@", url.path), level: .info)
         }
     }
 
@@ -416,9 +416,9 @@ final class AppStore: ObservableObject {
     func openFilePanel() {
         guard !isSigning else { return }
         let panel = NSOpenPanel()
-        panel.title = "选择要检查的文件"
-        panel.message = "拖入 App、Framework、插件或任意 Mach-O 二进制，也可以选择普通文件查看 xattr。"
-        panel.prompt = "检查"
+        panel.title = L10n.t("选择要检查的文件")
+        panel.message = L10n.t("拖入 App、Framework、插件或任意 Mach-O 二进制，也可以选择普通文件查看 xattr。")
+        panel.prompt = L10n.t("检查")
         panel.canChooseFiles = true
         panel.canChooseDirectories = true
         panel.allowsMultipleSelection = false
@@ -437,7 +437,7 @@ final class AppStore: ObservableObject {
     func copyCommand() {
         guard let commandPreview else { return }
         copyToPasteboard(commandPreview)
-        showToast("命令已复制", style: .info)
+        showToast(L10n.t("命令已复制"), style: .info)
     }
 
     func copyLog() {
@@ -449,28 +449,28 @@ final class AppStore: ObservableObject {
             return line
         }.joined(separator: "\n\n")
         copyToPasteboard(text)
-        showToast("活动日志已复制", style: .info)
+        showToast(L10n.t("活动日志已复制"), style: .info)
     }
 
     func copyReport() {
         guard let target, let signature else { return }
         var lines: [String] = [
-            "Seal 检查报告",
-            "路径：\(target.url.path)",
-            "类型：\(target.kind.label)",
-            "状态：\(signature.status.title)",
+            L10n.t("Seal 检查报告"),
+            L10n.t("路径：%@", target.url.path),
+            L10n.t("类型：%@", target.kind.label),
+            L10n.t("状态：%@", signature.status.title),
             "Identifier：\(signature.identifier ?? "—")",
             "Team ID：\(signature.teamID ?? "—")",
             "Authority：\(signature.authorities.joined(separator: " → "))",
             "CDHash：\(signature.cdhash ?? "—")",
             "Gatekeeper：\(signature.gatekeeper.title)",
-            "校验：\(signature.verificationTitle)"
+            L10n.t("校验：%@", signature.verificationTitle)
         ]
         if let entitlements = signature.entitlements {
             lines.append("Entitlements：\n\(entitlements)")
         }
         copyToPasteboard(lines.joined(separator: "\n"))
-        showToast("检查报告已复制", style: .info)
+        showToast(L10n.t("检查报告已复制"), style: .info)
     }
 
     private func copyToPasteboard(_ string: String) {

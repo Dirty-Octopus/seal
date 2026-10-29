@@ -14,11 +14,11 @@ enum TargetKind: String {
     var label: String {
         switch self {
         case .appBundle: return "App Bundle"
-        case .audioPlugin: return "音频插件"
+        case .audioPlugin: return L10n.t("音频插件")
         case .codeBundle: return "Code Bundle"
-        case .executable: return "Mach-O 二进制"
-        case .file: return "文件"
-        case .folder: return "文件夹"
+        case .executable: return L10n.t("Mach-O 二进制")
+        case .file: return L10n.t("文件")
+        case .folder: return L10n.t("文件夹")
         }
     }
 
@@ -61,8 +61,8 @@ struct TargetInfo: Equatable {
     var isSizePending: Bool { byteSize < 0 }
 
     var sizeText: String {
-        if isSizePending { return "计算中…" }
-        return ByteCountFormatter.string(fromByteCount: byteSize, countStyle: .file)
+        if isSizePending { return L10n.t("计算中…") }
+        return L10n.byteString(byteSize)
     }
 
     var parentPath: String {
@@ -195,31 +195,31 @@ enum SignatureStatus: String {
 
     var title: String {
         switch self {
-        case .signed: return "签名有效"
-        case .adHoc: return "Ad-hoc 签名"
-        case .unsigned: return "未签名"
-        case .invalid: return "签名无效"
-        case .unsupported: return "无法直接签名"
+        case .signed: return L10n.t("签名有效")
+        case .adHoc: return L10n.t("Ad-hoc 签名")
+        case .unsigned: return L10n.t("未签名")
+        case .invalid: return L10n.t("签名无效")
+        case .unsupported: return L10n.t("无法直接签名")
         }
     }
 
     var shortTitle: String {
         switch self {
-        case .signed: return "已签名"
+        case .signed: return L10n.t("已签名")
         case .adHoc: return "Ad-hoc"
-        case .unsigned: return "未签名"
-        case .invalid: return "无效"
-        case .unsupported: return "不适用"
+        case .unsigned: return L10n.t("未签名")
+        case .invalid: return L10n.t("无效")
+        case .unsupported: return L10n.t("不适用")
         }
     }
 
     var detail: String {
         switch self {
-        case .signed: return "代码签名校验通过，签名链完整。"
-        case .adHoc: return "本机临时签名有效，但没有可识别的开发者证书。"
-        case .unsigned: return "这个对象还没有代码签名。"
-        case .invalid: return "签名存在，但没有通过 codesign 校验。"
-        case .unsupported: return "普通文件夹不能直接签名；请选择 .app、VST/VST3/AU 插件或二进制文件。"
+        case .signed: return L10n.t("代码签名校验通过，签名链完整。")
+        case .adHoc: return L10n.t("本机临时签名有效，但没有可识别的开发者证书。")
+        case .unsigned: return L10n.t("这个对象还没有代码签名。")
+        case .invalid: return L10n.t("签名存在，但没有通过 codesign 校验。")
+        case .unsupported: return L10n.t("普通文件夹不能直接签名；请选择 .app、VST/VST3/AU 插件或二进制文件。")
         }
     }
 
@@ -245,15 +245,15 @@ enum GatekeeperStatus: Equatable {
 
     var title: String {
         switch self {
-        case .accepted: return "Gatekeeper 已接受"
-        case .rejected: return "Gatekeeper 未通过"
-        case .notAssessed: return "Gatekeeper 未评估"
+        case .accepted: return L10n.t("Gatekeeper 已接受")
+        case .rejected: return L10n.t("Gatekeeper 未通过")
+        case .notAssessed: return L10n.t("Gatekeeper 未评估")
         }
     }
 
     var detail: String {
         switch self {
-        case .accepted: return "spctl 评估通过。"
+        case .accepted: return L10n.t("spctl 评估通过。")
         case .rejected(let reason): return reason
         case .notAssessed(let reason): return reason
         }
@@ -281,11 +281,11 @@ struct SignatureReport {
     var entitlements: String?
     var verificationPassed: Bool = false
     var verificationOutput: String = ""
-    var gatekeeper: GatekeeperStatus = .notAssessed("仅对 App Bundle 评估")
+    var gatekeeper: GatekeeperStatus = .notAssessed(L10n.t("仅对 App Bundle 评估"))
     var rawDisplay: String = ""
 
     var authorityLine: String {
-        authorities.first ?? (status == .adHoc ? "Ad-hoc（无证书链）" : "—")
+        authorities.first ?? (status == .adHoc ? L10n.t("Ad-hoc（无证书链）") : "—")
     }
 
     var verificationSymbol: String {
@@ -293,9 +293,9 @@ struct SignatureReport {
     }
 
     var verificationTitle: String {
-        if status == .unsigned { return "未签名，无法验证" }
-        if status == .unsupported { return "不适用" }
-        return verificationPassed ? "codesign 校验通过" : "codesign 校验失败"
+        if status == .unsigned { return L10n.t("未签名，无法验证") }
+        if status == .unsupported { return L10n.t("不适用") }
+        return verificationPassed ? L10n.t("codesign 校验通过") : L10n.t("codesign 校验失败")
     }
 }
 
@@ -310,7 +310,7 @@ struct XattrItem: Identifiable, Equatable {
     var id: String { name }
 
     var byteCountText: String {
-        ByteCountFormatter.string(fromByteCount: Int64(data.count), countStyle: .file)
+        L10n.byteString(Int64(data.count))
     }
 
     var isQuarantine: Bool {
@@ -357,18 +357,18 @@ enum XattrDecoder {
         case "com.apple.metadata:kMDItemWhereFroms":
             return whereFromItem(name: name, data: data)
         case "com.apple.FinderInfo":
-            return XattrItem(name: name, data: data, summary: "Finder 元数据 · \(data.count) 字节", details: [
-                "这个属性常用于保存 Finder 标签、窗口位置等元数据。",
-                "十六进制：\(data.prefix(64).map { String(format: "%02X", $0) }.joined(separator: " "))"
+            return XattrItem(name: name, data: data, summary: L10n.t("Finder 元数据 · %d 字节", data.count), details: [
+                L10n.t("这个属性常用于保存 Finder 标签、窗口位置等元数据。"),
+                L10n.t("十六进制：%@", data.prefix(64).map { String(format: "%02X", $0) }.joined(separator: " "))
             ])
         case "com.apple.ResourceFork":
-            return XattrItem(name: name, data: data, summary: "资源分支 · \(ByteCountFormatter.string(fromByteCount: Int64(data.count), countStyle: .file))", details: [
-                "资源分支可能包含旧的 Classic 资源或自定义元数据。"
+            return XattrItem(name: name, data: data, summary: L10n.t("资源分支 · %@", L10n.byteString(Int64(data.count))), details: [
+                L10n.t("资源分支可能包含旧的 Classic 资源或自定义元数据。")
             ])
         case "com.apple.provenance":
             let text = String(data: data, encoding: .utf8) ?? data.prefix(80).map { String(format: "%02x", $0) }.joined()
-            return XattrItem(name: name, data: data, summary: "来源标记 · \(text)", details: [
-                "provenance：\(text)"
+            return XattrItem(name: name, data: data, summary: L10n.t("来源标记 · %@", text), details: [
+                L10n.t("provenance：%@", text)
             ])
         default:
             let utf8 = String(data: data, encoding: .utf8)
@@ -379,25 +379,25 @@ enum XattrDecoder {
             if let utf8, !utf8.isEmpty, readable, utf8.count <= 180 {
                 summary = utf8.replacingOccurrences(of: "\n", with: " ")
             } else if data.isEmpty {
-                summary = "空值"
+                summary = L10n.t("空值")
             } else {
                 summary = data.prefix(18).map { String(format: "%02X", $0) }.joined(separator: " ") + (data.count > 18 ? "…" : "")
             }
             let hex = data.prefix(512).map { String(format: "%02X", $0) }.joined(separator: " ")
             return XattrItem(name: name, data: data, summary: summary, details: [
-                "大小：\(ByteCountFormatter.string(fromByteCount: Int64(data.count), countStyle: .file))",
-                "十六进制预览：\(hex)\(data.count > 512 ? " …" : "")"
+                L10n.t("大小：%@", L10n.byteString(Int64(data.count))),
+                L10n.t("十六进制预览：%@", hex + (data.count > 512 ? " …" : ""))
             ])
         }
     }
 
     private static func quarantineItem(name: String, data: Data) -> XattrItem {
         guard let raw = String(data: data, encoding: .utf8) else {
-            return XattrItem(name: name, data: data, summary: "隔离属性 · 无法解析", details: [])
+            return XattrItem(name: name, data: data, summary: L10n.t("隔离属性 · 无法解析"), details: [])
         }
         let parts = raw.split(separator: ";", omittingEmptySubsequences: false).map(String.init)
-        var lines = ["原始值：\(raw)"]
-        var summary = "隔离属性"
+        var lines = [L10n.t("原始值：%@", raw)]
+        var summary = L10n.t("隔离属性")
 
         if parts.count >= 4 {
             let flags = UInt64(parts[0], radix: 16) ?? 0
@@ -406,16 +406,16 @@ enum XattrDecoder {
             let origin = parts[3]
             let date = Date(timeIntervalSince1970: TimeInterval(timestamp))
             let formatter = DateFormatter()
-            formatter.locale = Locale(identifier: "zh_CN")
+            formatter.locale = L10n.locale
             formatter.dateStyle = .medium
             formatter.timeStyle = .short
 
             summary = "\(agent) · \(formatter.string(from: date))"
             lines = [
-                "下载代理：\(agent)",
-                "下载时间：\(formatter.string(from: date))",
-                "来源：\(origin.isEmpty ? "—" : origin)",
-                "标志：0x\(String(flags, radix: 16))\(quarantineFlagDescription(flags))"
+                L10n.t("下载代理：%@", agent),
+                L10n.t("下载时间：%@", formatter.string(from: date)),
+                L10n.t("来源：%@", origin.isEmpty ? "—" : origin),
+                L10n.t("标志：0x%@", String(flags, radix: 16) + quarantineFlagDescription(flags))
             ]
         }
 
@@ -424,10 +424,10 @@ enum XattrDecoder {
 
     private static func quarantineFlagDescription(_ flags: UInt64) -> String {
         var parts: [String] = []
-        if flags & 0x1 != 0 { parts.append("已下载") }
-        if flags & 0x2 != 0 { parts.append("沙盒") }
-        if flags & 0x4 != 0 { parts.append("硬隔离") }
-        if flags & 0x40 != 0 { parts.append("用户已批准") }
+        if flags & 0x1 != 0 { parts.append(L10n.t("已下载")) }
+        if flags & 0x2 != 0 { parts.append(L10n.t("沙盒")) }
+        if flags & 0x4 != 0 { parts.append(L10n.t("硬隔离")) }
+        if flags & 0x40 != 0 { parts.append(L10n.t("用户已批准")) }
         return parts.isEmpty ? "" : " · " + parts.joined(separator: " / ")
     }
 
@@ -438,12 +438,12 @@ enum XattrDecoder {
         } else if let text = String(data: data, encoding: .utf8) {
             urls = [text]
         }
-        let summary = urls.first ?? "来源记录"
+        let summary = urls.first ?? L10n.t("来源记录")
         return XattrItem(
             name: name,
             data: data,
             summary: summary,
-            details: urls.isEmpty ? ["无法解析来源 plist。"] : urls.map { "来源：\($0)" }
+            details: urls.isEmpty ? [L10n.t("无法解析来源 plist。")] : urls.map { L10n.t("来源：%@", $0) }
         )
     }
 }
@@ -455,7 +455,11 @@ struct SigningIdentity: Identifiable, Hashable {
     let name: String
     let isAdHoc: Bool
 
-    static let adHoc = SigningIdentity(id: "-", name: "Ad-hoc（本机临时签名）", isAdHoc: true)
+    static let adHoc = SigningIdentity(id: "-", name: "Ad-hoc", isAdHoc: true)
+
+    var displayName: String {
+        isAdHoc ? L10n.t("Ad-hoc（本机临时签名）") : name
+    }
 }
 
 struct SignOptions {
@@ -479,9 +483,9 @@ enum InspectorTab: String, CaseIterable, Identifiable {
 
     var title: String {
         switch self {
-        case .resign: return "重新签名"
-        case .xattrs: return "扩展属性"
-        case .activity: return "活动"
+        case .resign: return L10n.t("重新签名")
+        case .xattrs: return L10n.t("扩展属性")
+        case .activity: return L10n.t("活动")
         }
     }
 
@@ -547,7 +551,7 @@ enum SealError: LocalizedError {
 
     var errorDescription: String? {
         switch self {
-        case .fileNotFound(let path): return "找不到文件：\(path)"
+        case .fileNotFound(let path): return L10n.t("找不到文件：%@", path)
         case .commandFailed(let message): return message
         case .xattr(let message): return message
         }

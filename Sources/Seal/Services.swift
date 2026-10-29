@@ -27,9 +27,9 @@ enum IdentityService {
 
         let message: String?
         if result.status != 0 {
-            message = result.combined.isEmpty ? "无法读取代码签名证书。" : result.combined
+            message = result.combined.isEmpty ? L10n.t("无法读取代码签名证书。") : result.combined
         } else if identities.isEmpty {
-            message = "未发现可用的代码签名证书，将使用 Ad-hoc 签名。"
+            message = L10n.t("未发现可用的代码签名证书，将使用 Ad-hoc 签名。")
         } else {
             message = nil
         }
@@ -46,9 +46,9 @@ enum SignatureInspector {
         guard target.canCodesign else {
             var report = SignatureReport()
             report.status = .unsupported
-            report.verificationOutput = "普通文件夹不包含可签名代码。扩展属性仍可正常读写。"
+            report.verificationOutput = L10n.t("普通文件夹不包含可签名代码。扩展属性仍可正常读写。")
             report.verificationPassed = false
-            report.gatekeeper = .notAssessed("普通文件夹不参与 Gatekeeper 评估")
+            report.gatekeeper = .notAssessed(L10n.t("普通文件夹不参与 Gatekeeper 评估"))
             return report
         }
 
@@ -74,7 +74,7 @@ enum SignatureInspector {
             if report.verificationOutput.isEmpty {
                 report.verificationOutput = displayText
             }
-            report.gatekeeper = .notAssessed(notSigned ? "未签名对象不参与 Gatekeeper 评估" : "签名无效，未执行 Gatekeeper 评估")
+            report.gatekeeper = .notAssessed(notSigned ? L10n.t("未签名对象不参与 Gatekeeper 评估") : L10n.t("签名无效，未执行 Gatekeeper 评估"))
             return report
         }
 
@@ -116,7 +116,7 @@ enum SignatureInspector {
                 report.gatekeeper = .rejected(lines.prefix(3).joined(separator: " · "))
             }
         } else if target.kind != .appBundle {
-            report.gatekeeper = .notAssessed("仅对 App Bundle 做 Gatekeeper 评估")
+            report.gatekeeper = .notAssessed(L10n.t("仅对 App Bundle 做 Gatekeeper 评估"))
         }
 
         return report
@@ -269,7 +269,7 @@ enum XattrService {
         let path = url.path
         let listSize = path.withCString { listxattr($0, nil, 0, XATTR_NOFOLLOW) }
         guard listSize >= 0 else {
-            throw SealError.xattr("读取扩展属性失败：\(posixMessage())")
+            throw SealError.xattr(L10n.t("读取扩展属性失败：%@", posixMessage()))
         }
         guard listSize > 0 else { return [] }
 
@@ -278,7 +278,7 @@ enum XattrService {
             listxattr($0, &buffer, listSize, XATTR_NOFOLLOW)
         }
         guard readSize >= 0 else {
-            throw SealError.xattr("读取扩展属性失败：\(posixMessage())")
+            throw SealError.xattr(L10n.t("读取扩展属性失败：%@", posixMessage()))
         }
 
         let data = Data(bytes: buffer, count: readSize)
@@ -303,7 +303,7 @@ enum XattrService {
             }
         }
         guard size >= 0 else {
-            throw SealError.xattr("读取 \(name) 失败：\(posixMessage())")
+            throw SealError.xattr(L10n.t("读取 %@ 失败：%@", name, posixMessage()))
         }
         guard size > 0 else { return Data() }
 
@@ -314,7 +314,7 @@ enum XattrService {
             }
         }
         guard readSize >= 0 else {
-            throw SealError.xattr("读取 \(name) 失败：\(posixMessage())")
+            throw SealError.xattr(L10n.t("读取 %@ 失败：%@", name, posixMessage()))
         }
         return Data(buffer.prefix(readSize))
     }
@@ -328,7 +328,7 @@ enum XattrService {
         }
         guard result == 0 else {
             if errno == ENOATTR { return }
-            throw SealError.xattr("移除 \(name) 失败：\(posixMessage())")
+            throw SealError.xattr(L10n.t("移除 %@ 失败：%@", name, posixMessage()))
         }
     }
 

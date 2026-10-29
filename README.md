@@ -8,7 +8,7 @@
 
 <p align="center">
   <a href="./README.md">English</a> ·
-  <a href="./README.zh-CN.md">简体中文</a>
+  <a href="./README.zh-CN.md">Chinese</a>
 </p>
 
 <p align="center">
@@ -27,6 +27,16 @@ No account, telemetry, or file upload is involved.
 | Dark | Light |
 | --- | --- |
 | ![Dark preview](./docs/preview-dark.png) | ![Light preview](./docs/preview-light.png) |
+
+## First launch
+
+On first launch, Seal asks you to choose English or Simplified Chinese. The interface language, window size presets, and welcome screen can be changed later from the gear icon.
+
+- English / Simplified Chinese
+- Compact 1040 × 720, Standard 1180 × 820, Large 1380 × 920
+- The window is freely resizable from the bottom-right corner. The workspace switches between two columns and a stacked layout.
+
+![First launch](./docs/onboarding.png)
 
 ## Install
 
@@ -60,6 +70,9 @@ For plugin bundles, Seal reads the bundle's `Info.plist`, displays the signature
 
 ## Features
 
+- First-run English / Simplified Chinese onboarding.
+- Settings for interface language and window size presets.
+- Resizable window with a responsive two-column / stacked layout.
 - Drag and drop a file, app, framework, or audio plugin into the window.
 - Inspect the current code signature: identifier, team ID, format, CDHash, authority chain, flags, timestamp, and entitlements.
 - Verify signatures with `codesign --verify --deep --strict`.
@@ -73,10 +86,11 @@ For plugin bundles, Seal reads the bundle's `Info.plist`, displays the signature
 
 ## Usage
 
-1. Drop a target into the window, or click **Open File**.
-2. Check the signature status and verification result on the left.
-3. Open **Re-sign**, select an identity, adjust the options, and click **Quick Re-sign**.
-4. Open **Extended Attributes** to inspect or remove xattr entries.
+1. Choose English or Simplified Chinese on first launch, or change it in Settings.
+2. Drop a target into the window, or click **Open File**.
+3. Check the signature status and verification result on the left.
+4. Open **Re-sign**, select an identity, adjust the options, and click **Quick Re-sign**.
+5. Open **Extended Attributes** to inspect or remove xattr entries.
 
 ## FAQ
 

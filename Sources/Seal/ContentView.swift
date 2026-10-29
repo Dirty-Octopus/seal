@@ -4,7 +4,9 @@ import UniformTypeIdentifiers
 
 struct ContentView: View {
     @StateObject private var store = AppStore()
+    @EnvironmentObject private var settings: AppSettings
     @Environment(\.colorScheme) private var colorScheme
+    @State private var showSettings = false
 
     var body: some View {
         let theme = Theme(scheme: colorScheme)
@@ -13,7 +15,7 @@ struct ContentView: View {
                 .ignoresSafeArea()
 
             VStack(spacing: 0) {
-                TopBar(store: store)
+                TopBar(store: store, onSettings: { showSettings = true })
 
                 ScrollView(.vertical, showsIndicators: false) {
                     VStack(spacing: 22) {
@@ -32,7 +34,7 @@ struct ContentView: View {
                                 .transition(.opacity.combined(with: .scale(scale: 0.99)))
                         }
                     }
-                    .frame(maxWidth: 1180)
+                    .frame(maxWidth: 1440)
                     .padding(.horizontal, 34)
                     .padding(.top, 8)
                     .padding(.bottom, 46)
@@ -55,7 +57,7 @@ struct ContentView: View {
             }
         }
         .background(WindowConfigurator())
-        .frame(minWidth: 1040, minHeight: 720)
+        .frame(minWidth: 1040, minHeight: 680)
         .preferredColorScheme(nil)
         .animation(.spring(response: 0.42, dampingFraction: 0.82), value: store.target?.url)
         .animation(.spring(response: 0.38, dampingFraction: 0.8), value: store.toast?.id)
@@ -75,26 +77,42 @@ struct ContentView: View {
         .onReceive(NotificationCenter.default.publisher(for: .sealResign)) { _ in
             store.resign()
         }
+        .onReceive(NotificationCenter.default.publisher(for: .sealOpenSettings)) { _ in
+            showSettings = true
+        }
+        .onAppear {
+            if CommandLine.arguments.contains("--show-settings") {
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.8) {
+                    showSettings = true
+                }
+            }
+        }
+        .sheet(isPresented: $showSettings) {
+            SettingsView()
+                .environmentObject(settings)
+        }
         .onReceive(NotificationCenter.default.publisher(for: .sealOpenPath)) { note in
             if let url = note.object as? URL {
                 store.select(url: url)
             }
         }
         .confirmationDialog(
-            "清除全部扩展属性？",
+            L10n.t("清除全部扩展属性？"),
             isPresented: $store.clearAllConfirmation,
             titleVisibility: .visible
         ) {
-            Button("清除 \(store.xattrs.count) 项", role: .destructive) {
+            Button(role: .destructive) {
                 store.clearAllXattrs()
+            } label: {
+                Text(L10n.t("清除 %d 项", store.xattrs.count))
             }
-            Button("取消", role: .cancel) {
+            Button(L10n.t("取消"), role: .cancel) {
                 store.clearAllConfirmation = false
             }
         } message: {
-            Text(store.xattrRecursive
+            Text(L10n.t(store.xattrRecursive
                  ? "会同时清理包内嵌套文件的同名扩展属性。此操作不可撤销。"
-                 : "仅清理当前对象顶层的扩展属性。此操作不可撤销。")
+                 : "仅清理当前对象顶层的扩展属性。此操作不可撤销。"))
         }
         .background(theme.canvas.opacity(0.001))
     }
@@ -153,6 +171,7 @@ struct FileDropDelegate: DropDelegate {
 
 private struct TopBar: View {
     @ObservedObject var store: AppStore
+    let onSettings: () -> Void
     @Environment(\.colorScheme) private var colorScheme
 
     var body: some View {
@@ -219,6 +238,8 @@ private struct TopBar: View {
             }
             .disabled(store.target == nil)
             .opacity(store.target == nil ? 0.45 : 1)
+
+            IconCircleButton(symbol: "gearshape", help: "设置", size: 34, action: onSettings)
 
             if store.target != nil {
                 IconCircleButton(symbol: "xmark", help: "关闭当前文件", size: 34) {
@@ -356,7 +377,7 @@ private struct DropZoneCard: View {
                 .animation(.spring(response: 0.42, dampingFraction: 0.72), value: targeted)
 
                 VStack(spacing: 5) {
-                    Text(targeted ? "松开即可检查" : "把文件拖到这里")
+                    Text(LocalizedStringKey(targeted ? "松开即可检查" : "把文件拖到这里"))
                         .font(.system(size: 24, weight: .bold, design: .rounded))
                         .foregroundStyle(theme.textPrimary)
                     Text("App / Framework / 插件 / Mach-O 二进制 / 普通文件")
@@ -417,10 +438,10 @@ private struct FeatureCard: View {
                 .background(Circle().fill(tint.opacity(theme.isDark ? 0.16 : 0.11)))
 
             VStack(alignment: .leading, spacing: 3) {
-                Text(title)
+                Text(LocalizedStringKey(title))
                     .font(.system(size: 12.5, weight: .bold, design: .rounded))
                     .foregroundStyle(theme.textPrimary)
-                Text(subtitle)
+                Text(LocalizedStringKey(subtitle))
                     .font(.system(size: 10.5, weight: .medium, design: .rounded))
                     .foregroundStyle(theme.textTertiary)
                     .lineLimit(2)
@@ -447,47 +468,68 @@ private struct WorkspaceView: View {
     @Environment(\.colorScheme) private var colorScheme
 
     var body: some View {
-        let theme = Theme(scheme: colorScheme)
         VStack(spacing: 20) {
             FileHeroCard(store: store)
 
-            HStack(alignment: .top, spacing: 22) {
-                SignatureCard(store: store)
-                    .frame(width: 372)
-
-                VStack(alignment: .leading, spacing: 13) {
-                    HStack(spacing: 12) {
-                        SegmentedTabs(selection: $store.activeTab)
-                        Spacer()
-                        if store.isLoading || store.isSigning || store.isVerifying {
-                            HStack(spacing: 7) {
-                                ProgressView()
-                                    .controlSize(.small)
-                                Text(store.isSigning ? "正在签名" : (store.isVerifying ? "正在验证" : "正在读取"))
-                                    .font(.system(size: 10.5, weight: .semibold, design: .rounded))
-                                    .foregroundStyle(theme.textTertiary)
-                            }
-                            .transition(.opacity)
-                        }
-                    }
-                    .padding(.horizontal, 2)
-
-                    Group {
-                        switch store.activeTab {
-                        case .resign:
-                            ResignPanel(store: store)
-                        case .xattrs:
-                            XattrPanel(store: store)
-                        case .activity:
-                            ActivityPanel(store: store)
-                        }
-                    }
-                    .id(store.activeTab)
-                    .transition(.opacity.combined(with: .move(edge: .trailing)))
-                }
-                .frame(maxWidth: .infinity)
+            ViewThatFits(in: .horizontal) {
+                wideLayout
+                narrowLayout
             }
         }
+    }
+
+    private var wideLayout: some View {
+        HStack(alignment: .top, spacing: 22) {
+            SignatureCard(store: store)
+                .frame(width: 372)
+
+            detailPane
+                .frame(minWidth: 620, maxWidth: .infinity)
+        }
+        .frame(minWidth: 1014, alignment: .leading)
+    }
+
+    private var narrowLayout: some View {
+        VStack(spacing: 18) {
+            SignatureCard(store: store)
+                .frame(maxWidth: 720)
+                .frame(maxWidth: .infinity, alignment: .leading)
+            detailPane
+        }
+    }
+
+    private var detailPane: some View {
+        VStack(alignment: .leading, spacing: 13) {
+            HStack(spacing: 12) {
+                SegmentedTabs(selection: $store.activeTab)
+                Spacer()
+                if store.isLoading || store.isSigning || store.isVerifying {
+                    HStack(spacing: 7) {
+                        ProgressView()
+                            .controlSize(.small)
+                        Text(LocalizedStringKey(store.isSigning ? "正在签名" : (store.isVerifying ? "正在验证" : "正在读取")))
+                            .font(.system(size: 10.5, weight: .semibold, design: .rounded))
+                            .foregroundStyle(Theme(scheme: colorScheme).textTertiary)
+                    }
+                    .transition(.opacity)
+                }
+            }
+            .padding(.horizontal, 2)
+
+            Group {
+                switch store.activeTab {
+                case .resign:
+                    ResignPanel(store: store)
+                case .xattrs:
+                    XattrPanel(store: store)
+                case .activity:
+                    ActivityPanel(store: store)
+                }
+            }
+            .id(store.activeTab)
+            .transition(.opacity.combined(with: .move(edge: .trailing)))
+        }
+        .frame(maxWidth: .infinity)
     }
 }
 
@@ -543,7 +585,7 @@ private struct FileHeroCard: View {
                                 MetaChip(symbol: "number", text: bundleID)
                             }
                             if !target.isWritable {
-                                MetaChip(symbol: "lock", text: "只读")
+                                MetaChip(symbol: "lock", text: L10n.t("只读"))
                             }
                         }
                     }
@@ -575,11 +617,12 @@ private struct FileHeroCard: View {
         )
     }
 
-    static let dateFormatter: DateFormatter = {
+    static var dateFormatter: DateFormatter {
         let formatter = DateFormatter()
+        formatter.locale = L10n.locale
         formatter.dateFormat = "yyyy/MM/dd HH:mm"
         return formatter
-    }()
+    }
 }
 
 private struct FileIcon: View {

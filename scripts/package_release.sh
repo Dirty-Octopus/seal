@@ -31,6 +31,8 @@ mkdir -p "$APP/Contents/MacOS" "$APP/Contents/Resources"
 chmod 755 "$APP/Contents/MacOS/Seal"
 cp scripts/Info.plist "$APP/Contents/Info.plist"
 cp Resources/AppIcon.icns "$APP/Contents/Resources/AppIcon.icns"
+cp -R Resources/en.lproj "$APP/Contents/Resources/"
+cp -R Resources/zh-Hans.lproj "$APP/Contents/Resources/"
 
 /usr/bin/plutil -lint "$APP/Contents/Info.plist" >/dev/null
 /usr/bin/xattr -cr "$APP" 2>/dev/null || true

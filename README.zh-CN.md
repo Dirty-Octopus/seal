@@ -26,7 +26,17 @@ Seal 是一个本地 macOS 工具，用于检查、验证和重签代码。它�
 
 | 深色 | 浅色 |
 | --- | --- |
-| ![深色预览](./docs/preview-dark.png) | ![浅色预览](./docs/preview-light.png) |
+| ![深色预览](./docs/preview-dark-zh.png) | ![浅色预览](./docs/preview-light-zh.png) |
+
+## 首次启动
+
+首次启动时可选择 English 或简体中文。界面语言、窗口尺寸预设和欢迎页之后都可以在齿轮设置中修改。
+
+- English / 简体中文
+- 紧凑 1040 × 720、标准 1180 × 820、大 1380 × 920
+- 窗口可通过右下角自由拉伸；工作区会在双栏和上下堆叠布局之间切换。
+
+![首次启动](./docs/onboarding.png)
 
 ## 安装
 
@@ -60,6 +70,9 @@ open /Applications/Seal.app
 
 ## 功能
 
+- 首次启动选择 English / 简体中文。
+- 设置中可调整界面语言与窗口尺寸预设。
+- 窗口可自由拉伸，工作区支持双栏 / 上下堆叠响应式布局。
 - 拖拽文件、App、Framework 或音频插件到窗口。
 - 读取当前签名：Identifier、Team ID、Format、CDHash、Authority 链、flags、Timestamp、Entitlements。
 - 使用 `codesign --verify --deep --strict` 验证签名。
@@ -73,10 +86,11 @@ open /Applications/Seal.app
 
 ## 使用
 
-1. 拖入目标文件，或点击「打开文件」。
-2. 在左侧查看签名状态和验证结果。
-3. 打开「重新签名」，选择身份和选项，点击「快速重新签名」。
-4. 打开「扩展属性」查看或移除 xattr。
+1. 首次启动选择 English 或简体中文；之后可在设置中修改。
+2. 拖入目标文件，或点击「打开文件」。
+3. 在左侧查看签名状态和验证结果。
+4. 打开「重新签名」，选择身份和选项，点击「快速重新签名」。
+5. 打开「扩展属性」查看或移除 xattr。
 
 ## 常见问题
 

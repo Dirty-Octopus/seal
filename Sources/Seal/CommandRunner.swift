@@ -68,7 +68,7 @@ enum CommandRunner {
                     continuation.resume(returning: CommandResult(
                         status: -1,
                         stdout: "",
-                        stderr: "无法启动 \(executable)：\(error.localizedDescription)",
+                        stderr: L10n.t("无法启动 %@：%@", executable, error.localizedDescription),
                         timedOut: false
                     ))
                     return

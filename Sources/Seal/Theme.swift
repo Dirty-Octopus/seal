@@ -218,11 +218,11 @@ struct SectionTitle: View {
     var body: some View {
         let theme = Theme(scheme: scheme)
         VStack(alignment: .leading, spacing: 4) {
-            Text(text)
+            Text(LocalizedStringKey(text))
                 .font(.system(size: 17, weight: .bold, design: .rounded))
                 .foregroundStyle(theme.textPrimary)
             if let subtitle {
-                Text(subtitle)
+                Text(LocalizedStringKey(subtitle))
                     .font(.system(size: 12, weight: .medium, design: .rounded))
                     .foregroundStyle(theme.textSecondary)
                     .fixedSize(horizontal: false, vertical: true)
@@ -402,8 +402,8 @@ struct IconCircleButton: View {
         .onHover { inside in
             withAnimation(.spring(response: 0.25, dampingFraction: 0.75)) { hover = inside }
         }
-        .help(help)
-        .accessibilityLabel(help)
+        .help(L10n.t(help))
+        .accessibilityLabel(L10n.t(help))
     }
 }
 
@@ -478,11 +478,11 @@ struct OptionToggle: View {
                     )
 
                 VStack(alignment: .leading, spacing: 2) {
-                    Text(title)
+                    Text(LocalizedStringKey(title))
                         .font(.system(size: 12.5, weight: .semibold, design: .rounded))
                         .foregroundStyle(theme.textPrimary)
                     if let subtitle {
-                        Text(subtitle)
+                        Text(LocalizedStringKey(subtitle))
                             .font(.system(size: 10.5, weight: .medium, design: .rounded))
                             .foregroundStyle(theme.textTertiary)
                             .lineLimit(1)
@@ -562,7 +562,7 @@ struct InfoRow: View {
                         .background(Circle().fill(theme.surfaceLow))
                 }
                 .buttonStyle(.plain)
-                .help("复制")
+                .help(L10n.t("复制"))
             }
         }
     }
@@ -685,11 +685,9 @@ struct WindowConfigurator: NSViewRepresentable {
         window.isOpaque = false
         window.contentView?.wantsLayer = true
         window.contentView?.layer?.backgroundColor = NSColor.clear.cgColor
-        window.minSize = NSSize(width: 1040, height: 720)
-        if window.frame.width < 1000 {
-            window.setContentSize(NSSize(width: 1180, height: 820))
-            window.center()
-        }
+        window.styleMask.insert(.resizable)
+        window.minSize = NSSize(width: 1040, height: 680)
+        WindowManager.shared.attach(window)
     }
 }
 
