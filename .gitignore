@@ -3,3 +3,10 @@
 dist/
 .DS_Store
 *.xcuserstate
+
+# Electron frontend and local test/build artifacts
+desktop/node_modules/
+desktop/dist/
+desktop/release/
+desktop/test-results/
+desktop/playwright-report/

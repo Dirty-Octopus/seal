@@ -1,0 +1,150 @@
+.appearance-options {
+  display: flex;
+  gap: 5px;
+}
+.appearance-options button {
+  flex: 1;
+  min-width: 0;
+  padding: 8px 10px;
+  white-space: nowrap;
+}
+.treatments button {
+  min-width: 0;
+  white-space: nowrap;
+}
+.system-section .actions button {
+  width: 125px;
+  white-space: nowrap;
+}
+.system-titlebar h2 {
+  line-height: 24px;
+}
+.system-section h3 {
+  line-height: 18px;
+  min-height: 18px;
+}
+.switches label {
+  min-height: 28px;
+}
+.hero > .muted,
+.hero > .lead {
+  width: 100%;
+}
+button[data-zh] {
+  white-space: nowrap;
+}
+p[data-zh] {
+  width: 100%;
+}
+html {
+  background-color: var(--bg);
+}
+html[data-appearance="light"] {
+  color-scheme: light;
+  --bg: #f2f2ee;
+  --panel: #e2e2dd;
+  --edge: #868681;
+  --ink: #171717;
+  --secondary: #53534f;
+  --panel-low: #e2e2dd;
+}
+html[data-appearance="light"] body[data-treatment="halftone"],
+html[data-appearance="light"] body[data-treatment="mono"] {
+  --bg: #f2f2ee;
+  --panel: #e2e2dd;
+  --edge: #868681;
+  --ink: #171717;
+  --secondary: #53534f;
+  --panel-low: #e2e2dd;
+}
+html[data-appearance="light"] body[data-treatment="classic"] {
+  --bg: #e7eff3;
+  --panel: #d4e1ea;
+  --edge: #738b9d;
+  --ink: #172c3b;
+  --secondary: #455f70;
+  --panel-low: #d4e1ea;
+  --accent: #a5d5ea;
+}
+html[data-appearance="light"] body[data-treatment="mono"] {
+  --accent: #b8b8b3;
+}
+html[data-appearance="light"]
+  button:not(
+    .primary,
+    .blue,
+    .red,
+    .yellow,
+    .active,
+    [aria-checked="true"],
+    [aria-pressed="true"],
+    .crt-hover
+  ) {
+  background-color: #d0d0cb;
+  color: var(--ink);
+}
+html[data-appearance="light"] .nav b {
+  color: var(--ink);
+}
+html[data-appearance="light"] h1 em {
+  color: var(--blue);
+}
+html[data-appearance="light"] body[data-treatment="mono"] h1 em {
+  color: #444;
+}
+html[data-appearance="light"] .system-backdrop {
+  background: #c5c5c580;
+}
+html[data-appearance="light"] .screen-bloom {
+  opacity: 0.045;
+}
+html[data-appearance="light"] .color-card.yellow {
+  color: #080808;
+}
+html[data-appearance="light"] .system-dialog {
+  background: var(--panel);
+}
+/* Color-only interpolation leaves hitboxes, masks and source motion untouched. */
+.appearance-transition,
+.appearance-transition body,
+.appearance-transition
+  :is(
+    #site,
+    .boot-face,
+    .panel,
+    .system-dialog,
+    header,
+    aside,
+    footer,
+    main,
+    button,
+    input,
+    h1 em,
+    p,
+    label,
+    small,
+    h2,
+    h3,
+    .system-section,
+    .wordmark,
+    .sidebar-foot
+  ) {
+  transition-property: background-color, color, border-color;
+  transition-duration: 480ms;
+  transition-timing-function: cubic-bezier(0.16, 0.82, 0.2, 1);
+}
+@media (prefers-reduced-motion: reduce) {
+  .appearance-transition * {
+    transition: none !important;
+  }
+}
+/* Explicit line boxes avoid language-dependent CJK fallback font metrics. */
+body {
+  line-height: 1.5;
+}
+.range-label {
+  line-height: 18px;
+}
+.wordmark {
+  line-height: 18px;
+}

@@ -1,0 +1,294 @@
+/* Source typography, stacked file-tab navigation and generated phosphor backdrop. */
+:root {
+  --mono: "IBM Plex Mono", "Courier New", monospace;
+  --display: "Barlow Condensed", "Arial Narrow", Arial, sans-serif;
+  --ease: cubic-bezier(0.16, 0.82, 0.2, 1);
+  --ease-machine: cubic-bezier(0.7, 0, 0.2, 1);
+  --strata-mid: #f22a30;
+  --strata-far: #164bff;
+  font-family: Arial, "PingFang SC", "Microsoft YaHei", sans-serif;
+  background-image: var(--ambient-grain);
+  background-size: 140px;
+  background-position: var(--ambient-x, 0px) var(--ambient-y, 0px);
+}
+.crt-surface {
+  background: transparent;
+}
+#site {
+  background: color-mix(in srgb, var(--bg) 92%, transparent);
+}
+.eyebrow,
+small,
+footer,
+.sidebar-foot,
+.section-line,
+.status,
+.wordmark small,
+.color-card span,
+.color-card strong,
+.range-label output {
+  font-family: var(--mono);
+}
+h1 {
+  font: 600 clamp(52px, 6vw, 78px)/0.91 var(--display);
+  letter-spacing: -0.5px;
+}
+h2,
+h3 {
+  font-family: var(--display);
+  font-weight: 600;
+}
+h2 {
+  font-size: 22px;
+}
+h3 {
+  font-size: 14px;
+}
+button {
+  font-family: var(--mono);
+  font-size: 11px;
+}
+.welcome-content h1 {
+  font: 600 clamp(64px, 8vw, 108px)/0.91 var(--display);
+}
+.navigation-caption {
+  display: flex;
+  justify-content: space-between;
+}
+.navigation-caption span {
+  position: static;
+  font: 7px var(--mono);
+}
+nav {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.nav {
+  display: block;
+  flex: 0 0 auto;
+  background: var(--panel);
+  font-family: Arial, "PingFang SC", sans-serif;
+}
+.nav b {
+  color: var(--ink);
+  font-weight: normal;
+}
+.nav.active,
+.nav.pending {
+  background: var(--accent);
+  color: #080808;
+}
+.nav.active b,
+.nav.pending b,
+.nav.active small,
+.nav.active > span {
+  color: #080808;
+}
+.nav:before {
+  background: var(--accent);
+}
+html:not(.crt-mode) .nav:hover:before,
+.nav.crt-hover:before {
+  transform: scaleX(1);
+}
+.nav.crt-hover b {
+  color: #080808;
+}
+.sidebar-foot {
+  border-top: 1px solid var(--edge);
+  padding-top: 12px;
+}
+.module-surface {
+  position: relative;
+}
+.module-wipe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: var(--accent);
+  transform-origin: left;
+  opacity: 0;
+  pointer-events: none;
+  z-index: 5;
+}
+.ascii-scramble {
+  position: relative;
+  color: transparent !important;
+}
+.ascii-scramble:after {
+  content: attr(data-ascii);
+  position: absolute;
+  inset: 0;
+  color: var(--ascii-ink);
+  box-sizing: border-box;
+  padding: inherit;
+  overflow: hidden;
+  overflow-wrap: anywhere;
+  pointer-events: none;
+}
+button.ascii-scramble:after {
+  display: grid;
+  place-content: center;
+}
+.scroll-ruler {
+  right: 14px;
+  top: 20%;
+  height: 55%;
+  background-color: var(--panel);
+}
+.scroll-ruler i {
+  background: var(--accent);
+}
+#screen-noise {
+  width: 100%;
+  height: 100%;
+  opacity: 0.025;
+  image-rendering: pixelated;
+  mix-blend-mode: soft-light;
+}
+.screen-patina {
+  overflow: hidden;
+}
+.no-motion .ascii-scramble:after {
+  display: none;
+}
+.no-motion .ascii-scramble {
+  color: var(--ascii-ink) !important;
+}
+
+:root {
+  --strata-front: #ffe500;
+  --panel-low: #111;
+}
+body[data-treatment="classic"] {
+  --strata-far: #2e566f;
+  --strata-mid: #4d8fb8;
+  --strata-front: #9ac9e2;
+  --panel-low: #142330;
+}
+body[data-treatment="mono"] {
+  --strata-far: #535353;
+  --strata-mid: #898989;
+  --strata-front: #c9c9c9;
+  --panel-low: #111;
+}
+.hero {
+  position: relative;
+  isolation: isolate;
+}
+.hero-art {
+  position: absolute;
+  inset: 0 0 auto;
+  height: 240px;
+  overflow: hidden;
+  z-index: -1;
+  pointer-events: none;
+}
+.hero-art:after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, var(--bg) 8%, transparent 76%);
+}
+.hero > .lead,
+.hero > .muted {
+  position: relative;
+  background: transparent;
+  width: fit-content;
+}
+.module-surface {
+  isolation: isolate;
+  overflow: hidden;
+}
+.boot-visible #site {
+  background: var(--bg);
+}
+.workspace-layout {
+  display: flex;
+  flex: 1;
+  min-height: 0;
+}
+.three.workspace {
+  display: grid;
+  flex: none;
+}
+.hero {
+  transform-origin: 0 0;
+}
+.portal-visual {
+  position: absolute;
+  right: 5%;
+  top: 25%;
+  width: 42%;
+  height: 48%;
+  transform-origin: 0 0;
+  overflow: hidden;
+  clip-path: polygon(
+    24px 0,
+    100% 0,
+    100% calc(100% - 24px),
+    calc(100% - 24px) 100%,
+    0 100%,
+    0 24px
+  );
+  pointer-events: none;
+}
+.portal-visual .banner-strata {
+  width: 100%;
+  height: 100%;
+}
+#welcome {
+  position: absolute;
+  inset: 40px 30px 24px;
+  background: transparent;
+  display: block;
+  overflow: visible;
+}
+.boot-face {
+  position: absolute;
+  inset: 0;
+  background: var(--bg);
+}
+.welcome-content {
+  position: absolute;
+  left: 3%;
+  top: 12%;
+  width: 48%;
+  padding: 24px;
+  text-align: left;
+}
+.welcome-content h1 {
+  font-size: clamp(54px, 6vw, 84px);
+}
+.welcome-content > .pixel-logo {
+  position: relative;
+  z-index: 30;
+}
+.welcome-content .eyebrow {
+  font-size: 8px;
+  max-width: 290px;
+}
+.welcome-content .welcome-meta {
+  font-size: 8px;
+}
+.portal-opening .boot-symbol {
+  z-index: 100;
+  pointer-events: none;
+}
+.hero-art {
+  inset: 0;
+  height: 100%;
+}
+.hero {
+  padding-bottom: 16px;
+  min-height: 260px;
+}
+.hero-copy {
+  position: relative;
+}
+.portal-opening #welcome {
+  pointer-events: none;
+}

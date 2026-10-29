@@ -1,184 +1,54 @@
-<h1 align="center">
-  <img src="./docs/icon.png" alt="Seal" width="120" />
-  <br>
-  Seal
-</h1>
+<h1 align="center"><img src="./docs/icon.png" alt="Seal" width="100" /><br>Seal</h1>
+<p align="center">macOS 本地签名与扩展属性管理工具</p>
+<p align="center"><a href="./README.md">English</a> · <a href="./README.zh-CN.md">简体中文</a></p>
 
-<h3 align="center">macOS 本地 <code>codesign</code> 与 <code>xattr</code> 图形工具</h3>
+Seal 用于检查、验证和重新签名 App、Framework、Mach-O 二进制与音频插件。1.2 版采用 [AYMDevKitUI](https://github.com/Dirty-Octopus/AYMDevKitUI) 的 Electron 应用框架，接入本地 macOS 进程服务。无需账号，不上传文件。
 
-<p align="center">
-  <a href="./README.md">English</a> ·
-  <a href="./README.zh-CN.md">简体中文</a>
-</p>
+## 工作区
 
-<p align="center">
-  <a href="https://github.com/Dirty-Octopus/seal/releases/latest"><img alt="Latest release" src="https://img.shields.io/github/v/release/Dirty-Octopus/seal?style=flat-square"></a>
-  <img alt="macOS 14+" src="https://img.shields.io/badge/macOS-14%2B-000000?style=flat-square">
-  <img alt="Universal" src="https://img.shields.io/badge/arch-arm64%20%7C%20x86__64-444444?style=flat-square">
-  <img alt="MIT" src="https://img.shields.io/badge/license-MIT-blue?style=flat-square">
-</p>
+- **检查与签名**：拖入 App、插件或二进制，查看签名和 Entitlements，选择钥匙串证书或 Ad-hoc 身份，重签后自动验证。
+- **批量队列**：依次检查和签名多个目标；停止会等待当前项结束。支持单项重试、Finder 定位、打开检查和清空已完成项目。
+- **扩展属性**：查看 quarantine、下载来源和其他元数据；可单项删除或清空，支持递归处理。
+- **活动记录**：保留本次会话最近 100 条记录，包含实际执行的命令，可复制。
 
-Seal 是一个本地 macOS 工具，用于检查、验证和重签代码。它把系统的 `codesign`、`xattr`、`spctl`、`security` 命令封装成拖拽界面，支持 App、Framework、Mach-O 二进制，以及 VST3、VST、Audio Unit、AAX 等音频插件包。
+支持 `.app`、`.framework`、`.xpc`、`.appex`、`.bundle`、`.plugin`、`.kext`、`.vst3`、`.vst`、`.component`、`.aaxplugin` 等代码包。普通文件和文件夹也支持扩展属性操作。签名校验与 Gatekeeper 评估分别显示，后者仅用于带签名的 App Bundle。
 
-不需要账号，不收集遥测，不上传文件。
+## 界面
 
-## 预览
+使用 AYM 的 CRT 曲面及鼠标坐标映射、16 × 16 蓝色工具标识、本地字体、面板转场和交互音效。设置包含中英文、跟随系统/浅色/深色、显示处理、动效、音效、CRT、柔化和窗口尺寸预设。欢迎页只在首次启动出现，之后可在设置中重播。
 
-| 深色 | 浅色 |
-| --- | --- |
-| ![深色预览](./docs/preview-dark-zh.png) | ![浅色预览](./docs/preview-light-zh.png) |
+![Seal 界面](./docs/preview-dark-zh.png)
 
-## 首次启动
+## 本地构建与测试
 
-首次启动时可选择 English 或简体中文。界面语言、窗口尺寸预设和欢迎页之后都可以在齿轮设置中修改。
+需要 macOS 14+、Node 22.12+。本次迁移在 Apple Silicon 上验证。
 
-- English / 简体中文
-- 紧凑 1040 × 720、标准 1180 × 820、大 1380 × 920
-- 窗口可通过右下角自由拉伸；工作区会在双栏和上下堆叠布局之间切换。
-
-![首次启动](./docs/onboarding.png)
-
-## 批量签名
-
-一次拖入多个文件，或点击顶部的「批量」进入队列。Seal 会记录队列、检查每一项，并使用当前身份与选项依次重签整个队列。
-
-- 全部检查 / 全部签名 / 停止
-- 每项显示签名状态、队列状态和错误信息
-- 支持重签单项、Finder 定位、在单文件视图打开、移出队列
-- 可清空已完成项目或整个列表
-- 显示总进度和最近活动
-
-![批量签名](./docs/preview-batch-zh.png)
-
-## 安装
-
-请到 [Releases 页面](https://github.com/Dirty-Octopus/seal/releases/latest) 下载最新的 universal DMG 或 ZIP。
-
-1. 打开 DMG，把 `Seal.app` 拖入 `/Applications`；或解压 ZIP 后移动到 `/Applications`。
-2. 如果 macOS 首次启动时拦截应用，在终端执行：
-
-```bash
-xattr -dr com.apple.quarantine /Applications/Seal.app
-codesign --force --deep --sign - /Applications/Seal.app
-open /Applications/Seal.app
-```
-
-> 由于本软件是开源项目且开发者未向苹果缴纳99美元保护费，安装后请手动执行上述命令。或者，你可以用 Seal 来管理你自己的签名（如果你有证书的话）。
-
-发布包使用 ad-hoc 签名，未经过 Apple 公证。上述命令会移除 quarantine 标记并重新应用 ad-hoc 签名。它适合在本机使用；ad-hoc 签名不能替代 Developer ID 签名与公证。
-
-需要 macOS 14 或更高版本。发布包为 Apple Silicon 与 Intel 通用二进制。
-
-## 支持的目标
-
-| 类型 | 说明 |
-| --- | --- |
-| App 与 bundle | `.app`、`.framework`、`.xpc`、`.appex`、`.bundle`、`.plugin`、`.kext` |
-| 音频插件 | `.vst3`、`.vst`、`.component`（Audio Unit）、`.aaxplugin` |
-| 二进制 | Mach-O 可执行文件与动态库 |
-| 文件与文件夹 | 查看和移除扩展属性 |
-
-对于插件包，Seal 会读取 `Info.plist`、显示签名链；启用深度签名时，会重签包内嵌套代码。
-
-## 功能
-
-- 批量检查与重签多个 App、插件或二进制。
-- 首次启动选择 English / 简体中文。
-- 设置中可调整界面语言与窗口尺寸预设。
-- 窗口可自由拉伸，工作区支持双栏 / 上下堆叠响应式布局。
-- 拖拽文件、App、Framework 或音频插件到窗口。
-- 读取当前签名：Identifier、Team ID、Format、CDHash、Authority 链、flags、Timestamp、Entitlements。
-- 使用 `codesign --verify --deep --strict` 验证签名。
-- 对 App Bundle 执行 `spctl` 评估并显示 Gatekeeper 结果。
-- 从钥匙串读取可用代码签名证书。
-- 使用证书重签；没有证书时使用 Ad-hoc 签名。
-- 配置深度签名、保留元数据、Hardened Runtime、时间戳、Entitlements 和 quarantine 清理。
-- 查看扩展属性（包括 `com.apple.quarantine`），支持单项移除和递归清除。
-- 活动日志记录实际执行的命令。
-- 不上传文件，不收集遥测。
-
-## 使用
-
-1. 首次启动选择 English 或简体中文；之后可在设置中修改。
-2. 拖入目标文件，或点击「打开文件」。
-3. 在左侧查看签名状态和验证结果。
-4. 打开「重新签名」，选择身份和选项，点击「快速重新签名」。
-5. 打开「扩展属性」查看或移除 xattr。
-6. 使用「批量」添加多个文件，统一检查并签名。
-
-## 常见问题
-
-### macOS 提示 Seal 已损坏、无法打开或来自未识别的开发者
-
-执行[安装](#安装)部分的命令。发布包使用 ad-hoc 签名，未经过 Apple 公证。
-
-### 需要付费 Apple Developer 账号吗？
-
-本机使用不需要。Ad-hoc 签名足够在本机测试。若要对外分发，请使用 Developer ID 证书并完成公证。
-
-### Seal 需要管理员权限吗？
-
-不需要。Seal 使用当前用户权限运行。如果目标不可写，请先复制到可写目录。Seal 不会默认调用 `sudo`。
-
-### 可以签 Apple 系统 App 吗？
-
-不可以。系统 App 受 SIP 保护，所在卷通常只读。请先复制到可写目录。
-
-### 支持 VST3、VST 和 Audio Unit 吗？
-
-支持。`.vst3`、`.vst`、`.component` 和 `.aaxplugin` 会按代码 bundle 处理，并默认启用深度签名。
-
-### Seal 会上传文件吗？
-
-不会。Seal 不上传文件，也不收集遥测。只有手动启用时间戳选项时，`codesign` 可能连接 Apple 时间戳服务。
-
-## 开发
-
-环境要求：
-
-- macOS 14 或更高版本
-- 安装 Xcode（SwiftUI 宏需要 Xcode 工具链；仅 Command Line Tools 不足）
-- 已在 Xcode 27.1 上测试
-
-构建：
-
-```bash
+```sh
 bash scripts/build.sh
+open dist/Seal.app
 ```
 
-安装本地构建到 `/Applications`：
+产物为 `dist/Seal.app`，使用 Ad-hoc 签名。构建不会覆盖 `/Applications/Seal.app`，也不会发布。需要另行安装时，可使用 `bash scripts/install.sh`。
 
-```bash
-bash scripts/install.sh
+```sh
+npm test --prefix desktop
+npm run test:app --prefix desktop
 ```
 
-安装脚本会先尝试普通复制；只有权限不足时，才通过 `osascript` 打开 macOS 系统管理员认证窗口，不会默认执行 `sudo`。
+第一条命令验证本地服务和界面基础逻辑；第二条会启动真实 Electron，使用临时文件检查签名、重签和属性操作，并把截图写入 `dist/qa/`。临时测试程序的编译需要 Command Line Tools。
 
-构建 universal Release（DMG、ZIP、SHA-256 校验文件）：
+`scripts/package_release.sh` 是单独的 universal DMG/ZIP 打包入口。本地 arm64 构建不代表已验证 universal 发布或 Apple 公证。原 Swift 源码保留作参考，可通过 `scripts/build_native.sh` 单独构建到 `dist/Seal-native.app`。架构与开发说明见 [desktop/README.md](./desktop/README.md)。
 
-```bash
-bash scripts/package_release.sh
-```
+## 签名与权限
 
-产物位于 `dist/`。
+Seal 使用当前用户权限调用 `codesign`、`xattr`、`security`、`spctl`，不调用 `sudo`。目标只读时，请先复制到可写位置。
 
-## 贡献
+默认使用 Ad-hoc 身份，并开启深度签名、保留元数据和清理隔离标记。使用证书时可选 Apple 时间戳服务。Ad-hoc 适合本机使用，对外分发所需的证书签名和公证需另行完成。
 
-欢迎提交 Issue 和 Pull Request。反馈签名问题时，请附上 macOS 版本、目标类型和 `codesign` 输出。
+本地构建未经过 Apple 公证。macOS 拦截下载的副本时，应先确认来源，再移除隔离标记或使用自己的身份签名。签名验证成功与 Gatekeeper 接受是两个独立结果。
 
-## 致谢
+语言、外观和窗口设置会保存在本机；队列、签名选项和日志仅保留在当前会话。递归清理对符号链接本身操作，不修改它指向的外部文件。macOS 可能保留或重新生成 `com.apple.provenance` 等受保护属性。
 
-- Apple 的 `codesign`、`xattr`、`spctl`、`security` 工具。
-- SwiftUI 与 AppKit。
-- 界面参考 Material 3 Expressive。
-- README 布局参考 [Clash Verge Rev](https://github.com/clash-verge-rev/clash-verge-rev)。
+## 许可证与致谢
 
-Seal 与 Apple 无关联。
-
-## 隐私
-
-Seal 不收集使用数据，不上传文件。所有检查和签名操作都在本机执行。启用时间戳选项时，`codesign` 可能连接 Apple 时间戳服务。
-
-## 许可证
-
-MIT，详见 [LICENSE](./LICENSE)。
+MIT，见 [LICENSE](./LICENSE)。界面基于 AYMDevKitUI 的 `ad8f98b` 提交，许可证、来源映射和字体许可保留在 [desktop/UPSTREAM.md](./desktop/UPSTREAM.md)。Seal 与 Apple 无关联。

@@ -1,0 +1,314 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; media-src 'self'; connect-src 'self' ws://127.0.0.1:1420;"
+    />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Seal</title>
+  </head>
+  <body data-treatment="halftone">
+    <svg
+      class="filter-definitions"
+      xmlns="http://www.w3.org/2000/svg"
+      aria-hidden="true"
+    >
+      <defs>
+        <filter
+          id="crt-lens"
+          x="0"
+          y="0"
+          width="100%"
+          height="100%"
+          color-interpolation-filters="sRGB"
+        >
+          <feFlood flood-color="rgb(128,128,0)" result="neutral" />
+          <feImage id="crt-map" preserveAspectRatio="none" result="lens-map" />
+          <feComposite
+            in="lens-map"
+            in2="neutral"
+            operator="over"
+            result="map"
+          />
+          <feDisplacementMap
+            id="crt-displacement"
+            in="SourceGraphic"
+            in2="map"
+            xChannelSelector="R"
+            yChannelSelector="G"
+            scale="0"
+            result="curved-page"
+          />
+          <feImage
+            id="crt-background"
+            x="0"
+            y="0"
+            width="140"
+            height="140"
+            preserveAspectRatio="none"
+            result="background-tile"
+          />
+          <feTile in="background-tile" result="background" />
+          <feMerge>
+            <feMergeNode in="background" />
+            <feMergeNode in="curved-page" />
+          </feMerge>
+        </filter>
+      </defs>
+    </svg>
+    <div class="native-drag"></div>
+    <div class="crt-surface">
+      <div id="site" class="shell" data-view="overview">
+        <header class="masthead">
+          <div class="wordmark brand-home">
+            <canvas
+              class="pixel-logo"
+              width="16"
+              height="16"
+              data-category="utility"
+            ></canvas
+            ><span>SEAL<small>LOCAL CODE SIGNING</small></span>
+          </div>
+          <div class="header-right header-tools">
+            <span class="status"><i></i> LOCAL / 1.2</span
+            ><button
+              id="system-open"
+              aria-label="打开设置"
+              aria-expanded="false"
+            >
+              <span data-icon>⚙</span
+              ><span data-zh="设置" data-en="SETTINGS">设置</span>
+            </button>
+          </div>
+        </header>
+        <div class="workspace-layout">
+          <aside>
+            <p class="eyebrow navigation-caption">
+              WORKSPACE <span>01–04</span>
+            </p>
+            <nav>
+              <button class="nav active" data-page="overview">
+                <span>01</span><b data-zh="检查与签名" data-en="INSPECT & SIGN">检查与签名</b
+                ><small>CODE SIGNATURE</small></button
+              ><button class="nav" data-page="batch">
+                <span>02</span
+                ><b data-zh="批量队列" data-en="BATCH QUEUE">批量队列</b
+                ><small>SEQUENTIAL PROCESSING</small></button
+              ><button class="nav" data-page="attributes">
+                <span>03</span
+                ><b data-zh="扩展属性" data-en="ATTRIBUTES">扩展属性</b
+                ><small>QUARANTINE & METADATA</small></button
+              ><button class="nav" data-page="activity">
+                <span>04</span
+                ><b data-zh="活动记录" data-en="ACTIVITY">活动记录</b
+                ><small>COMMAND HISTORY</small>
+              </button>
+            </nav>
+            <div class="sidebar-foot">
+              <span id="sidebar-target" data-zh="尚未选择文件" data-en="NO FILE SELECTED"></span><br /><span>CODESIGN / XATTR</span>
+            </div>
+          </aside>
+          <main id="main">
+            <div class="module-surface">
+              <div class="module-wipe"></div>
+              <section data-view="overview">
+                <div class="hero workspace-hero">
+                  <p class="eyebrow">01 / CODE SIGNATURE</p>
+                  <h1 class="hero-copy" data-zh="检查与签名" data-en="INSPECT & SIGN">检查与签名</h1>
+                  <p class="muted" data-zh="检查代码签名，选择身份，在本机完成重签。" data-en="Inspect code. Choose an identity. Re-sign locally."></p>
+                </div>
+                <div id="drop-zone" class="drop-zone workspace" role="button" tabindex="0" aria-label="打开或拖入文件 / Open or drop files">
+                  <span class="drop-symbol" aria-hidden="true">↙</span>
+                  <div><h2 data-zh="拖入 App、插件或二进制文件" data-en="DROP AN APP, PLUGIN OR BINARY"></h2><p data-zh="支持 VST3 / VST / AU / AAX · 多个文件自动进入批量队列" data-en="VST3 / VST / AU / AAX · Multiple files open the batch queue"></p></div>
+                  <button id="open-target" class="primary" data-zh="打开文件 ↗" data-en="OPEN FILE ↗"></button>
+                </div>
+                <div id="single-result" hidden></div>
+                <div class="format-strip" id="empty-support"><span>APP / FRAMEWORK / MACH-O</span><span>VST3 / VST / AU / AAX</span><span data-zh="本地处理 · 不上传文件" data-en="LOCAL PROCESSING · NO UPLOADS"></span></div>
+              </section>
+              <section data-view="batch" hidden>
+                <div class="workspace-hero"><p class="eyebrow">02 / BATCH QUEUE</p><h1 data-zh="批量队列" data-en="BATCH QUEUE"></h1><p class="muted" data-zh="统一配置，依次处理。停止会等待当前项目完成。" data-en="One configuration. Sequential processing. Stop after the current item."></p></div>
+                <div class="actions batch-toolbar"><button id="batch-add" data-zh="添加文件 +" data-en="ADD FILES +"></button><button id="batch-inspect" data-zh="全部检查" data-en="INSPECT ALL"></button><button id="batch-sign" class="primary" data-zh="全部签名 ↗" data-en="SIGN ALL ↗"></button><button id="batch-stop" class="danger" data-zh="停止" data-en="STOP" hidden></button><button id="batch-clear-done" data-zh="清空已完成" data-en="CLEAR COMPLETED"></button><button id="batch-clear" data-zh="清空队列" data-en="CLEAR QUEUE"></button></div>
+                <div id="batch-progress" class="queue-summary" aria-live="polite"></div>
+                <div id="batch-list"></div>
+                <div id="batch-options" class="panel"></div>
+              </section>
+              <section data-view="attributes" hidden>
+                <div class="workspace-hero"><p class="eyebrow">03 / EXTENDED ATTRIBUTES</p><h1 data-zh="扩展属性" data-en="EXTENDED ATTRIBUTES"></h1><p class="muted" data-zh="查看下载来源、隔离标记和文件元数据。" data-en="Inspect download origins, quarantine flags and file metadata."></p></div>
+                <div id="attributes-content"></div>
+              </section>
+              <section data-view="activity" hidden>
+                <div class="workspace-hero"><p class="eyebrow">04 / ACTIVITY LOG</p><h1 data-zh="活动记录" data-en="ACTIVITY LOG"></h1><p class="muted" data-zh="保留本次会话最近 100 条记录，包含实际执行的命令。" data-en="The last 100 session entries, including the exact commands executed."></p></div>
+                <div class="actions"><button id="copy-log" data-zh="复制日志" data-en="COPY LOG"></button><button id="clear-log" data-zh="清空日志" data-en="CLEAR LOG"></button></div>
+                <div id="activity-list" aria-live="off"></div>
+              </section>
+            </div>
+          </main>
+        </div>
+        <footer>
+          <span>SEAL / MACOS</span><span id="footer-status">READY</span
+          ><span>1.2.0 · LOCAL</span>
+        </footer>
+      </div>
+      <div id="welcome">
+        <div class="boot-face">
+          <canvas id="ascii" class="boot-grid"></canvas>
+          <div class="welcome-content portal-copy">
+            <canvas
+              class="pixel-logo boot-symbol"
+              width="16"
+              height="16"
+              data-category="utility"
+            ></canvas>
+            <p class="eyebrow">SEAL / LOCAL CODE SIGNING</p>
+            <h1>YOUR CODE.<br /><em>YOUR SIGNATURE.</em></h1>
+            <p
+              data-zh="检查、验证与重新签名。文件始终留在本机。"
+              data-en="Inspect, verify and re-sign. Your files stay on your Mac."
+            ></p>
+            <button
+              id="start"
+              class="primary portal-controls"
+              data-zh="开始使用 ↗"
+              data-en="GET STARTED ↗"
+            ></button
+            ><div class="welcome-language"><button data-language="zh">简体中文</button><button data-language="en">ENGLISH</button></div><span class="welcome-meta">APP / PLUGINS / MACH-O</span>
+          </div>
+          <div class="portal-visual" aria-hidden="true">
+            <svg
+              class="banner-strata"
+              viewBox="0 0 1200 300"
+              preserveAspectRatio="xMidYMid slice"
+            >
+              <path class="strata-base" d="M0 0H1200V300H0Z" />
+              <g class="strata-far">
+                <path d="M520 0H1200V300H750L630 180H440L560 60Z" />
+                <path d="M810 0H880L640 300H570Z" />
+              </g>
+              <g class="strata-mid">
+                <path d="M930 0H1200V300H680L790 190H930L1050 70H860Z" />
+                <path d="M620 0H645L410 300H385Z" />
+              </g>
+              <g class="strata-front">
+                <path d="M1120 0H1200V300H940L830 190H1020L1090 120H1000Z" />
+                <path d="M770 246H975L1029 300H716Z" />
+              </g>
+              <path
+                class="strata-line"
+                d="M600 20H915L1015 120H1180M490 280H660L790 150H920M745 238H992L1034 280H1180"
+              />
+            </svg>
+          </div>
+        </div>
+      </div>
+      <div class="system-backdrop" hidden></div>
+      <dialog
+        id="system-dialog"
+        class="system-dialog"
+        aria-labelledby="settings-heading"
+      >
+        <div class="system-emblem"></div>
+        <div class="system-content">
+          <div class="system-titlebar">
+            <h2
+              id="settings-heading"
+              data-zh="界面控制"
+              data-en="INTERFACE CONTROL"
+            ></h2>
+            <button id="system-close" aria-label="关闭设置">×</button>
+          </div>
+          <p class="system-description">SEAL / INTERFACE PREFERENCES</p>
+          <div class="system-section">
+            <h3 data-zh="显示处理" data-en="DISPLAY TREATMENT"></h3>
+            <div class="treatments">
+              <button
+                data-treatment="classic"
+                data-zh="经典蓝"
+                data-en="CLASSIC"
+              ></button
+              ><button
+                data-treatment="halftone"
+                data-zh="高对比"
+                data-en="CONTRAST"
+              ></button
+              ><button
+                data-treatment="mono"
+                data-zh="灰阶"
+                data-en="MONO"
+              ></button>
+            </div>
+          </div>
+          <div class="system-section">
+            <h3 data-zh="外观模式" data-en="APPEARANCE"></h3>
+            <div class="appearance-options">
+              <button
+                data-appearance-choice="system"
+                data-zh="跟随系统"
+                data-en="SYSTEM"
+              ></button
+              ><button
+                data-appearance-choice="light"
+                data-zh="浅色"
+                data-en="LIGHT"
+              ></button
+              ><button
+                data-appearance-choice="dark"
+                data-zh="深色"
+                data-en="DARK"
+              ></button>
+            </div>
+          </div>
+          <div class="system-section switches">
+            <label
+              ><span data-zh="界面动效" data-en="INTERFACE MOTION"></span
+              ><button id="motion-toggle" role="switch"></button></label
+            ><label
+              ><span data-zh="交互音效" data-en="INTERFACE SOUND"></span
+              ><button id="sound-toggle" role="switch"></button></label
+            ><label
+              ><span>CRT <small>EXPERIMENTAL</small></span
+              ><button id="crt-toggle" role="switch"></button
+            ></label>
+          </div>
+          <div class="system-section">
+            <label class="range-label"
+              ><span data-zh="屏幕柔化" data-en="SCREEN SOFTNESS"></span
+              ><output id="softness-value">0.20</output
+              ><input
+                id="softness"
+                type="range"
+                min="0"
+                max="0.8"
+                step="0.05"
+                value="0.2"
+            /></label>
+          </div>
+          <div class="system-section">
+            <h3>LANGUAGE / 语言</h3>
+            <div class="actions">
+              <button data-language="zh">简体中文</button
+              ><button data-language="en">ENGLISH</button>
+            </div>
+          </div>
+          <div class="system-section"><h3 data-zh="窗口尺寸" data-en="WINDOW SIZE"></h3><div class="treatments"><button data-preset="compact" data-zh="紧凑" data-en="COMPACT"></button><button data-preset="standard" data-zh="标准" data-en="STANDARD"></button><button data-preset="large" data-zh="大" data-en="LARGE"></button></div></div>
+          <div class="system-section"><button id="replay" class="wide" data-zh="显示欢迎界面" data-en="SHOW WELCOME"></button></div>
+          <div class="system-section">
+            <button
+              id="reset"
+              class="wide"
+              data-zh="重置全部设置 ↺"
+              data-en="RESET ALL SETTINGS ↺"
+            ></button>
+          </div>
+        </div>
+      </dialog>
+      <div id="toast" role="status" hidden></div>
+      <div class="screen-bloom"></div>
+      <div class="screen-patina"><canvas id="screen-noise"></canvas></div>
+      <div class="scroll-ruler" aria-hidden="true"><i></i></div>
+    </div>
+    <div id="error" hidden role="alert"></div>
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>

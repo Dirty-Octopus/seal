@@ -1,0 +1,51 @@
+{
+  "name": "seal-desktop",
+  "version": "1.2.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite --host 127.0.0.1 --port 1420 --strictPort",
+    "build": "vite build",
+    "test": "node --test tests/*.test.cjs tests/core.test.js",
+    "desktop:dev": "electron .",
+    "desktop:build": "npm run build && node -e \"require('electron')\" && electron-builder --mac dir --arm64 --config.electronDist=node_modules/electron/dist --publish never",
+    "test:browser": "npm run test:app",
+    "desktop:universal": "npm run build && electron-builder --mac dir --universal --publish never",
+    "test:app": "npm run build && node tests/app.test.mjs"
+  },
+  "dependencies": {
+    "@fontsource/barlow-condensed": "^5.3.0",
+    "@fontsource/ibm-plex-mono": "^5.3.0"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.56",
+    "electron": "45.1.0",
+    "electron-builder": "^26",
+    "vite": "^7"
+  },
+  "main": "electron.cjs",
+  "description": "Local macOS code signing and extended attribute manager with AYMDevKitUI",
+  "author": "Andy Yu",
+  "build": {
+    "appId": "com.andyyu.seal",
+    "productName": "Seal",
+    "directories": {
+      "output": "release"
+    },
+    "files": [
+      "dist/**/*",
+      "electron.cjs",
+      "preload.cjs",
+      "backend.cjs",
+      "package.json",
+      "AYMDevKitUI-LICENSE",
+      "licenses/**/*"
+    ],
+    "mac": {
+      "category": "public.app-category.developer-tools",
+      "icon": "../Resources/AppIcon.icns",
+      "identity": null,
+      "minimumSystemVersion": "14.0"
+    }
+  }
+}
