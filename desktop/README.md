@@ -10,7 +10,7 @@ npm test
 npm run test:app
 ```
 
-From the repository root, `bash scripts/build.sh` creates and ad-hoc signs `dist/Seal.app` for Apple Silicon. It does not install or publish the app. `bash scripts/package_release.sh` is the separate universal DMG/ZIP packaging path; the local UI migration is validated on arm64.
+From the repository root, `bash scripts/build.sh` creates and ad-hoc signs `dist/Seal.app` for Apple Silicon. It does not install or publish the app. `bash scripts/package_release.sh` is the separate universal DMG/ZIP packaging path; the packaged app workflow is validated on Apple Silicon, and the release includes arm64/x86_64 binaries.
 
 `SEAL_DEV_URL=http://127.0.0.1:1420 npm run desktop:dev` loads the optional Vite development server. Packaged apps always load bundled assets. `npm run dev` starts Vite. Node 22.12+ is required; the local build uses Node 24.
 
@@ -38,3 +38,5 @@ Language, appearance, display treatment, sound, motion, CRT, softness, onboardin
 ## Upstream and licenses
 
 See [AYMDevKitUI-LICENSE](./AYMDevKitUI-LICENSE), [UPSTREAM.md](./UPSTREAM.md) and `licenses/` for the interface and bundled font licenses. The previous SwiftUI implementation remains in the repository's `Sources/` and `Package.swift` as reference; it is not the active desktop runtime.
+
+For a predownloaded official Electron runtime, set `SEAL_ELECTRON_DIST` to a folder containing `electron-v45.1.0-darwin-arm64.zip` and `electron-v45.1.0-darwin-x64.zip` before running the root release script. Verify both against `node_modules/electron/checksums.json`; the override only changes the runtime source and does not publish artifacts.

@@ -19,9 +19,24 @@ Seal 用于检查、验证和重新签名 App、Framework、Mach-O 二进制与�
 
 ![Seal 界面](./docs/preview-dark-zh.png)
 
+## 下载与安装
+
+从 [Seal v1.2.0](https://github.com/Dirty-Octopus/seal/releases/tag/v1.2.0) 下载 universal **DMG** 或 **ZIP**。安装包包含 Apple Silicon（arm64）与 Intel（x86_64）代码，需要 macOS 14 或更高版本。使用成品应用无需安装 Node.js 或 Xcode。
+
+1. 打开 DMG，将 `Seal.app` 拖入 `/Applications`；或解压 ZIP 后将应用移入该目录。
+2. 应用使用 Ad-hoc 签名，未经过 Apple 公证。如果 macOS 拦截下载的副本，确认来源后执行：
+
+```sh
+xattr -dr com.apple.quarantine /Applications/Seal.app
+codesign --force --deep --sign - --timestamp=none /Applications/Seal.app
+open /Applications/Seal.app
+```
+
+发布附件中的 `SHA256SUMS.txt` 可用于核对 DMG 和 ZIP。严格签名校验通过与 Gatekeeper 接受是两个独立结果，Ad-hoc 签名仍可能被 Gatekeeper 拒绝。
+
 ## 本地构建与测试
 
-需要 macOS 14+、Node 22.12+。本次迁移在 Apple Silicon 上验证。
+从源码构建需要 macOS 14+、Node 22.12+。应用与签名工作流在 Apple Silicon 上测试，universal 安装包包含两种架构。
 
 ```sh
 bash scripts/build.sh
@@ -37,7 +52,7 @@ npm run test:app --prefix desktop
 
 第一条命令验证本地服务和界面基础逻辑；第二条会启动真实 Electron，使用临时文件检查签名、重签和属性操作，并把截图写入 `dist/qa/`。临时测试程序的编译需要 Command Line Tools。
 
-`scripts/package_release.sh` 是单独的 universal DMG/ZIP 打包入口。本地 arm64 构建不代表已验证 universal 发布或 Apple 公证。原 Swift 源码保留作参考，可通过 `scripts/build_native.sh` 单独构建到 `dist/Seal-native.app`。架构与开发说明见 [desktop/README.md](./desktop/README.md)。
+`scripts/package_release.sh` 会构建 universal 应用、验证签名，并生成 DMG、ZIP 和 SHA-256 校验文件，不会自动发布。发布包未经过 Apple 公证。原 Swift 源码保留作参考，可通过 `scripts/build_native.sh` 单独构建到 `dist/Seal-native.app`。架构与开发说明见 [desktop/README.md](./desktop/README.md)。
 
 ## 签名与权限
 

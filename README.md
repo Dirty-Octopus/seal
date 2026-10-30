@@ -19,9 +19,24 @@ The AYM shell provides CRT curvature with mapped pointer input, a 16 × 16 blue 
 
 ![Seal interface](./docs/preview-light.png)
 
+## Download and install
+
+Download the universal **DMG** or **ZIP** from [Seal v1.2.0](https://github.com/Dirty-Octopus/seal/releases/tag/v1.2.0). The package includes Apple Silicon (arm64) and Intel (x86_64) code and requires macOS 14 or later. Node.js and Xcode are not required to use the packaged app.
+
+1. Open the DMG and drag `Seal.app` into `/Applications`, or unzip the ZIP and move the app there.
+2. The app is ad-hoc signed and not notarized. If macOS blocks the downloaded copy, confirm its source, then run:
+
+```sh
+xattr -dr com.apple.quarantine /Applications/Seal.app
+codesign --force --deep --sign - --timestamp=none /Applications/Seal.app
+open /Applications/Seal.app
+```
+
+`SHA256SUMS.txt` is included with the release for checking the DMG and ZIP. Gatekeeper may reject an ad-hoc signature even when strict signature verification passes.
+
 ## Local build and testing
 
-Requires macOS 14+ and Node 22.12+. This migration is validated on Apple Silicon.
+Building from source requires macOS 14+ and Node 22.12+. The app and signing workflow are tested on Apple Silicon; the universal package includes both architectures.
 
 ```sh
 bash scripts/build.sh
@@ -37,7 +52,7 @@ npm run test:app --prefix desktop
 
 The first command covers the local services and interface primitives. The second launches real Electron, uses temporary targets for signing and attribute operations, and captures screenshots in `dist/qa/`. Command Line Tools are required to compile the disposable test fixture.
 
-`bash scripts/package_release.sh` is the separate universal DMG/ZIP packaging path. No universal release or notarization is implied by the local arm64 build. The previous Swift source remains available as reference; `scripts/build_native.sh` builds it separately to `dist/Seal-native.app`. See [desktop/README.md](./desktop/README.md) for architecture and development details.
+`bash scripts/package_release.sh` builds the universal app, verifies its signature, and generates DMG/ZIP packages with SHA-256 checksums. It does not publish them. The release is not notarized. The previous Swift source remains available as reference; `scripts/build_native.sh` builds it separately to `dist/Seal-native.app`. See [desktop/README.md](./desktop/README.md) for architecture and development details.
 
 ## Signing and permissions
 

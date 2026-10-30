@@ -3,7 +3,11 @@ set -euo pipefail
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$ROOT"
 if [ ! -d desktop/node_modules ]; then npm ci --prefix desktop; fi
-npm run desktop:universal --prefix desktop
+if [ -n "${SEAL_ELECTRON_DIST:-}" ]; then
+    npm run desktop:universal --prefix desktop -- --config.electronDist="$SEAL_ELECTRON_DIST"
+else
+    npm run desktop:universal --prefix desktop
+fi
 VERSION="$(node -p "require('./desktop/package.json').version")"
 mkdir -p "$ROOT/dist"
 rm -rf "$ROOT/dist/Seal.app" "$ROOT/dist/dmg-staging"
