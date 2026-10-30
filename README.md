@@ -1,6 +1,7 @@
 <h1 align="center"><img src="./docs/icon.png" alt="Seal" width="100" /><br>Seal</h1>
 <p align="center">Local macOS code signing and extended attribute management.</p>
 <p align="center"><a href="./README.md">English</a> · <a href="./README.zh-CN.md">简体中文</a></p>
+<p align="center"><a href="https://repology.org/projects/?search=seal"><img src="https://img.shields.io/badge/Repology-Packaging%20status-blue" alt="Repology package status" /></a></p>
 
 Seal inspects, verifies and re-signs apps, frameworks, Mach-O binaries and audio plugins. Version 1.2 uses the [AYMDevKitUI](https://github.com/Dirty-Octopus/AYMDevKitUI) Electron application shell with a local macOS process service. Files stay on your Mac; no account or upload is involved.
 

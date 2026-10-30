@@ -1,6 +1,7 @@
 <h1 align="center"><img src="./docs/icon.png" alt="Seal" width="100" /><br>Seal</h1>
 <p align="center">macOS 本地签名与扩展属性管理工具</p>
 <p align="center"><a href="./README.md">English</a> · <a href="./README.zh-CN.md">简体中文</a></p>
+<p align="center"><a href="https://repology.org/projects/?search=seal"><img src="https://img.shields.io/badge/Repology-Packaging%20status-blue" alt="Repology package status" /></a></p>
 
 Seal 用于检查、验证和重新签名 App、Framework、Mach-O 二进制与音频插件。1.2 版采用 [AYMDevKitUI](https://github.com/Dirty-Octopus/AYMDevKitUI) 的 Electron 应用框架，接入本地 macOS 进程服务。无需账号，不上传文件。
 
