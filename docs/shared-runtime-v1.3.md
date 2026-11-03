@@ -1,6 +1,6 @@
 # Seal 1.3 shared-runtime integration — 2026-11-03
 
-Local development preview; no remote push, tag or release was created for this change.
+Shared-runtime developer preview for the v1.3.0 release. The 1.2.0 standalone universal release remains available separately.
 
 The build now reuses AYMDevKitUI's published `electron-45.1.0-arm64-f50b306c4c3a8321` runtime. Seal's thin application archive does not contain the four shared framework trees, and its output does not include a separately rebuilt Electron runtime ZIP. The native installer downloads a SHA-256-pinned runtime only when absent, reuses its validated immutable files through hard links, downloads Seal's own archive, and verifies a complete staged app before replacement.
 
@@ -28,4 +28,4 @@ The default root build and package scripts produce the thin shared-runtime artif
 
 ## Limits
 
-This follows the upstream arm64 developer preview, retains Seal's macOS 14 floor, uses Ad-hoc code signatures and an unsigned installer, and is not notarized. Privileged system Installer execution, physical Intel hardware and Developer ID distribution were not tested. The new application archive URLs target a future v1.3.0 release and need the corresponding assets published before online installation; local testing needs no publication. No real `/Applications` directories were modified.
+This follows the upstream arm64 developer preview, retains Seal's macOS 14 floor, uses Ad-hoc code signatures and an unsigned installer, and is not notarized. Privileged system Installer execution, physical Intel hardware and Developer ID distribution were not tested. The pinned application archive is distributed with v1.3.0. Unpublished rebuilds need a new immutable application asset before online installation; complete local test projections need no publication. No real `/Applications` directories were modified.

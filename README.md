@@ -20,15 +20,29 @@ The AYM shell provides CRT curvature with mapped pointer input, a 16 × 16 blue 
 
 ![Seal interface](./docs/preview-light.png)
 
-## Shared runtime (1.3 development)
+## Shared runtime (1.3 preview)
 
 The default build now follows AYMDevKitUI's shared-runtime installer flow. Seal ships a thin application ZIP and a native online `.pkg`; it reuses the published Electron 45.1.0 runtime rather than shipping another framework archive with each app.
 
 Installed apps live in `/Applications/Andy Yu/`. Regular framework files share physical storage through hard links to an immutable runtime cache. Each app retains its own bundle ID, process and profile. The first compatible install downloads the pinned runtime; later installs reuse it. Application installation/updates still download the small app ZIP, and installed apps run offline. Finder can continue to show the full logical size.
 
-The upstream shared-runtime preview currently supports **Apple Silicon only**. Seal retains its macOS 14+ requirement. These new 1.3 artifacts are local development builds; their application download URLs become usable when the corresponding release assets are published. The standalone 1.2.0 release remains available below.
+The upstream shared-runtime preview currently supports **Apple Silicon only**. Seal retains its macOS 14+ requirement. The [v1.3.0 shared-runtime preview](https://github.com/Dirty-Octopus/seal/releases/tag/v1.3.0) provides the native online installer. It is an unsigned, unnotarized developer preview. The standalone 1.2.0 release remains available for Intel Macs and users who prefer an independent app bundle.
 
 ## Download and install
+
+### Shared runtime preview: Apple Silicon
+
+Download [Seal-Shared-arm64-Preview.pkg](https://github.com/Dirty-Octopus/seal/releases/download/v1.3.0/Seal-Shared-arm64-Preview.pkg) from [v1.3.0](https://github.com/Dirty-Octopus/seal/releases/tag/v1.3.0). Requires macOS 14+ on Apple Silicon.
+
+1. Quit any running copy of Seal before installing or updating.
+2. Open the `.pkg` with macOS Installer. It fetches or reuses the pinned AYM runtime, downloads Seal's thin archive, and verifies the complete app before replacement.
+3. Launch `/Applications/Andy Yu/Seal.app`.
+
+The installer is approximately **56 KiB**; Seal's application download is approximately **4.1 MiB**. A first compatible install also downloads the shared runtime, approximately **113 MiB**. Later apps reuse that runtime. No Node.js, Python or developer tools are required on the target Mac.
+
+The application ZIP is an immutable installer dependency, **not a standalone app download**. Keep `SHA256SUMS.txt` for checking the published installer and ZIP. The previous `/Applications/Seal.app` is not removed automatically. The installer is unsigned, code uses Ad-hoc signatures, and this preview is not notarized. Do not re-sign or recursively clear attributes on installed shared frameworks.
+
+### Standalone release: Apple Silicon and Intel
 
 Download the universal **DMG** or **ZIP** from [Seal v1.2.0](https://github.com/Dirty-Octopus/seal/releases/tag/v1.2.0). The package includes Apple Silicon (arm64) and Intel (x86_64) code and requires macOS 14 or later. Node.js and Xcode are not required to use the packaged app.
 
@@ -52,7 +66,7 @@ bash scripts/build.sh
 open dist/shared-arm64/local/Seal.app
 ```
 
-The build creates `dist/shared-arm64/`: a thin app ZIP, an online installer, SHA-256 checksums and a complete local test app under `local/Seal.app`. The local test app already shares the cached runtime. It does not modify `/Applications`. `scripts/install.sh` opens the native installer, whose pinned application ZIP must first be available at its release URL.
+The build creates `dist/shared-arm64/`: a thin app ZIP, an online installer, SHA-256 checksums and a complete local test app under `local/Seal.app`. The local test app already shares the cached runtime. It does not modify `/Applications`. `scripts/install.sh` opens the native installer. Rebuilds with changed application content need their own immutable published ZIP before online installation; use `local/Seal.app` to test unpublished builds.
 
 ```sh
 npm test --prefix desktop

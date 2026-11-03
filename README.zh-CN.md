@@ -20,15 +20,29 @@ Seal 用于检查、验证和重新签名 App、Framework、Mach-O 二进制与�
 
 ![Seal 界面](./docs/preview-dark-zh.png)
 
-## 共享运行时（1.3 开发版）
+## 共享运行时（1.3 预览版）
 
 默认构建已跟进 AYMDevKitUI 的 shared runtime 流程，输出薄应用 ZIP 和原生在线安装器 `.pkg`，复用官方已发布的 Electron 45.1.0 运行时，不再为每个软件发布一份相同的 Framework。
 
 应用安装在 `/Applications/Andy Yu/`。框架中的普通文件通过硬链接复用不可变缓存的物理存储，各应用仍保留独立包标识、进程和配置。首次安装下载固定运行时，后续兼容应用复用；安装或更新应用时仍需下载小体积的应用 ZIP。安装完成后可离线运行。Finder 可能仍显示完整的逻辑体积。
 
-上游当前已验证的共享运行时预览仅支持 **Apple Silicon**，Seal 仍要求 macOS 14+。1.3 产物目前为本地开发预览，发布对应应用附件后，安装器中的下载地址才可用于在线安装。已发布的 1.2.0 独立版仍可从下方下载。
+上游当前已验证的共享运行时预览仅支持 **Apple Silicon**，Seal 仍要求 macOS 14+。[v1.3.0 共享运行时预览版](https://github.com/Dirty-Octopus/seal/releases/tag/v1.3.0) 提供原生在线安装器，属于安装器未签名、应用未公证的开发预览。Intel 用户或希望使用独立应用包的用户，仍可下载下方的 1.2.0 通用版。
 
 ## 下载与安装
+
+### 共享运行时预览版：Apple Silicon
+
+从 [v1.3.0](https://github.com/Dirty-Octopus/seal/releases/tag/v1.3.0) 下载 [Seal-Shared-arm64-Preview.pkg](https://github.com/Dirty-Octopus/seal/releases/download/v1.3.0/Seal-Shared-arm64-Preview.pkg)，需要 Apple Silicon 和 macOS 14+。
+
+1. 安装或更新前，先退出所有正在运行的 Seal。
+2. 使用 macOS 系统安装器打开 `.pkg`。安装器会下载或复用固定的 AYM 运行时，下载 Seal 薄应用包，并在替换前验证完整应用。
+3. 从 `/Applications/Andy Yu/Seal.app` 启动。
+
+安装器约 **56 KiB**，Seal 应用下载约 **4.1 MiB**；首次兼容安装还需下载约 **113 MiB** 的共享运行时，后续应用复用。目标电脑无需安装 Node.js、Python 或开发工具。
+
+应用 ZIP 是固定校验值的安装器依赖，**不能当作独立应用直接解压运行**。`SHA256SUMS.txt` 用于核对安装器和 ZIP。旧的 `/Applications/Seal.app` 不会自动删除。本预览版安装器未签名，应用使用 Ad-hoc 签名，未经过 Apple 公证。不要原地重签已安装的共享框架，也不要对它们递归清理属性。
+
+### 独立版：Apple Silicon 与 Intel
 
 从 [Seal v1.2.0](https://github.com/Dirty-Octopus/seal/releases/tag/v1.2.0) 下载 universal **DMG** 或 **ZIP**。安装包包含 Apple Silicon（arm64）与 Intel（x86_64）代码，需要 macOS 14 或更高版本。使用成品应用无需安装 Node.js 或 Xcode。
 
@@ -52,7 +66,7 @@ bash scripts/build.sh
 open dist/shared-arm64/local/Seal.app
 ```
 
-产物位于 `dist/shared-arm64/`：薄应用 ZIP、在线安装器、SHA-256 校验文件，以及 `local/Seal.app` 完整本地测试应用。测试应用已复用缓存中的运行时，构建不会修改 `/Applications`。`scripts/install.sh` 会打开系统安装器；其中固定的应用下载地址需先有对应发布附件。
+产物位于 `dist/shared-arm64/`：薄应用 ZIP、在线安装器、SHA-256 校验文件，以及 `local/Seal.app` 完整本地测试应用。测试应用已复用缓存中的运行时，构建不会修改 `/Applications`。`scripts/install.sh` 会打开系统安装器。重新构建后若应用内容有变化，需要发布新的固定应用 ZIP 后才能在线安装；未发布构建可使用 `local/Seal.app` 测试。
 
 ```sh
 npm test --prefix desktop
