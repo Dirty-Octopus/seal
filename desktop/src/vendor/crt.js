@@ -1,3 +1,4 @@
+import { defaultCrtEnabled, loadCrtPreference } from "../preferences.js";
 const SIZE = 192;
 const STRENGTH = 0.042;
 const maps = new Map();
@@ -75,9 +76,6 @@ export function initCrtLens(t) {
   const active = () => enabled && !document.fullscreenElement;
   // Portal, chrome object and archive share the same optical surface.
   const inputActive = active;
-  const defaultEnabled = () =>
-    !matchMedia("(max-width: 640px), (hover: none) and (pointer: coarse)")
-      .matches;
   const interactive = "button,a,input,textarea,select,summary,[role=button],[role=slider],video";
 
   function updateMap() {
@@ -129,7 +127,7 @@ export function initCrtLens(t) {
   }
   control.addEventListener("click", () => setEnabled(!enabled));
   document.addEventListener("settingsreset", () => {
-    setEnabled(defaultEnabled(), false);
+    setEnabled(defaultCrtEnabled, false);
     try {
       localStorage.removeItem("seal-crt");
     } catch {
@@ -309,9 +307,8 @@ export function initCrtLens(t) {
     { capture: true, passive: false },
   );
   try {
-    const saved = localStorage.getItem("seal-crt");
-    setEnabled(saved === null ? defaultEnabled() : saved !== "false", false);
+    setEnabled(loadCrtPreference(localStorage), false);
   } catch {
-    setEnabled(defaultEnabled(), false);
+    setEnabled(defaultCrtEnabled, false);
   }
 }

@@ -10,7 +10,7 @@ npm test
 npm run test:app
 ```
 
-From the repository root, `bash scripts/build.sh` now creates a thin shared-runtime installer and ZIP in `dist/shared-arm64/`, with a complete local test app in `local/Seal.app`. The default build reuses the official AYM arm64 runtime. See [shared-runtime/README.md](./shared-runtime/README.md). `scripts/build_standalone.sh` and `scripts/package_standalone.sh` retain the previous independent app and universal DMG/ZIP flows.
+From the repository root, `bash scripts/build.sh` now creates a thin shared-runtime installer and ZIP in `dist/shared-arm64/`, with a complete local test app in `local/Seal.app`. The default build reuses the official AYM arm64 runtime. See [shared-runtime/README.md](./shared-runtime/README.md). `scripts/build_standalone.sh` and `scripts/package_standalone.sh` retain the independent Apple Silicon app and Intel DMG/ZIP flows (with optional universal packaging).
 
 `SEAL_DEV_URL=http://127.0.0.1:1420 npm run desktop:dev` loads the optional Vite development server. Packaged apps always load bundled assets. `npm run dev` starts Vite. Node 22.12+ is required; the local build uses Node 24.
 
@@ -42,3 +42,5 @@ See [AYMDevKitUI-LICENSE](./AYMDevKitUI-LICENSE), [UPSTREAM.md](./UPSTREAM.md) a
 For a predownloaded official Electron runtime, set `SEAL_ELECTRON_DIST` to a folder containing `electron-v45.1.0-darwin-arm64.zip` and `electron-v45.1.0-darwin-x64.zip` before running `scripts/package_standalone.sh`. Verify both against `node_modules/electron/checksums.json`; the override only changes the runtime source and does not publish artifacts.
 
 The signing service protects hard-linked shared files and immutable production/development caches from in-place writes. Shared-runtime integration tests: `npm run runtime:test -- ../dist/shared-arm64` from this directory.
+
+The root release script now assembles Apple Silicon shared-runtime assets and x86_64 standalone DMG/ZIP in `dist/releases/v<version>/` with one checksum file. Fresh/reset visual preferences default to softness 0 and CRT off; saved choices are retained.

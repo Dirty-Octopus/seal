@@ -16,23 +16,23 @@ Seal 用于检查、验证和重新签名 App、Framework、Mach-O 二进制与�
 
 ## 界面
 
-使用 AYM 的 CRT 曲面及鼠标坐标映射、16 × 16 蓝色工具标识、本地字体、面板转场和交互音效。设置包含中英文、跟随系统/浅色/深色、显示处理、动效、音效、CRT、柔化和窗口尺寸预设。欢迎页只在首次启动出现，之后可在设置中重播。
+使用 AYM 的 CRT 曲面及鼠标坐标映射、16 × 16 蓝色工具标识、本地字体、面板转场和交互音效。设置包含中英文、跟随系统/浅色/深色、显示处理、动效、音效、CRT、柔化和窗口尺寸预设。新配置和重置设置后的屏幕柔化默认 **0**，CRT 畸变默认 **关闭**；已有用户设置会保留。欢迎页只在首次启动出现，之后可在设置中重播。
 
 ![Seal 界面](./docs/preview-dark-zh.png)
 
-## 共享运行时（1.3 预览版）
+## 共享运行时（1.3.1 预览版）
 
 默认构建已跟进 AYMDevKitUI 的 shared runtime 流程，输出薄应用 ZIP 和原生在线安装器 `.pkg`，复用官方已发布的 Electron 45.1.0 运行时，不再为每个软件发布一份相同的 Framework。
 
 应用安装在 `/Applications/Andy Yu/`。框架中的普通文件通过硬链接复用不可变缓存的物理存储，各应用仍保留独立包标识、进程和配置。首次安装下载固定运行时，后续兼容应用复用；安装或更新应用时仍需下载小体积的应用 ZIP。安装完成后可离线运行。Finder 可能仍显示完整的逻辑体积。
 
-上游当前已验证的共享运行时预览仅支持 **Apple Silicon**，Seal 仍要求 macOS 14+。[v1.3.0 共享运行时预览版](https://github.com/Dirty-Octopus/seal/releases/tag/v1.3.0) 提供原生在线安装器，属于安装器未签名、应用未公证的开发预览。Intel 用户或希望使用独立应用包的用户，仍可下载下方的 1.2.0 通用版。
+上游当前已验证的共享运行时预览仅支持 **Apple Silicon**，Seal 仍要求 macOS 14+。[v1.3.1 共享运行时预览版](https://github.com/Dirty-Octopus/seal/releases/tag/v1.3.1) 提供原生在线安装器，属于安装器未签名、应用未公证的开发预览。同一 v1.3.1 Release 同时提供 Intel 独立 DMG/ZIP，内含自己的 Electron 运行时。
 
 ## 下载与安装
 
 ### 共享运行时预览版：Apple Silicon
 
-从 [v1.3.0](https://github.com/Dirty-Octopus/seal/releases/tag/v1.3.0) 下载 [Seal-Shared-arm64-Preview.pkg](https://github.com/Dirty-Octopus/seal/releases/download/v1.3.0/Seal-Shared-arm64-Preview.pkg)，需要 Apple Silicon 和 macOS 14+。
+从 [v1.3.1](https://github.com/Dirty-Octopus/seal/releases/tag/v1.3.1) 下载 [Seal-Shared-arm64-Preview.pkg](https://github.com/Dirty-Octopus/seal/releases/download/v1.3.1/Seal-Shared-arm64-Preview.pkg)，需要 Apple Silicon 和 macOS 14+。
 
 1. 安装或更新前，先退出所有正在运行的 Seal。
 2. 使用 macOS 系统安装器打开 `.pkg`。安装器会下载或复用固定的 AYM 运行时，下载 Seal 薄应用包，并在替换前验证完整应用。
@@ -42,9 +42,9 @@ Seal 用于检查、验证和重新签名 App、Framework、Mach-O 二进制与�
 
 应用 ZIP 是固定校验值的安装器依赖，**不能当作独立应用直接解压运行**。`SHA256SUMS.txt` 用于核对安装器和 ZIP。旧的 `/Applications/Seal.app` 不会自动删除。本预览版安装器未签名，应用使用 Ad-hoc 签名，未经过 Apple 公证。不要原地重签已安装的共享框架，也不要对它们递归清理属性。
 
-### 独立版：Apple Silicon 与 Intel
+### Intel 独立版：v1.3.1
 
-从 [Seal v1.2.0](https://github.com/Dirty-Octopus/seal/releases/tag/v1.2.0) 下载 universal **DMG** 或 **ZIP**。安装包包含 Apple Silicon（arm64）与 Intel（x86_64）代码，需要 macOS 14 或更高版本。使用成品应用无需安装 Node.js 或 Xcode。
+从同一 [v1.3.1 Release](https://github.com/Dirty-Octopus/seal/releases/tag/v1.3.1) 下载 [Seal-1.3.1-macos-intel.dmg](https://github.com/Dirty-Octopus/seal/releases/download/v1.3.1/Seal-1.3.1-macos-intel.dmg) 或 [Seal-1.3.1-macos-intel.zip](https://github.com/Dirty-Octopus/seal/releases/download/v1.3.1/Seal-1.3.1-macos-intel.zip)。这两份 x86_64 独立包包含 Electron，需要 macOS 14+，不依赖共享运行时安装器。[旧版 v1.2.0 通用包](https://github.com/Dirty-Octopus/seal/releases/tag/v1.2.0) 仍可下载。
 
 1. 打开 DMG，将 `Seal.app` 拖入 `/Applications`；或解压 ZIP 后将应用移入该目录。
 2. 应用使用 Ad-hoc 签名，未经过 Apple 公证。如果 macOS 拦截下载的副本，确认来源后执行：
@@ -76,7 +76,7 @@ SEAL_PACKAGED_APP="$PWD/dist/shared-arm64/local/Seal.app" npm run test:app --pre
 
 服务测试覆盖签名和共享文件写入保护。运行时测试使用真实原生助手，在隔离的非特权目录验证双应用 inode 共享、缓存及离线复用、下载失败恢复、严格签名、进程与配置隔离，并运行完整 Seal 工作流。应用测试仅操作临时签名目标，截图位于 `dist/qa/`。测试不安装到真实 `/Applications`。
 
-`scripts/package_release.sh` 输出共享版薄安装器和应用附件，不自动发布，也不另行打包官方运行时 ZIP。当前为 Ad-hoc 开发预览，安装器未签名、未经过 Apple 公证。独立版构建保留在 `scripts/build_standalone.sh`，通用 DMG/ZIP 打包保留在 `scripts/package_standalone.sh`。原 Swift 源码保留作参考，可通过 `scripts/build_native.sh` 单独构建到 `dist/Seal-native.app`。架构与开发说明见 [desktop/README.md](./desktop/README.md)。
+`scripts/package_release.sh` 构建共享安装器/应用 ZIP 和 Intel 独立 DMG/ZIP，并将这四份文件与统一的 SHA-256 校验文件汇总到 `dist/releases/v1.3.1/`，不自动发布，也不另行打包官方运行时 ZIP。当前为 Ad-hoc 开发预览，安装器未签名、未经过 Apple 公证。独立版构建保留在 `scripts/build_standalone.sh`，`scripts/package_standalone.sh` 默认打包 Intel 独立版，设置 `SEAL_STANDALONE_ARCH=universal` 可生成可选通用包。原 Swift 源码保留作参考，可通过 `scripts/build_native.sh` 单独构建到 `dist/Seal-native.app`。架构与开发说明见 [desktop/README.md](./desktop/README.md)。
 
 ## 签名与权限
 

@@ -24,11 +24,18 @@ try {
   await run('/usr/bin/xattr', ['-w', 'com.seal.fixture', '<img src=x onerror=alert(1)>', binary]);
   const packaged = process.env.SEAL_PACKAGED_APP;
   app = await electron.launch({ ...(packaged ? { executablePath: path.join(packaged, 'Contents/MacOS/Seal') } : {}), args: packaged ? ['--inspect', binary] : [desktop, '--inspect', binary], env: { ...process.env, SEAL_TEST_USER_DATA: path.join(scratch, 'preferences'), ELECTRON_ENABLE_LOGGING: '1' } });
+  const runtime = await app.evaluate(({ app }) => ({ architecture: process.arch, version: app.getVersion() }));
+  if (process.env.SEAL_EXPECT_ARCH) expect(runtime.architecture).toBe(process.env.SEAL_EXPECT_ARCH);
+  console.log('Runtime:', JSON.stringify(runtime));
   const page = await app.firstWindow();
   page.on('pageerror', (error) => errors.push(error.message));
   page.on('console', (msg) => { if (msg.type() === 'error') console.error('Renderer:', msg.text()); });
   await page.waitForFunction(() => document.querySelector('#start')?.textContent.trim());
   await page.waitForFunction(() => !!document.querySelector('.file-meta'));
+  await expect(page.locator('#softness')).toHaveValue('0');
+  await expect(page.locator('#crt-toggle')).toHaveAttribute('aria-checked', 'false');
+  expect(await page.evaluate(() => document.documentElement.classList.contains('crt-mode'))).toBe(false);
+  expect(await page.evaluate(() => getComputedStyle(document.documentElement).getPropertyValue('--screen-softness').trim())).toBe('0px');
   // Exercise the physical pointer through the same quantized CRT inverse as the renderer.
   async function click(selector) {
     const locator = page.locator(`${selector}:visible`).first();
@@ -43,6 +50,26 @@ try {
   await click('#start');
   await page.waitForFunction(() => document.querySelector('#welcome').hidden && !document.body.classList.contains('portal-opening'));
   await expect(page.locator('.file-meta h2')).toContainText("Test ' & Seal");
+  await page.screenshot({ path: path.join(screenshots, 'inspect-defaults-zh.png') });
+  await click('#system-open');
+  await page.waitForFunction(() => document.querySelector('#system-dialog').open && !document.querySelector('.system-content').inert);
+  await page.locator('#softness').focus();
+  await page.keyboard.press('ArrowRight');
+  await expect(page.locator('#softness')).toHaveValue('0.05');
+  await click('#crt-toggle');
+  expect(await page.evaluate(() => localStorage.getItem('seal-crt'))).toBe('true');
+  expect(await page.evaluate(() => JSON.parse(localStorage.getItem('seal-interface')).softness)).toBe(0.05);
+  await click('#reset');
+  await expect(page.locator('#softness')).toHaveValue('0');
+  await expect(page.locator('#crt-toggle')).toHaveAttribute('aria-checked', 'false');
+  expect(await page.evaluate(() => document.documentElement.classList.contains('crt-mode'))).toBe(false);
+  expect(await page.evaluate(() => localStorage.getItem('seal-crt'))).toBe(null);
+  await page.screenshot({ path: path.join(screenshots, 'settings-defaults.png') });
+  // Opt in again so the complete workflow still exercises physical CRT pointer mapping.
+  await click('#crt-toggle');
+  await expect(page.locator('#crt-toggle')).toHaveAttribute('aria-checked', 'true');
+  await page.keyboard.press('Escape');
+  await page.waitForFunction(() => !document.querySelector('#system-dialog').open);
   await expect(page.locator('[data-action="sign"]').first()).toBeEnabled();
   await page.screenshot({ path: path.join(screenshots, 'inspect-before.png') });
   // Signing mutates only the temporary fixture, then verifies it through the real backend.
@@ -105,13 +132,27 @@ try {
   await page.waitForFunction(() => document.querySelector('#system-dialog').open && !document.querySelector('.system-content').inert);
   await click('[data-language="zh"]');
   await click('[data-appearance-choice="dark"]');
+  await click('#crt-toggle');
+  await expect(page.locator('#crt-toggle')).toHaveAttribute('aria-checked', 'false');
   await page.keyboard.press('Escape');
   await page.waitForFunction(() => !document.querySelector('#system-dialog').open);
   await page.evaluate(() => { document.querySelector('#main').scrollTop = 0; });
   await page.waitForTimeout(500);
   await page.screenshot({ path: path.join(screenshots, 'inspect-dark-zh.png') });
+  await click('#system-open');
+  await page.waitForFunction(() => document.querySelector('#system-dialog').open && !document.querySelector('.system-content').inert);
+  await click('[data-language="en"]');
+  await page.waitForFunction(() => !document.querySelector('.ascii-scramble'));
+  await click('[data-appearance-choice="light"]');
+  await page.waitForTimeout(550);
+  await expect(page.locator('#softness')).toHaveValue('0');
+  await expect(page.locator('#crt-toggle')).toHaveAttribute('aria-checked', 'false');
+  await page.screenshot({ path: path.join(screenshots, 'settings-light-en.png') });
+  await page.keyboard.press('Escape');
+  await page.waitForFunction(() => !document.querySelector('#system-dialog').open);
+  await page.screenshot({ path: path.join(screenshots, 'inspect-light-en.png') });
   expect(errors).toEqual([]);
-  console.log('PASS: native Electron launch, native file selection + real-file drop bridge, CRT pointer mapping, onboarding, signature inspection, real signing + strict verification, recursive quarantine cleanup, safe xattr rendering + removal, batch signing, settings, English, light appearance and compact layout.');
+  console.log('PASS: fresh/reset visual defaults, saved opt-in controls, native Electron launch, native file selection + real-file drop bridge, CRT pointer mapping, onboarding, signature inspection, real signing + strict verification, recursive quarantine cleanup, safe xattr rendering + removal, batch signing, settings, English, light appearance and compact layout.');
   console.log('Screenshots:', screenshots);
 } finally {
   if (app) await app.close();

@@ -16,23 +16,23 @@ Supported bundles include `.app`, `.framework`, `.xpc`, `.appex`, `.bundle`, `.p
 
 ## Interface
 
-The AYM shell provides CRT curvature with mapped pointer input, a 16 × 16 blue utility mark, bundled Barlow Condensed / IBM Plex Mono, panel transitions and interface sounds. Settings include Chinese/English, system/light/dark appearance, display treatment, motion, sound, CRT, softness and window presets. Welcome appears on first launch and can be replayed from Settings.
+The AYM shell provides CRT curvature with mapped pointer input, a 16 × 16 blue utility mark, bundled Barlow Condensed / IBM Plex Mono, panel transitions and interface sounds. Settings include Chinese/English, system/light/dark appearance, display treatment, motion, sound, CRT, softness and window presets. Screen softness defaults to **0** and CRT distortion defaults to **off**, both on fresh settings and after Reset. Previously saved choices are preserved. Welcome appears on first launch and can be replayed from Settings.
 
 ![Seal interface](./docs/preview-light.png)
 
-## Shared runtime (1.3 preview)
+## Shared runtime (1.3.1 preview)
 
 The default build now follows AYMDevKitUI's shared-runtime installer flow. Seal ships a thin application ZIP and a native online `.pkg`; it reuses the published Electron 45.1.0 runtime rather than shipping another framework archive with each app.
 
 Installed apps live in `/Applications/Andy Yu/`. Regular framework files share physical storage through hard links to an immutable runtime cache. Each app retains its own bundle ID, process and profile. The first compatible install downloads the pinned runtime; later installs reuse it. Application installation/updates still download the small app ZIP, and installed apps run offline. Finder can continue to show the full logical size.
 
-The upstream shared-runtime preview currently supports **Apple Silicon only**. Seal retains its macOS 14+ requirement. The [v1.3.0 shared-runtime preview](https://github.com/Dirty-Octopus/seal/releases/tag/v1.3.0) provides the native online installer. It is an unsigned, unnotarized developer preview. The standalone 1.2.0 release remains available for Intel Macs and users who prefer an independent app bundle.
+The upstream shared-runtime preview currently supports **Apple Silicon only**. Seal retains its macOS 14+ requirement. The [v1.3.1 shared-runtime preview](https://github.com/Dirty-Octopus/seal/releases/tag/v1.3.1) provides the native online installer. It is an unsigned, unnotarized developer preview. The same v1.3.1 Release also provides an independent Intel DMG/ZIP, including its own Electron runtime.
 
 ## Download and install
 
 ### Shared runtime preview: Apple Silicon
 
-Download [Seal-Shared-arm64-Preview.pkg](https://github.com/Dirty-Octopus/seal/releases/download/v1.3.0/Seal-Shared-arm64-Preview.pkg) from [v1.3.0](https://github.com/Dirty-Octopus/seal/releases/tag/v1.3.0). Requires macOS 14+ on Apple Silicon.
+Download [Seal-Shared-arm64-Preview.pkg](https://github.com/Dirty-Octopus/seal/releases/download/v1.3.1/Seal-Shared-arm64-Preview.pkg) from [v1.3.1](https://github.com/Dirty-Octopus/seal/releases/tag/v1.3.1). Requires macOS 14+ on Apple Silicon.
 
 1. Quit any running copy of Seal before installing or updating.
 2. Open the `.pkg` with macOS Installer. It fetches or reuses the pinned AYM runtime, downloads Seal's thin archive, and verifies the complete app before replacement.
@@ -42,9 +42,9 @@ The installer is approximately **56 KiB**; Seal's application download is approx
 
 The application ZIP is an immutable installer dependency, **not a standalone app download**. Keep `SHA256SUMS.txt` for checking the published installer and ZIP. The previous `/Applications/Seal.app` is not removed automatically. The installer is unsigned, code uses Ad-hoc signatures, and this preview is not notarized. Do not re-sign or recursively clear attributes on installed shared frameworks.
 
-### Standalone release: Apple Silicon and Intel
+### Intel standalone: v1.3.1
 
-Download the universal **DMG** or **ZIP** from [Seal v1.2.0](https://github.com/Dirty-Octopus/seal/releases/tag/v1.2.0). The package includes Apple Silicon (arm64) and Intel (x86_64) code and requires macOS 14 or later. Node.js and Xcode are not required to use the packaged app.
+Download [Seal-1.3.1-macos-intel.dmg](https://github.com/Dirty-Octopus/seal/releases/download/v1.3.1/Seal-1.3.1-macos-intel.dmg) or [Seal-1.3.1-macos-intel.zip](https://github.com/Dirty-Octopus/seal/releases/download/v1.3.1/Seal-1.3.1-macos-intel.zip) from the same [v1.3.1 Release](https://github.com/Dirty-Octopus/seal/releases/tag/v1.3.1). These x86_64 packages include Electron and require macOS 14+. They do not use the shared-runtime installer. The [older v1.2.0 universal packages](https://github.com/Dirty-Octopus/seal/releases/tag/v1.2.0) remain available.
 
 1. Open the DMG and drag `Seal.app` into `/Applications`, or unzip the ZIP and move the app there.
 2. The app is ad-hoc signed and not notarized. If macOS blocks the downloaded copy, confirm its source, then run:
@@ -76,7 +76,7 @@ SEAL_PACKAGED_APP="$PWD/dist/shared-arm64/local/Seal.app" npm run test:app --pre
 
 The service tests cover signing and shared-file write protection. The runtime tests exercise the actual native helper in private, unprivileged test roots: two-app inode sharing, runtime reuse/offline reuse, failed-download recovery, strict signatures, process/profile isolation and the full Seal workflow. The packaged-app test uses temporary signing targets and saves screenshots in `dist/qa/`. Tests do not install into the real `/Applications`.
 
-`bash scripts/package_release.sh` produces the thin shared-runtime installer and app assets without publishing them. The runtime ZIP remains hosted by AYMDevKitUI. The current preview is ad-hoc signed, with an unsigned installer and no notarization. For an independent standalone build, use `scripts/build_standalone.sh`; `scripts/package_standalone.sh` retains universal DMG/ZIP packaging. The previous Swift source remains available as reference; `scripts/build_native.sh` builds it separately to `dist/Seal-native.app`. See [desktop/README.md](./desktop/README.md) for architecture and development details.
+`bash scripts/package_release.sh` builds the shared-runtime installer/app ZIP and Intel standalone DMG/ZIP, then collects all five release assets (including a combined SHA-256 file) in `dist/releases/v1.3.1/`. It does not publish them. The runtime ZIP remains hosted by AYMDevKitUI. The current preview is ad-hoc signed, with an unsigned installer and no notarization. For an independent standalone build, use `scripts/build_standalone.sh`; `scripts/package_standalone.sh` defaults to Intel DMG/ZIP packaging; set `SEAL_STANDALONE_ARCH=universal` for optional universal packages. The previous Swift source remains available as reference; `scripts/build_native.sh` builds it separately to `dist/Seal-native.app`. See [desktop/README.md](./desktop/README.md) for architecture and development details.
 
 ## Signing and permissions
 

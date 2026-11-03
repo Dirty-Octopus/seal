@@ -16,7 +16,7 @@ open dist/shared-arm64/local/Seal.app
 npm run runtime:test --prefix desktop -- ../dist/shared-arm64
 ```
 
-The standalone builder is used as a signing/source intermediate. The deliverables omit shared framework trees: `Seal-Shared-arm64-Preview.pkg`, `com.andyyu.seal-1.3.0-arm64-<hash>.zip` and `SHA256SUMS.txt`. No Electron ZIP is emitted with the app. The default app download URL targets `v1.3.0`; the files must be published there before using the online installer. This integration does not publish assets.
+The standalone builder is used as a signing/source intermediate. The deliverables omit shared framework trees: `Seal-Shared-arm64-Preview.pkg`, `com.andyyu.seal-1.3.1-arm64-<hash>.zip` and `SHA256SUMS.txt`. No Electron ZIP is emitted with the app. The default app download URL targets `v1.3.1`; the files must be published there before using the online installer. This integration does not publish assets.
 
 `SEAL_SHARED_CACHE` can select a development cache; its default is `~/Library/Caches/Andy Yu/SharedElectron`. The official ZIP is fetched only when absent, verified against the pin, unpacked to a content-addressed directory and validated file-by-file with strict framework signature checks. A valid cache is reused offline. `SEAL_SHARED_OUTPUT` selects a different output directory. Rebuilds replace only previous successful Seal shared-runtime outputs; an unrelated existing directory is rejected. The complete local test app hard-links the developer cache and is not an installed product.
 

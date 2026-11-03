@@ -24,3 +24,5 @@ Adaptations:
 ## Shared runtime
 
 The shared-runtime build/installer follows upstream commit `48e355f61177498b20287049716f6e52a1cf847b`. `shared-runtime/vendor/` retains the upstream native helper and builder; the builder has one documented minimum-OS integration patch. The pinned manifest comes from the official, checksum-verified arm64 preview installer, and Seal reuses its published runtime ID and URL. `shared-runtime/README.md` records source and archive hashes. UI sources still derive from `ad8f98b`; the upstream delta to `48e355f` only adds packaging and documentation.
+
+Seal 1.3.1 sets screen softness to zero and CRT off for fresh/reset preferences. `vendor/crt.js` now reads the app-owned default/storage helper from `preferences.js`; explicit saved CRT choices remain supported.

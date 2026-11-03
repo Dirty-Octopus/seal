@@ -38,3 +38,19 @@ test("appearance defaults to system and explicit modes ignore system changes", (
   assert.equal(resolveAppearance("light", true), "light");
   assert.equal(resolveAppearance("dark", false), "dark");
 });
+import { defaultCrtEnabled, loadCrtPreference } from '../src/preferences.js';
+test('fresh and invalid preferences default to zero softness and CRT off', () => {
+  assert.equal(defaults.softness, 0);
+  assert.equal(defaultCrtEnabled, false);
+  assert.equal(loadPreferences({ getItem: () => null }).softness, 0);
+  assert.equal(sanitize({ softness: NaN }).softness, 0);
+  assert.equal(loadCrtPreference({ getItem: () => null }), false);
+  assert.equal(loadCrtPreference({ getItem: () => 'invalid' }), false);
+  assert.equal(loadCrtPreference({ getItem: () => { throw new Error('Storage unavailable'); } }), false);
+});
+test('explicit saved softness and CRT choices survive the new defaults', () => {
+  assert.equal(sanitize({ softness: 0.2 }).softness, 0.2);
+  assert.equal(sanitize({ softness: 0 }).softness, 0);
+  assert.equal(loadCrtPreference({ getItem: () => 'true' }), true);
+  assert.equal(loadCrtPreference({ getItem: () => 'false' }), false);
+});
