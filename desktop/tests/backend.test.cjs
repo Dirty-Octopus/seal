@@ -90,3 +90,35 @@ test('real macOS signing, strict verification and recursive xattr cleanup on dis
     assert.equal((await service.inspect(target.path)).signature.verified, true);
   } finally { await fs.rm(dir, { recursive: true, force: true }); }
 });
+test('shared hard-linked files reject signing and recursive attributes without changing either projection', async () => {
+  const dir = await fs.mkdtemp(path.join(os.tmpdir(), 'seal-shared-guard-'));
+  try {
+    const cache = path.join(dir, 'runtime-file'), app = path.join(dir, 'Shared.app'), projected = path.join(app, 'engine');
+    await fs.mkdir(app); await fs.writeFile(cache, 'shared engine'); await fs.link(cache, projected);
+    const commands = [], service = new SealService((command) => commands.push(command));
+    const [target, file] = await service.adopt([app, projected]);
+    await assert.rejects(service.sign(target.path, '-', { deep: false, removeQuarantine: false }), /shared hard-linked/);
+    await assert.rejects(service.removeXattr(target.path, 'com.apple.quarantine', true), /shared hard-linked/);
+    await assert.rejects(service.clearXattrs(target.path, true), /shared hard-linked/);
+    await assert.rejects(service.removeXattr(file.path, 'com.apple.quarantine', false), /shared hard-linked/);
+    assert.deepEqual(commands, []);
+    assert.equal(await fs.readFile(cache, 'utf8'), 'shared engine');
+    assert.equal((await fs.stat(cache)).ino, (await fs.stat(projected)).ino);
+    // A top-level directory attribute is private even when its children share files.
+    await run('/usr/bin/xattr', ['-w', 'com.seal.private', 'private', target.path]);
+    await service.removeXattr(target.path, 'com.seal.private', false);
+    assert.equal((await run('/usr/bin/xattr', ['-p', 'com.seal.private', target.path])).succeeded, false);
+  } finally { await fs.rm(dir, { recursive: true, force: true }); }
+});
+test('managed runtime paths reject mutations even when no other app currently links them', async () => {
+  const dir = await fs.mkdtemp(path.join(os.tmpdir(), 'seal-cache-guard-'));
+  try {
+    for (const prefix of [['Applications', 'Andy Yu', 'Runtime'], ['Library', 'Caches', 'Andy Yu', 'SharedElectron']]) {
+      const file = path.join(dir, ...prefix, 'test', 'engine');
+      await fs.mkdir(path.dirname(file), { recursive: true }); await fs.writeFile(file, 'immutable');
+      const service = new SealService(), [target] = await service.adopt([file]);
+      await assert.rejects(service.sign(target.path, '-', {}), /cache is immutable/);
+      await assert.rejects(service.clearXattrs(target.path, false), /cache is immutable/);
+    }
+  } finally { await fs.rm(dir, { recursive: true, force: true }); }
+});

@@ -1,0 +1,1058 @@
+{
+  "schema": 1,
+  "runtimeID": "electron-45.1.0-arm64-f50b306c4c3a8321",
+  "architecture": "arm64",
+  "electronVersion": "45.1.0",
+  "archiveURL": "https://github.com/Dirty-Octopus/AYMDevKitUI/releases/download/runtime-45.1.0-arm64-preview/electron-45.1.0-arm64-f50b306c4c3a8321.zip",
+  "archiveSHA256": "c4bcaffc0e6e8d9224d4463a1d1ec8d0bd93b88aa67fc9008b0cab60195a1ba8",
+  "frameworks": [
+    "Electron Framework.framework",
+    "Mantle.framework",
+    "ReactiveObjC.framework",
+    "Squirrel.framework"
+  ],
+  "files": [
+    {
+      "path": "Electron Framework.framework/Electron Framework",
+      "target": "Versions/Current/Electron Framework"
+    },
+    {
+      "path": "Electron Framework.framework/Helpers",
+      "target": "Versions/Current/Helpers"
+    },
+    {
+      "path": "Electron Framework.framework/Libraries",
+      "target": "Versions/Current/Libraries"
+    },
+    {
+      "path": "Electron Framework.framework/Resources",
+      "target": "Versions/Current/Resources"
+    },
+    {
+      "path": "Electron Framework.framework/Versions/A/Electron Framework",
+      "sha256": "10ae0e17b4d35668173e78c7352bc1f615ef8a6553c81eb177697803f79f049b"
+    },
+    {
+      "path": "Electron Framework.framework/Versions/A/Helpers/app_shim_loader",
+      "sha256": "0a7418555066dd404e5d7d7dfaf90b660440d04db734fe10785693a51defba4a"
+    },
+    {
+      "path": "Electron Framework.framework/Versions/A/Helpers/chrome_crashpad_handler",
+      "sha256": "5e18b244ae7fe168101287d553b41e0158a536b132a554e451d3c0b1a85e0748"
+    },
+    {
+      "path": "Electron Framework.framework/Versions/A/Libraries/libffmpeg.dylib",
+      "sha256": "0d2ef878dee5dee00c21788279a4e8cecd712ef70d939b6aad3eb104ab031aa4"
+    },
+    {
+      "path": "Electron Framework.framework/Versions/A/Libraries/libvk_swiftshader.dylib",
+      "sha256": "3db7d6b9d175b8d18c1aedba0aee45db5c4065490679587b457240d17dea76fe"
+    },
+    {
+      "path": "Electron Framework.framework/Versions/A/Libraries/vk_swiftshader_icd.json",
+      "sha256": "d717d915e31e7c27948b80b36ab34e2d897888114c5c7d0af835f93eb53e58f5"
+    },
+    {
+      "path": "Electron Framework.framework/Versions/A/Resources/Info.plist",
+      "sha256": "5d4e01b4e9380732c956c0fd20bad4f7de05f38514d0ff314367b6ec0b0c0692"
+    },
+    {
+      "path": "Electron Framework.framework/Versions/A/Resources/MainMenu.nib",
+      "sha256": "4b2168de2d6d9a09b20faaa23139d5f25f73b2595671de25872d191b6939d819"
+    },
+    {
+      "path": "Electron Framework.framework/Versions/A/Resources/af.lproj/locale.pak",
+      "sha256": "3ff81cb2168f6f5c8733030e692e93056caf179ec3679c8abdf210603e8e19f5"
+    },
+    {
+      "path": "Electron Framework.framework/Versions/A/Resources/af_FEMININE.lproj/locale.pak",
+      "sha256": "ca73097bd968b363b7145e86b64f3c595e533808b0763dc8863a27fc363cfa51"
+    },
+    {
+      "path": "Electron Framework.framework/Versions/A/Resources/af_MASCULINE.lproj/locale.pak",
+      "sha256": "ca73097bd968b363b7145e86b64f3c595e533808b0763dc8863a27fc363cfa51"
+    },
+    {
+      "path": "Electron Framework.framework/Versions/A/Resources/af_NEUTER.lproj/locale.pak",
+      "sha256": "ca73097bd968b363b7145e86b64f3c595e533808b0763dc8863a27fc363cfa51"
+    },
+    {
+      "path": "Electron Framework.framework/Versions/A/Resources/am.lproj/locale.pak",
+      "sha256": "b8bf0eba56fc69d47f3419a4cca9ddf0b0e437f7e1ce19d44e4aac9e25a652f9"
+    },
+    {
+      "path": "Electron Framework.framework/Versions/A/Resources/am_FEMININE.lproj/locale.pak",
+      "sha256": "ca73097bd968b363b7145e86b64f3c595e533808b0763dc8863a27fc363cfa51"
+    },
+    {
+      "path": "Electron Framework.framework/Versions/A/Resources/am_MASCULINE.lproj/locale.pak",
+      "sha256": "ca73097bd968b363b7145e86b64f3c595e533808b0763dc8863a27fc363cfa51"
+    },
+    {
+      "path": "Electron Framework.framework/Versions/A/Resources/am_NEUTER.lproj/locale.pak",
+      "sha256": "ca73097bd968b363b7145e86b64f3c595e533808b0763dc8863a27fc363cfa51"
+    },
+    {
+      "path": "Electron Framework.framework/Versions/A/Resources/ar.lproj/locale.pak",
+      "sha256": "29ce7e075337af52f0866d9266450e0f15d68c6cb04c5d0d1eb853a0f7a97407"
+    },
+    {
+      "path": "Electron Framework.framework/Versions/A/Resources/ar_FEMININE.lproj/locale.pak",
+      "sha256": "ca73097bd968b363b7145e86b64f3c595e533808b0763dc8863a27fc363cfa51"
+    },
+    {
+      "path": "Electron Framework.framework/Versions/A/Resources/ar_MASCULINE.lproj/locale.pak",
+      "sha256": "ca73097bd968b363b7145e86b64f3c595e533808b0763dc8863a27fc363cfa51"
+    },
+    {
+      "path": "Electron Framework.framework/Versions/A/Resources/ar_NEUTER.lproj/locale.pak",
+      "sha256": "ca73097bd968b363b7145e86b64f3c595e533808b0763dc8863a27fc363cfa51"
+    },
+    {
+      "path": "Electron Framework.framework/Versions/A/Resources/bg.lproj/locale.pak",
+      "sha256": "74e9ef262fa2aac8b4d08c0d1d37841c1a8c23c6da7ee0ec07723a01bc2584ca"
+    },
+    {
+      "path": "Electron Framework.framework/Versions/A/Resources/bg_FEMININE.lproj/locale.pak",
+      "sha256": "ca73097bd968b363b7145e86b64f3c595e533808b0763dc8863a27fc363cfa51"
+    },
+    {
+      "path": "Electron Framework.framework/Versions/A/Resources/bg_MASCULINE.lproj/locale.pak",
+      "sha256": "ca73097bd968b363b7145e86b64f3c595e533808b0763dc8863a27fc363cfa51"
+    },
+    {
+      "path": "Electron Framework.framework/Versions/A/Resources/bg_NEUTER.lproj/locale.pak",
+      "sha256": "ca73097bd968b363b7145e86b64f3c595e533808b0763dc8863a27fc363cfa51"
+    },
+    {
+      "path": "Electron Framework.framework/Versions/A/Resources/bn.lproj/locale.pak",
+      "sha256": "d808e6605838972fc76101d72e67e09e63eb59760454f422f272b7eff83f3051"
+    },
+    {
+      "path": "Electron Framework.framework/Versions/A/Resources/bn_FEMININE.lproj/locale.pak",
+      "sha256": "ca73097bd968b363b7145e86b64f3c595e533808b0763dc8863a27fc363cfa51"
+    },
+    {
+      "path": "Electron Framework.framework/Versions/A/Resources/bn_MASCULINE.lproj/locale.pak",
+      "sha256": "ca73097bd968b363b7145e86b64f3c595e533808b0763dc8863a27fc363cfa51"
+    },
+    {
+      "path": "Electron Framework.framework/Versions/A/Resources/bn_NEUTER.lproj/locale.pak",
+      "sha256": "ca73097bd968b363b7145e86b64f3c595e533808b0763dc8863a27fc363cfa51"
+    },
+    {
+      "path": "Electron Framework.framework/Versions/A/Resources/ca.lproj/locale.pak",
+      "sha256": "d7a79024fd2999b19412404e74f2e2b77db0f5cb42405081cdbb93921a44722c"
+    },
+    {
+      "path": "Electron Framework.framework/Versions/A/Resources/ca_FEMININE.lproj/locale.pak",
+      "sha256": "ca73097bd968b363b7145e86b64f3c595e533808b0763dc8863a27fc363cfa51"
+    },
+    {
+      "path": "Electron Framework.framework/Versions/A/Resources/ca_MASCULINE.lproj/locale.pak",
+      "sha256": "ca73097bd968b363b7145e86b64f3c595e533808b0763dc8863a27fc363cfa51"
+    },
+    {
+      "path": "Electron Framework.framework/Versions/A/Resources/ca_NEUTER.lproj/locale.pak",
+      "sha256": "ca73097bd968b363b7145e86b64f3c595e533808b0763dc8863a27fc363cfa51"
+    },
+    {
+      "path": "Electron Framework.framework/Versions/A/Resources/chrome_100_percent.pak",
+      "sha256": "bfca9271a0917a999fdeb08ab692efb8fd55e066f974ac5a4375effe3a7992f7"
+    },
+    {
+      "path": "Electron Framework.framework/Versions/A/Resources/chrome_200_percent.pak",
+      "sha256": "f3caf66a4f99d03dcb682bb96dfafbdf17393f15e9ee829e0b98b707fe94d38b"
+    },
+    {
+      "path": "Electron Framework.framework/Versions/A/Resources/cs.lproj/locale.pak",
+      "sha256": "4f3d5c5d86d35133a51ed42451e234dd702628845538b933a5b3cd7fb6fd6464"
+    },
+    {
+      "path": "Electron Framework.framework/Versions/A/Resources/cs_FEMININE.lproj/locale.pak",
+      "sha256": "ca73097bd968b363b7145e86b64f3c595e533808b0763dc8863a27fc363cfa51"
+    },
+    {
+      "path": "Electron Framework.framework/Versions/A/Resources/cs_MASCULINE.lproj/locale.pak",
+      "sha256": "ca73097bd968b363b7145e86b64f3c595e533808b0763dc8863a27fc363cfa51"
+    },
+    {
+      "path": "Electron Framework.framework/Versions/A/Resources/cs_NEUTER.lproj/locale.pak",
+      "sha256": "ca73097bd968b363b7145e86b64f3c595e533808b0763dc8863a27fc363cfa51"
+    },
+    {
+      "path": "Electron Framework.framework/Versions/A/Resources/da.lproj/locale.pak",
+      "sha256": "212cbf976059696ec2d59a252c97e7945a8cbec45240fffc2d1d11f72b64673a"
+    },
+    {
+      "path": "Electron Framework.framework/Versions/A/Resources/da_FEMININE.lproj/locale.pak",
+      "sha256": "ca73097bd968b363b7145e86b64f3c595e533808b0763dc8863a27fc363cfa51"
+    },
+    {
+      "path": "Electron Framework.framework/Versions/A/Resources/da_MASCULINE.lproj/locale.pak",
+      "sha256": "ca73097bd968b363b7145e86b64f3c595e533808b0763dc8863a27fc363cfa51"
+    },
+    {
+      "path": "Electron Framework.framework/Versions/A/Resources/da_NEUTER.lproj/locale.pak",
+      "sha256": "ca73097bd968b363b7145e86b64f3c595e533808b0763dc8863a27fc363cfa51"
+    },
+    {
+      "path": "Electron Framework.framework/Versions/A/Resources/de.lproj/locale.pak",
+      "sha256": "4f4d720569197db8f492dc6662d18af241b7e8bb78336a0f55a92017672bb579"
+    },
+    {
+      "path": "Electron Framework.framework/Versions/A/Resources/de_FEMININE.lproj/locale.pak",
+      "sha256": "ca73097bd968b363b7145e86b64f3c595e533808b0763dc8863a27fc363cfa51"
+    },
+    {
+      "path": "Electron Framework.framework/Versions/A/Resources/de_MASCULINE.lproj/locale.pak",
+      "sha256": "ca73097bd968b363b7145e86b64f3c595e533808b0763dc8863a27fc363cfa51"
+    },
+    {
+      "path": "Electron Framework.framework/Versions/A/Resources/de_NEUTER.lproj/locale.pak",
+      "sha256": "ca73097bd968b363b7145e86b64f3c595e533808b0763dc8863a27fc363cfa51"
+    },
+    {
+      "path": "Electron Framework.framework/Versions/A/Resources/el.lproj/locale.pak",
+      "sha256": "a0e0a04741c9141dd60c1367cbe53cb4c316d2baca95df3ac3d1ec2451520488"
+    },
+    {
+      "path": "Electron Framework.framework/Versions/A/Resources/el_FEMININE.lproj/locale.pak",
+      "sha256": "ca73097bd968b363b7145e86b64f3c595e533808b0763dc8863a27fc363cfa51"
+    },
+    {
+      "path": "Electron Framework.framework/Versions/A/Resources/el_MASCULINE.lproj/locale.pak",
+      "sha256": "ca73097bd968b363b7145e86b64f3c595e533808b0763dc8863a27fc363cfa51"
+    },
+    {
+      "path": "Electron Framework.framework/Versions/A/Resources/el_NEUTER.lproj/locale.pak",
+      "sha256": "ca73097bd968b363b7145e86b64f3c595e533808b0763dc8863a27fc363cfa51"
+    },
+    {
+      "path": "Electron Framework.framework/Versions/A/Resources/en.lproj/locale.pak",
+      "sha256": "57d63e7a79747d44d874f68397151eb4f0f94a993253591d823478af78bdc55b"
+    },
+    {
+      "path": "Electron Framework.framework/Versions/A/Resources/en_FEMININE.lproj/locale.pak",
+      "sha256": "ca73097bd968b363b7145e86b64f3c595e533808b0763dc8863a27fc363cfa51"
+    },
+    {
+      "path": "Electron Framework.framework/Versions/A/Resources/en_GB.lproj/locale.pak",
+      "sha256": "576de970e3076e96b15fd92811392492a397d48c1a62e00d391ed0eb84604201"
+    },
+    {
+      "path": "Electron Framework.framework/Versions/A/Resources/en_GB_FEMININE.lproj/locale.pak",
+      "sha256": "ca73097bd968b363b7145e86b64f3c595e533808b0763dc8863a27fc363cfa51"
+    },
+    {
+      "path": "Electron Framework.framework/Versions/A/Resources/en_GB_MASCULINE.lproj/locale.pak",
+      "sha256": "ca73097bd968b363b7145e86b64f3c595e533808b0763dc8863a27fc363cfa51"
+    },
+    {
+      "path": "Electron Framework.framework/Versions/A/Resources/en_GB_NEUTER.lproj/locale.pak",
+      "sha256": "ca73097bd968b363b7145e86b64f3c595e533808b0763dc8863a27fc363cfa51"
+    },
+    {
+      "path": "Electron Framework.framework/Versions/A/Resources/en_MASCULINE.lproj/locale.pak",
+      "sha256": "ca73097bd968b363b7145e86b64f3c595e533808b0763dc8863a27fc363cfa51"
+    },
+    {
+      "path": "Electron Framework.framework/Versions/A/Resources/en_NEUTER.lproj/locale.pak",
+      "sha256": "ca73097bd968b363b7145e86b64f3c595e533808b0763dc8863a27fc363cfa51"
+    },
+    {
+      "path": "Electron Framework.framework/Versions/A/Resources/es.lproj/locale.pak",
+      "sha256": "b9858ae91d6a229720fac4d71dc759d9132d6d13ebeb657539b795d828f2b7e5"
+    },
+    {
+      "path": "Electron Framework.framework/Versions/A/Resources/es_419.lproj/locale.pak",
+      "sha256": "7578150aa47924cc38e4e829654b2de8d01ef6305ad93cc5e4a059e39d4d7c2a"
+    },
+    {
+      "path": "Electron Framework.framework/Versions/A/Resources/es_419_FEMININE.lproj/locale.pak",
+      "sha256": "ca73097bd968b363b7145e86b64f3c595e533808b0763dc8863a27fc363cfa51"
+    },
+    {
+      "path": "Electron Framework.framework/Versions/A/Resources/es_419_MASCULINE.lproj/locale.pak",
+      "sha256": "ca73097bd968b363b7145e86b64f3c595e533808b0763dc8863a27fc363cfa51"
+    },
+    {
+      "path": "Electron Framework.framework/Versions/A/Resources/es_419_NEUTER.lproj/locale.pak",
+      "sha256": "ca73097bd968b363b7145e86b64f3c595e533808b0763dc8863a27fc363cfa51"
+    },
+    {
+      "path": "Electron Framework.framework/Versions/A/Resources/es_FEMININE.lproj/locale.pak",
+      "sha256": "ca73097bd968b363b7145e86b64f3c595e533808b0763dc8863a27fc363cfa51"
+    },
+    {
+      "path": "Electron Framework.framework/Versions/A/Resources/es_MASCULINE.lproj/locale.pak",
+      "sha256": "ca73097bd968b363b7145e86b64f3c595e533808b0763dc8863a27fc363cfa51"
+    },
+    {
+      "path": "Electron Framework.framework/Versions/A/Resources/es_NEUTER.lproj/locale.pak",
+      "sha256": "ca73097bd968b363b7145e86b64f3c595e533808b0763dc8863a27fc363cfa51"
+    },
+    {
+      "path": "Electron Framework.framework/Versions/A/Resources/et.lproj/locale.pak",
+      "sha256": "fc8f2472d1be6c4cc0b58e59d657cf141980125031cc15a79b0f47366deda7db"
+    },
+    {
+      "path": "Electron Framework.framework/Versions/A/Resources/et_FEMININE.lproj/locale.pak",
+      "sha256": "ca73097bd968b363b7145e86b64f3c595e533808b0763dc8863a27fc363cfa51"
+    },
+    {
+      "path": "Electron Framework.framework/Versions/A/Resources/et_MASCULINE.lproj/locale.pak",
+      "sha256": "ca73097bd968b363b7145e86b64f3c595e533808b0763dc8863a27fc363cfa51"
+    },
+    {
+      "path": "Electron Framework.framework/Versions/A/Resources/et_NEUTER.lproj/locale.pak",
+      "sha256": "ca73097bd968b363b7145e86b64f3c595e533808b0763dc8863a27fc363cfa51"
+    },
+    {
+      "path": "Electron Framework.framework/Versions/A/Resources/fa.lproj/locale.pak",
+      "sha256": "1ee07f00578ad3f7f1357021f1ebd51466d7052318cdcf315ff1606927d734c4"
+    },
+    {
+      "path": "Electron Framework.framework/Versions/A/Resources/fa_FEMININE.lproj/locale.pak",
+      "sha256": "ca73097bd968b363b7145e86b64f3c595e533808b0763dc8863a27fc363cfa51"
+    },
+    {
+      "path": "Electron Framework.framework/Versions/A/Resources/fa_MASCULINE.lproj/locale.pak",
+      "sha256": "ca73097bd968b363b7145e86b64f3c595e533808b0763dc8863a27fc363cfa51"
+    },
+    {
+      "path": "Electron Framework.framework/Versions/A/Resources/fa_NEUTER.lproj/locale.pak",
+      "sha256": "ca73097bd968b363b7145e86b64f3c595e533808b0763dc8863a27fc363cfa51"
+    },
+    {
+      "path": "Electron Framework.framework/Versions/A/Resources/fi.lproj/locale.pak",
+      "sha256": "a0b4fd75a5416973bdeaa8f4881b68853cd643f83b549717b2db96b3fb7101e2"
+    },
+    {
+      "path": "Electron Framework.framework/Versions/A/Resources/fi_FEMININE.lproj/locale.pak",
+      "sha256": "ca73097bd968b363b7145e86b64f3c595e533808b0763dc8863a27fc363cfa51"
+    },
+    {
+      "path": "Electron Framework.framework/Versions/A/Resources/fi_MASCULINE.lproj/locale.pak",
+      "sha256": "ca73097bd968b363b7145e86b64f3c595e533808b0763dc8863a27fc363cfa51"
+    },
+    {
+      "path": "Electron Framework.framework/Versions/A/Resources/fi_NEUTER.lproj/locale.pak",
+      "sha256": "ca73097bd968b363b7145e86b64f3c595e533808b0763dc8863a27fc363cfa51"
+    },
+    {
+      "path": "Electron Framework.framework/Versions/A/Resources/fil.lproj/locale.pak",
+      "sha256": "d0adc379507ffebde20485c96a57b245f4bb3bc1d49d4d35dda822c4bca5d290"
+    },
+    {
+      "path": "Electron Framework.framework/Versions/A/Resources/fil_FEMININE.lproj/locale.pak",
+      "sha256": "ca73097bd968b363b7145e86b64f3c595e533808b0763dc8863a27fc363cfa51"
+    },
+    {
+      "path": "Electron Framework.framework/Versions/A/Resources/fil_MASCULINE.lproj/locale.pak",
+      "sha256": "ca73097bd968b363b7145e86b64f3c595e533808b0763dc8863a27fc363cfa51"
+    },
+    {
+      "path": "Electron Framework.framework/Versions/A/Resources/fil_NEUTER.lproj/locale.pak",
+      "sha256": "ca73097bd968b363b7145e86b64f3c595e533808b0763dc8863a27fc363cfa51"
+    },
+    {
+      "path": "Electron Framework.framework/Versions/A/Resources/fr.lproj/locale.pak",
+      "sha256": "b1ef9162b277aa8b2ecb845088f0a7716e7328e405241215a91e0d448832bfc7"
+    },
+    {
+      "path": "Electron Framework.framework/Versions/A/Resources/fr_FEMININE.lproj/locale.pak",
+      "sha256": "ca73097bd968b363b7145e86b64f3c595e533808b0763dc8863a27fc363cfa51"
+    },
+    {
+      "path": "Electron Framework.framework/Versions/A/Resources/fr_MASCULINE.lproj/locale.pak",
+      "sha256": "ca73097bd968b363b7145e86b64f3c595e533808b0763dc8863a27fc363cfa51"
+    },
+    {
+      "path": "Electron Framework.framework/Versions/A/Resources/fr_NEUTER.lproj/locale.pak",
+      "sha256": "ca73097bd968b363b7145e86b64f3c595e533808b0763dc8863a27fc363cfa51"
+    },
+    {
+      "path": "Electron Framework.framework/Versions/A/Resources/gu.lproj/locale.pak",
+      "sha256": "cf82b6b32bda7add658119f2876794fddb2a6f676f1386ab403c249be8d28d1b"
+    },
+    {
+      "path": "Electron Framework.framework/Versions/A/Resources/gu_FEMININE.lproj/locale.pak",
+      "sha256": "ca73097bd968b363b7145e86b64f3c595e533808b0763dc8863a27fc363cfa51"
+    },
+    {
+      "path": "Electron Framework.framework/Versions/A/Resources/gu_MASCULINE.lproj/locale.pak",
+      "sha256": "ca73097bd968b363b7145e86b64f3c595e533808b0763dc8863a27fc363cfa51"
+    },
+    {
+      "path": "Electron Framework.framework/Versions/A/Resources/gu_NEUTER.lproj/locale.pak",
+      "sha256": "ca73097bd968b363b7145e86b64f3c595e533808b0763dc8863a27fc363cfa51"
+    },
+    {
+      "path": "Electron Framework.framework/Versions/A/Resources/he.lproj/locale.pak",
+      "sha256": "0da87527fe4302218244e5d4f542f8cbfae286dd502070de789259594d396bba"
+    },
+    {
+      "path": "Electron Framework.framework/Versions/A/Resources/he_FEMININE.lproj/locale.pak",
+      "sha256": "ca73097bd968b363b7145e86b64f3c595e533808b0763dc8863a27fc363cfa51"
+    },
+    {
+      "path": "Electron Framework.framework/Versions/A/Resources/he_MASCULINE.lproj/locale.pak",
+      "sha256": "ca73097bd968b363b7145e86b64f3c595e533808b0763dc8863a27fc363cfa51"
+    },
+    {
+      "path": "Electron Framework.framework/Versions/A/Resources/he_NEUTER.lproj/locale.pak",
+      "sha256": "ca73097bd968b363b7145e86b64f3c595e533808b0763dc8863a27fc363cfa51"
+    },
+    {
+      "path": "Electron Framework.framework/Versions/A/Resources/hi.lproj/locale.pak",
+      "sha256": "d5bde2f91d1af83ca64dbdac7a0e414616f9748562e7630e470e6e50fca40ee9"
+    },
+    {
+      "path": "Electron Framework.framework/Versions/A/Resources/hi_FEMININE.lproj/locale.pak",
+      "sha256": "ca73097bd968b363b7145e86b64f3c595e533808b0763dc8863a27fc363cfa51"
+    },
+    {
+      "path": "Electron Framework.framework/Versions/A/Resources/hi_MASCULINE.lproj/locale.pak",
+      "sha256": "ca73097bd968b363b7145e86b64f3c595e533808b0763dc8863a27fc363cfa51"
+    },
+    {
+      "path": "Electron Framework.framework/Versions/A/Resources/hi_NEUTER.lproj/locale.pak",
+      "sha256": "ca73097bd968b363b7145e86b64f3c595e533808b0763dc8863a27fc363cfa51"
+    },
+    {
+      "path": "Electron Framework.framework/Versions/A/Resources/hr.lproj/locale.pak",
+      "sha256": "63fd35c556382e1bd004278c77f4d5c30fc017f7bf9c921a9517533584627b2b"
+    },
+    {
+      "path": "Electron Framework.framework/Versions/A/Resources/hr_FEMININE.lproj/locale.pak",
+      "sha256": "ca73097bd968b363b7145e86b64f3c595e533808b0763dc8863a27fc363cfa51"
+    },
+    {
+      "path": "Electron Framework.framework/Versions/A/Resources/hr_MASCULINE.lproj/locale.pak",
+      "sha256": "ca73097bd968b363b7145e86b64f3c595e533808b0763dc8863a27fc363cfa51"
+    },
+    {
+      "path": "Electron Framework.framework/Versions/A/Resources/hr_NEUTER.lproj/locale.pak",
+      "sha256": "ca73097bd968b363b7145e86b64f3c595e533808b0763dc8863a27fc363cfa51"
+    },
+    {
+      "path": "Electron Framework.framework/Versions/A/Resources/hu.lproj/locale.pak",
+      "sha256": "2309de5f6774fe15460d2ae6c4b7a4a7dd53129d0d0eb088acab45b35b80e52d"
+    },
+    {
+      "path": "Electron Framework.framework/Versions/A/Resources/hu_FEMININE.lproj/locale.pak",
+      "sha256": "ca73097bd968b363b7145e86b64f3c595e533808b0763dc8863a27fc363cfa51"
+    },
+    {
+      "path": "Electron Framework.framework/Versions/A/Resources/hu_MASCULINE.lproj/locale.pak",
+      "sha256": "ca73097bd968b363b7145e86b64f3c595e533808b0763dc8863a27fc363cfa51"
+    },
+    {
+      "path": "Electron Framework.framework/Versions/A/Resources/hu_NEUTER.lproj/locale.pak",
+      "sha256": "ca73097bd968b363b7145e86b64f3c595e533808b0763dc8863a27fc363cfa51"
+    },
+    {
+      "path": "Electron Framework.framework/Versions/A/Resources/icudtl.dat",
+      "sha256": "02a01b3188b6a41a756f7322fdb5e6b5ca6573b327b01dfc8ed662d571a6f769"
+    },
+    {
+      "path": "Electron Framework.framework/Versions/A/Resources/id.lproj/locale.pak",
+      "sha256": "dfee5c806075bea37161c3382c4713e100a76059f1c3e00e0f4703713be46672"
+    },
+    {
+      "path": "Electron Framework.framework/Versions/A/Resources/id_FEMININE.lproj/locale.pak",
+      "sha256": "ca73097bd968b363b7145e86b64f3c595e533808b0763dc8863a27fc363cfa51"
+    },
+    {
+      "path": "Electron Framework.framework/Versions/A/Resources/id_MASCULINE.lproj/locale.pak",
+      "sha256": "ca73097bd968b363b7145e86b64f3c595e533808b0763dc8863a27fc363cfa51"
+    },
+    {
+      "path": "Electron Framework.framework/Versions/A/Resources/id_NEUTER.lproj/locale.pak",
+      "sha256": "ca73097bd968b363b7145e86b64f3c595e533808b0763dc8863a27fc363cfa51"
+    },
+    {
+      "path": "Electron Framework.framework/Versions/A/Resources/it.lproj/locale.pak",
+      "sha256": "fa878238c794f1b378a6e49040fd73e010362b51b1b1d812f680b70a182fe59b"
+    },
+    {
+      "path": "Electron Framework.framework/Versions/A/Resources/it_FEMININE.lproj/locale.pak",
+      "sha256": "ca73097bd968b363b7145e86b64f3c595e533808b0763dc8863a27fc363cfa51"
+    },
+    {
+      "path": "Electron Framework.framework/Versions/A/Resources/it_MASCULINE.lproj/locale.pak",
+      "sha256": "ca73097bd968b363b7145e86b64f3c595e533808b0763dc8863a27fc363cfa51"
+    },
+    {
+      "path": "Electron Framework.framework/Versions/A/Resources/it_NEUTER.lproj/locale.pak",
+      "sha256": "ca73097bd968b363b7145e86b64f3c595e533808b0763dc8863a27fc363cfa51"
+    },
+    {
+      "path": "Electron Framework.framework/Versions/A/Resources/ja.lproj/locale.pak",
+      "sha256": "d4a44319f53febb0a916c1b061609498770ed0bfee81adbcbf52934af3073d79"
+    },
+    {
+      "path": "Electron Framework.framework/Versions/A/Resources/ja_FEMININE.lproj/locale.pak",
+      "sha256": "ca73097bd968b363b7145e86b64f3c595e533808b0763dc8863a27fc363cfa51"
+    },
+    {
+      "path": "Electron Framework.framework/Versions/A/Resources/ja_MASCULINE.lproj/locale.pak",
+      "sha256": "ca73097bd968b363b7145e86b64f3c595e533808b0763dc8863a27fc363cfa51"
+    },
+    {
+      "path": "Electron Framework.framework/Versions/A/Resources/ja_NEUTER.lproj/locale.pak",
+      "sha256": "ca73097bd968b363b7145e86b64f3c595e533808b0763dc8863a27fc363cfa51"
+    },
+    {
+      "path": "Electron Framework.framework/Versions/A/Resources/kn.lproj/locale.pak",
+      "sha256": "bd25c8f5b171bacc4ea2f560f1ee8fcad665cc27ebce4839d090e190804bb726"
+    },
+    {
+      "path": "Electron Framework.framework/Versions/A/Resources/kn_FEMININE.lproj/locale.pak",
+      "sha256": "ca73097bd968b363b7145e86b64f3c595e533808b0763dc8863a27fc363cfa51"
+    },
+    {
+      "path": "Electron Framework.framework/Versions/A/Resources/kn_MASCULINE.lproj/locale.pak",
+      "sha256": "ca73097bd968b363b7145e86b64f3c595e533808b0763dc8863a27fc363cfa51"
+    },
+    {
+      "path": "Electron Framework.framework/Versions/A/Resources/kn_NEUTER.lproj/locale.pak",
+      "sha256": "ca73097bd968b363b7145e86b64f3c595e533808b0763dc8863a27fc363cfa51"
+    },
+    {
+      "path": "Electron Framework.framework/Versions/A/Resources/ko.lproj/locale.pak",
+      "sha256": "d4e35274c5f752024db614cb850ba4df4b14fc7e95d178df3f9da6677ec3f43d"
+    },
+    {
+      "path": "Electron Framework.framework/Versions/A/Resources/ko_FEMININE.lproj/locale.pak",
+      "sha256": "ca73097bd968b363b7145e86b64f3c595e533808b0763dc8863a27fc363cfa51"
+    },
+    {
+      "path": "Electron Framework.framework/Versions/A/Resources/ko_MASCULINE.lproj/locale.pak",
+      "sha256": "ca73097bd968b363b7145e86b64f3c595e533808b0763dc8863a27fc363cfa51"
+    },
+    {
+      "path": "Electron Framework.framework/Versions/A/Resources/ko_NEUTER.lproj/locale.pak",
+      "sha256": "ca73097bd968b363b7145e86b64f3c595e533808b0763dc8863a27fc363cfa51"
+    },
+    {
+      "path": "Electron Framework.framework/Versions/A/Resources/lt.lproj/locale.pak",
+      "sha256": "102f2960a7d3d6edddc9f6f310e38825aaef57ca0cf8d31b0c6b0c179196ecaa"
+    },
+    {
+      "path": "Electron Framework.framework/Versions/A/Resources/lt_FEMININE.lproj/locale.pak",
+      "sha256": "ca73097bd968b363b7145e86b64f3c595e533808b0763dc8863a27fc363cfa51"
+    },
+    {
+      "path": "Electron Framework.framework/Versions/A/Resources/lt_MASCULINE.lproj/locale.pak",
+      "sha256": "ca73097bd968b363b7145e86b64f3c595e533808b0763dc8863a27fc363cfa51"
+    },
+    {
+      "path": "Electron Framework.framework/Versions/A/Resources/lt_NEUTER.lproj/locale.pak",
+      "sha256": "ca73097bd968b363b7145e86b64f3c595e533808b0763dc8863a27fc363cfa51"
+    },
+    {
+      "path": "Electron Framework.framework/Versions/A/Resources/lv.lproj/locale.pak",
+      "sha256": "d3b97eb6b207d13ba81c05188b326b41b08ad84fd776004672dbd981dc2579bb"
+    },
+    {
+      "path": "Electron Framework.framework/Versions/A/Resources/lv_FEMININE.lproj/locale.pak",
+      "sha256": "ca73097bd968b363b7145e86b64f3c595e533808b0763dc8863a27fc363cfa51"
+    },
+    {
+      "path": "Electron Framework.framework/Versions/A/Resources/lv_MASCULINE.lproj/locale.pak",
+      "sha256": "ca73097bd968b363b7145e86b64f3c595e533808b0763dc8863a27fc363cfa51"
+    },
+    {
+      "path": "Electron Framework.framework/Versions/A/Resources/lv_NEUTER.lproj/locale.pak",
+      "sha256": "ca73097bd968b363b7145e86b64f3c595e533808b0763dc8863a27fc363cfa51"
+    },
+    {
+      "path": "Electron Framework.framework/Versions/A/Resources/ml.lproj/locale.pak",
+      "sha256": "20df5d0e7cc5dfe2b865e88a8aabdfcfa37232e83238b0cc0279226d8a81063a"
+    },
+    {
+      "path": "Electron Framework.framework/Versions/A/Resources/ml_FEMININE.lproj/locale.pak",
+      "sha256": "ca73097bd968b363b7145e86b64f3c595e533808b0763dc8863a27fc363cfa51"
+    },
+    {
+      "path": "Electron Framework.framework/Versions/A/Resources/ml_MASCULINE.lproj/locale.pak",
+      "sha256": "ca73097bd968b363b7145e86b64f3c595e533808b0763dc8863a27fc363cfa51"
+    },
+    {
+      "path": "Electron Framework.framework/Versions/A/Resources/ml_NEUTER.lproj/locale.pak",
+      "sha256": "ca73097bd968b363b7145e86b64f3c595e533808b0763dc8863a27fc363cfa51"
+    },
+    {
+      "path": "Electron Framework.framework/Versions/A/Resources/mr.lproj/locale.pak",
+      "sha256": "64c0458a6e41ad9123e8737685c9d89eae6acda6ca061fa12d802d0c2f6973d1"
+    },
+    {
+      "path": "Electron Framework.framework/Versions/A/Resources/mr_FEMININE.lproj/locale.pak",
+      "sha256": "ca73097bd968b363b7145e86b64f3c595e533808b0763dc8863a27fc363cfa51"
+    },
+    {
+      "path": "Electron Framework.framework/Versions/A/Resources/mr_MASCULINE.lproj/locale.pak",
+      "sha256": "ca73097bd968b363b7145e86b64f3c595e533808b0763dc8863a27fc363cfa51"
+    },
+    {
+      "path": "Electron Framework.framework/Versions/A/Resources/mr_NEUTER.lproj/locale.pak",
+      "sha256": "ca73097bd968b363b7145e86b64f3c595e533808b0763dc8863a27fc363cfa51"
+    },
+    {
+      "path": "Electron Framework.framework/Versions/A/Resources/ms.lproj/locale.pak",
+      "sha256": "5dda3826ce78bf058f9112bb54095c73d5d0df38eee359260942158344d6d2ff"
+    },
+    {
+      "path": "Electron Framework.framework/Versions/A/Resources/ms_FEMININE.lproj/locale.pak",
+      "sha256": "ca73097bd968b363b7145e86b64f3c595e533808b0763dc8863a27fc363cfa51"
+    },
+    {
+      "path": "Electron Framework.framework/Versions/A/Resources/ms_MASCULINE.lproj/locale.pak",
+      "sha256": "ca73097bd968b363b7145e86b64f3c595e533808b0763dc8863a27fc363cfa51"
+    },
+    {
+      "path": "Electron Framework.framework/Versions/A/Resources/ms_NEUTER.lproj/locale.pak",
+      "sha256": "ca73097bd968b363b7145e86b64f3c595e533808b0763dc8863a27fc363cfa51"
+    },
+    {
+      "path": "Electron Framework.framework/Versions/A/Resources/nb.lproj/locale.pak",
+      "sha256": "409efadedddae7df1a33fde7e28a0aefdf1ff7bd662df30fb657cb0420f1a733"
+    },
+    {
+      "path": "Electron Framework.framework/Versions/A/Resources/nb_FEMININE.lproj/locale.pak",
+      "sha256": "ca73097bd968b363b7145e86b64f3c595e533808b0763dc8863a27fc363cfa51"
+    },
+    {
+      "path": "Electron Framework.framework/Versions/A/Resources/nb_MASCULINE.lproj/locale.pak",
+      "sha256": "ca73097bd968b363b7145e86b64f3c595e533808b0763dc8863a27fc363cfa51"
+    },
+    {
+      "path": "Electron Framework.framework/Versions/A/Resources/nb_NEUTER.lproj/locale.pak",
+      "sha256": "ca73097bd968b363b7145e86b64f3c595e533808b0763dc8863a27fc363cfa51"
+    },
+    {
+      "path": "Electron Framework.framework/Versions/A/Resources/nl.lproj/locale.pak",
+      "sha256": "eb271a3d68230947a61fc042376bceb3dbdb2d66e652e988877df1b8cd09f8ca"
+    },
+    {
+      "path": "Electron Framework.framework/Versions/A/Resources/nl_FEMININE.lproj/locale.pak",
+      "sha256": "ca73097bd968b363b7145e86b64f3c595e533808b0763dc8863a27fc363cfa51"
+    },
+    {
+      "path": "Electron Framework.framework/Versions/A/Resources/nl_MASCULINE.lproj/locale.pak",
+      "sha256": "ca73097bd968b363b7145e86b64f3c595e533808b0763dc8863a27fc363cfa51"
+    },
+    {
+      "path": "Electron Framework.framework/Versions/A/Resources/nl_NEUTER.lproj/locale.pak",
+      "sha256": "ca73097bd968b363b7145e86b64f3c595e533808b0763dc8863a27fc363cfa51"
+    },
+    {
+      "path": "Electron Framework.framework/Versions/A/Resources/pl.lproj/locale.pak",
+      "sha256": "beadfc6bfa33158649ccef44472c4f05db04294fe5eccbdafb8e9c254bc662f0"
+    },
+    {
+      "path": "Electron Framework.framework/Versions/A/Resources/pl_FEMININE.lproj/locale.pak",
+      "sha256": "ca73097bd968b363b7145e86b64f3c595e533808b0763dc8863a27fc363cfa51"
+    },
+    {
+      "path": "Electron Framework.framework/Versions/A/Resources/pl_MASCULINE.lproj/locale.pak",
+      "sha256": "ca73097bd968b363b7145e86b64f3c595e533808b0763dc8863a27fc363cfa51"
+    },
+    {
+      "path": "Electron Framework.framework/Versions/A/Resources/pl_NEUTER.lproj/locale.pak",
+      "sha256": "ca73097bd968b363b7145e86b64f3c595e533808b0763dc8863a27fc363cfa51"
+    },
+    {
+      "path": "Electron Framework.framework/Versions/A/Resources/pt_BR.lproj/locale.pak",
+      "sha256": "4605a46c8b5b56ec52b9d7160216c4c5e38fd4e05a1adf73edf992889d810bde"
+    },
+    {
+      "path": "Electron Framework.framework/Versions/A/Resources/pt_BR_FEMININE.lproj/locale.pak",
+      "sha256": "ca73097bd968b363b7145e86b64f3c595e533808b0763dc8863a27fc363cfa51"
+    },
+    {
+      "path": "Electron Framework.framework/Versions/A/Resources/pt_BR_MASCULINE.lproj/locale.pak",
+      "sha256": "ca73097bd968b363b7145e86b64f3c595e533808b0763dc8863a27fc363cfa51"
+    },
+    {
+      "path": "Electron Framework.framework/Versions/A/Resources/pt_BR_NEUTER.lproj/locale.pak",
+      "sha256": "ca73097bd968b363b7145e86b64f3c595e533808b0763dc8863a27fc363cfa51"
+    },
+    {
+      "path": "Electron Framework.framework/Versions/A/Resources/pt_PT.lproj/locale.pak",
+      "sha256": "32164968ad0dfbe5240bffe1a606c65ea3b3f92a1ade8539541940ed003a0667"
+    },
+    {
+      "path": "Electron Framework.framework/Versions/A/Resources/pt_PT_FEMININE.lproj/locale.pak",
+      "sha256": "ca73097bd968b363b7145e86b64f3c595e533808b0763dc8863a27fc363cfa51"
+    },
+    {
+      "path": "Electron Framework.framework/Versions/A/Resources/pt_PT_MASCULINE.lproj/locale.pak",
+      "sha256": "ca73097bd968b363b7145e86b64f3c595e533808b0763dc8863a27fc363cfa51"
+    },
+    {
+      "path": "Electron Framework.framework/Versions/A/Resources/pt_PT_NEUTER.lproj/locale.pak",
+      "sha256": "ca73097bd968b363b7145e86b64f3c595e533808b0763dc8863a27fc363cfa51"
+    },
+    {
+      "path": "Electron Framework.framework/Versions/A/Resources/resources.pak",
+      "sha256": "d4200cbf2fd61f494d283c86249cd898994feb49b599c8411d86f6711a88cc2e"
+    },
+    {
+      "path": "Electron Framework.framework/Versions/A/Resources/ro.lproj/locale.pak",
+      "sha256": "05627b7cbdaef95f77036005a3fbceae7aee474f3decaa24d12b599e41cb8fed"
+    },
+    {
+      "path": "Electron Framework.framework/Versions/A/Resources/ro_FEMININE.lproj/locale.pak",
+      "sha256": "ca73097bd968b363b7145e86b64f3c595e533808b0763dc8863a27fc363cfa51"
+    },
+    {
+      "path": "Electron Framework.framework/Versions/A/Resources/ro_MASCULINE.lproj/locale.pak",
+      "sha256": "ca73097bd968b363b7145e86b64f3c595e533808b0763dc8863a27fc363cfa51"
+    },
+    {
+      "path": "Electron Framework.framework/Versions/A/Resources/ro_NEUTER.lproj/locale.pak",
+      "sha256": "ca73097bd968b363b7145e86b64f3c595e533808b0763dc8863a27fc363cfa51"
+    },
+    {
+      "path": "Electron Framework.framework/Versions/A/Resources/ru.lproj/locale.pak",
+      "sha256": "e9249209ee4f9f733a7a47228a4b27713326e76e738d304b01750fb0a30896bd"
+    },
+    {
+      "path": "Electron Framework.framework/Versions/A/Resources/ru_FEMININE.lproj/locale.pak",
+      "sha256": "ca73097bd968b363b7145e86b64f3c595e533808b0763dc8863a27fc363cfa51"
+    },
+    {
+      "path": "Electron Framework.framework/Versions/A/Resources/ru_MASCULINE.lproj/locale.pak",
+      "sha256": "ca73097bd968b363b7145e86b64f3c595e533808b0763dc8863a27fc363cfa51"
+    },
+    {
+      "path": "Electron Framework.framework/Versions/A/Resources/ru_NEUTER.lproj/locale.pak",
+      "sha256": "ca73097bd968b363b7145e86b64f3c595e533808b0763dc8863a27fc363cfa51"
+    },
+    {
+      "path": "Electron Framework.framework/Versions/A/Resources/sk.lproj/locale.pak",
+      "sha256": "696b72b3b73b7216e4e213e0509432fd03006437214a0742e3e20789736bb92e"
+    },
+    {
+      "path": "Electron Framework.framework/Versions/A/Resources/sk_FEMININE.lproj/locale.pak",
+      "sha256": "ca73097bd968b363b7145e86b64f3c595e533808b0763dc8863a27fc363cfa51"
+    },
+    {
+      "path": "Electron Framework.framework/Versions/A/Resources/sk_MASCULINE.lproj/locale.pak",
+      "sha256": "ca73097bd968b363b7145e86b64f3c595e533808b0763dc8863a27fc363cfa51"
+    },
+    {
+      "path": "Electron Framework.framework/Versions/A/Resources/sk_NEUTER.lproj/locale.pak",
+      "sha256": "ca73097bd968b363b7145e86b64f3c595e533808b0763dc8863a27fc363cfa51"
+    },
+    {
+      "path": "Electron Framework.framework/Versions/A/Resources/sl.lproj/locale.pak",
+      "sha256": "9f750eff1937df07a2a422544a4a17f174472e17359f589635effd38d0e370a2"
+    },
+    {
+      "path": "Electron Framework.framework/Versions/A/Resources/sl_FEMININE.lproj/locale.pak",
+      "sha256": "ca73097bd968b363b7145e86b64f3c595e533808b0763dc8863a27fc363cfa51"
+    },
+    {
+      "path": "Electron Framework.framework/Versions/A/Resources/sl_MASCULINE.lproj/locale.pak",
+      "sha256": "ca73097bd968b363b7145e86b64f3c595e533808b0763dc8863a27fc363cfa51"
+    },
+    {
+      "path": "Electron Framework.framework/Versions/A/Resources/sl_NEUTER.lproj/locale.pak",
+      "sha256": "ca73097bd968b363b7145e86b64f3c595e533808b0763dc8863a27fc363cfa51"
+    },
+    {
+      "path": "Electron Framework.framework/Versions/A/Resources/sr.lproj/locale.pak",
+      "sha256": "dd4f8436e1f9f4ea81dfa96dc438cb9bce81844c0c2a9c24dc30e57fca5fe1fd"
+    },
+    {
+      "path": "Electron Framework.framework/Versions/A/Resources/sr_FEMININE.lproj/locale.pak",
+      "sha256": "ca73097bd968b363b7145e86b64f3c595e533808b0763dc8863a27fc363cfa51"
+    },
+    {
+      "path": "Electron Framework.framework/Versions/A/Resources/sr_MASCULINE.lproj/locale.pak",
+      "sha256": "ca73097bd968b363b7145e86b64f3c595e533808b0763dc8863a27fc363cfa51"
+    },
+    {
+      "path": "Electron Framework.framework/Versions/A/Resources/sr_NEUTER.lproj/locale.pak",
+      "sha256": "ca73097bd968b363b7145e86b64f3c595e533808b0763dc8863a27fc363cfa51"
+    },
+    {
+      "path": "Electron Framework.framework/Versions/A/Resources/sv.lproj/locale.pak",
+      "sha256": "62c5ace1f2c901c555b756bbd3262add8f45a062dbd939472b0ef1605e24bd7d"
+    },
+    {
+      "path": "Electron Framework.framework/Versions/A/Resources/sv_FEMININE.lproj/locale.pak",
+      "sha256": "ca73097bd968b363b7145e86b64f3c595e533808b0763dc8863a27fc363cfa51"
+    },
+    {
+      "path": "Electron Framework.framework/Versions/A/Resources/sv_MASCULINE.lproj/locale.pak",
+      "sha256": "ca73097bd968b363b7145e86b64f3c595e533808b0763dc8863a27fc363cfa51"
+    },
+    {
+      "path": "Electron Framework.framework/Versions/A/Resources/sv_NEUTER.lproj/locale.pak",
+      "sha256": "ca73097bd968b363b7145e86b64f3c595e533808b0763dc8863a27fc363cfa51"
+    },
+    {
+      "path": "Electron Framework.framework/Versions/A/Resources/sw.lproj/locale.pak",
+      "sha256": "d091d8d2497651a06195ae2229e59f0968c38efc3f623bb755a3f1ea1652a297"
+    },
+    {
+      "path": "Electron Framework.framework/Versions/A/Resources/sw_FEMININE.lproj/locale.pak",
+      "sha256": "ca73097bd968b363b7145e86b64f3c595e533808b0763dc8863a27fc363cfa51"
+    },
+    {
+      "path": "Electron Framework.framework/Versions/A/Resources/sw_MASCULINE.lproj/locale.pak",
+      "sha256": "ca73097bd968b363b7145e86b64f3c595e533808b0763dc8863a27fc363cfa51"
+    },
+    {
+      "path": "Electron Framework.framework/Versions/A/Resources/sw_NEUTER.lproj/locale.pak",
+      "sha256": "ca73097bd968b363b7145e86b64f3c595e533808b0763dc8863a27fc363cfa51"
+    },
+    {
+      "path": "Electron Framework.framework/Versions/A/Resources/ta.lproj/locale.pak",
+      "sha256": "072a9512e41eb1dc014744f77418f59da9b0500da630b7320f62008bb1a44304"
+    },
+    {
+      "path": "Electron Framework.framework/Versions/A/Resources/ta_FEMININE.lproj/locale.pak",
+      "sha256": "ca73097bd968b363b7145e86b64f3c595e533808b0763dc8863a27fc363cfa51"
+    },
+    {
+      "path": "Electron Framework.framework/Versions/A/Resources/ta_MASCULINE.lproj/locale.pak",
+      "sha256": "ca73097bd968b363b7145e86b64f3c595e533808b0763dc8863a27fc363cfa51"
+    },
+    {
+      "path": "Electron Framework.framework/Versions/A/Resources/ta_NEUTER.lproj/locale.pak",
+      "sha256": "ca73097bd968b363b7145e86b64f3c595e533808b0763dc8863a27fc363cfa51"
+    },
+    {
+      "path": "Electron Framework.framework/Versions/A/Resources/te.lproj/locale.pak",
+      "sha256": "29824a7e8f6de2dc252b55e557c76d4d6140df26ad9a03ed233ce294f7db90e8"
+    },
+    {
+      "path": "Electron Framework.framework/Versions/A/Resources/te_FEMININE.lproj/locale.pak",
+      "sha256": "ca73097bd968b363b7145e86b64f3c595e533808b0763dc8863a27fc363cfa51"
+    },
+    {
+      "path": "Electron Framework.framework/Versions/A/Resources/te_MASCULINE.lproj/locale.pak",
+      "sha256": "ca73097bd968b363b7145e86b64f3c595e533808b0763dc8863a27fc363cfa51"
+    },
+    {
+      "path": "Electron Framework.framework/Versions/A/Resources/te_NEUTER.lproj/locale.pak",
+      "sha256": "ca73097bd968b363b7145e86b64f3c595e533808b0763dc8863a27fc363cfa51"
+    },
+    {
+      "path": "Electron Framework.framework/Versions/A/Resources/th.lproj/locale.pak",
+      "sha256": "d250b3f5f10f117e1189e958810b12cd321de5b7e5a7cc46db9f0e5c827e91fd"
+    },
+    {
+      "path": "Electron Framework.framework/Versions/A/Resources/th_FEMININE.lproj/locale.pak",
+      "sha256": "ca73097bd968b363b7145e86b64f3c595e533808b0763dc8863a27fc363cfa51"
+    },
+    {
+      "path": "Electron Framework.framework/Versions/A/Resources/th_MASCULINE.lproj/locale.pak",
+      "sha256": "ca73097bd968b363b7145e86b64f3c595e533808b0763dc8863a27fc363cfa51"
+    },
+    {
+      "path": "Electron Framework.framework/Versions/A/Resources/th_NEUTER.lproj/locale.pak",
+      "sha256": "ca73097bd968b363b7145e86b64f3c595e533808b0763dc8863a27fc363cfa51"
+    },
+    {
+      "path": "Electron Framework.framework/Versions/A/Resources/tr.lproj/locale.pak",
+      "sha256": "f71bddd229b640d688a973d0ca08d8c83660ef773ce2fad6b4fb2ee40239a9f3"
+    },
+    {
+      "path": "Electron Framework.framework/Versions/A/Resources/tr_FEMININE.lproj/locale.pak",
+      "sha256": "ca73097bd968b363b7145e86b64f3c595e533808b0763dc8863a27fc363cfa51"
+    },
+    {
+      "path": "Electron Framework.framework/Versions/A/Resources/tr_MASCULINE.lproj/locale.pak",
+      "sha256": "ca73097bd968b363b7145e86b64f3c595e533808b0763dc8863a27fc363cfa51"
+    },
+    {
+      "path": "Electron Framework.framework/Versions/A/Resources/tr_NEUTER.lproj/locale.pak",
+      "sha256": "ca73097bd968b363b7145e86b64f3c595e533808b0763dc8863a27fc363cfa51"
+    },
+    {
+      "path": "Electron Framework.framework/Versions/A/Resources/uk.lproj/locale.pak",
+      "sha256": "78c870fc3e22009ae997a08f16a6dea0fab30e9937a78ee4dc7082964cc1f9c6"
+    },
+    {
+      "path": "Electron Framework.framework/Versions/A/Resources/uk_FEMININE.lproj/locale.pak",
+      "sha256": "ca73097bd968b363b7145e86b64f3c595e533808b0763dc8863a27fc363cfa51"
+    },
+    {
+      "path": "Electron Framework.framework/Versions/A/Resources/uk_MASCULINE.lproj/locale.pak",
+      "sha256": "ca73097bd968b363b7145e86b64f3c595e533808b0763dc8863a27fc363cfa51"
+    },
+    {
+      "path": "Electron Framework.framework/Versions/A/Resources/uk_NEUTER.lproj/locale.pak",
+      "sha256": "ca73097bd968b363b7145e86b64f3c595e533808b0763dc8863a27fc363cfa51"
+    },
+    {
+      "path": "Electron Framework.framework/Versions/A/Resources/ur.lproj/locale.pak",
+      "sha256": "74b9b02f559f0b2382456a1122c531030f53d6ee53d32edce5d29161b93a6916"
+    },
+    {
+      "path": "Electron Framework.framework/Versions/A/Resources/ur_FEMININE.lproj/locale.pak",
+      "sha256": "ca73097bd968b363b7145e86b64f3c595e533808b0763dc8863a27fc363cfa51"
+    },
+    {
+      "path": "Electron Framework.framework/Versions/A/Resources/ur_MASCULINE.lproj/locale.pak",
+      "sha256": "ca73097bd968b363b7145e86b64f3c595e533808b0763dc8863a27fc363cfa51"
+    },
+    {
+      "path": "Electron Framework.framework/Versions/A/Resources/ur_NEUTER.lproj/locale.pak",
+      "sha256": "ca73097bd968b363b7145e86b64f3c595e533808b0763dc8863a27fc363cfa51"
+    },
+    {
+      "path": "Electron Framework.framework/Versions/A/Resources/v8_context_snapshot.arm64.bin",
+      "sha256": "91939bc76a6c95b287700109df35eef096868d0eccaf55798a4d89f8c3dc8a08"
+    },
+    {
+      "path": "Electron Framework.framework/Versions/A/Resources/vi.lproj/locale.pak",
+      "sha256": "d35991bca6964aff4bbb3b0981ef42fa881014ebd01b109d25fa82832b03954e"
+    },
+    {
+      "path": "Electron Framework.framework/Versions/A/Resources/vi_FEMININE.lproj/locale.pak",
+      "sha256": "ca73097bd968b363b7145e86b64f3c595e533808b0763dc8863a27fc363cfa51"
+    },
+    {
+      "path": "Electron Framework.framework/Versions/A/Resources/vi_MASCULINE.lproj/locale.pak",
+      "sha256": "ca73097bd968b363b7145e86b64f3c595e533808b0763dc8863a27fc363cfa51"
+    },
+    {
+      "path": "Electron Framework.framework/Versions/A/Resources/vi_NEUTER.lproj/locale.pak",
+      "sha256": "ca73097bd968b363b7145e86b64f3c595e533808b0763dc8863a27fc363cfa51"
+    },
+    {
+      "path": "Electron Framework.framework/Versions/A/Resources/zh_CN.lproj/locale.pak",
+      "sha256": "827445f8cd5e8b0159144091a37fd405fa805c33ddcec2f59082fa5e783ee3cf"
+    },
+    {
+      "path": "Electron Framework.framework/Versions/A/Resources/zh_CN_FEMININE.lproj/locale.pak",
+      "sha256": "ca73097bd968b363b7145e86b64f3c595e533808b0763dc8863a27fc363cfa51"
+    },
+    {
+      "path": "Electron Framework.framework/Versions/A/Resources/zh_CN_MASCULINE.lproj/locale.pak",
+      "sha256": "ca73097bd968b363b7145e86b64f3c595e533808b0763dc8863a27fc363cfa51"
+    },
+    {
+      "path": "Electron Framework.framework/Versions/A/Resources/zh_CN_NEUTER.lproj/locale.pak",
+      "sha256": "ca73097bd968b363b7145e86b64f3c595e533808b0763dc8863a27fc363cfa51"
+    },
+    {
+      "path": "Electron Framework.framework/Versions/A/Resources/zh_TW.lproj/locale.pak",
+      "sha256": "7a484759adb65192c7b03795465b5d72c4404affc25bb9b20bf975a118b14a93"
+    },
+    {
+      "path": "Electron Framework.framework/Versions/A/Resources/zh_TW_FEMININE.lproj/locale.pak",
+      "sha256": "ca73097bd968b363b7145e86b64f3c595e533808b0763dc8863a27fc363cfa51"
+    },
+    {
+      "path": "Electron Framework.framework/Versions/A/Resources/zh_TW_MASCULINE.lproj/locale.pak",
+      "sha256": "ca73097bd968b363b7145e86b64f3c595e533808b0763dc8863a27fc363cfa51"
+    },
+    {
+      "path": "Electron Framework.framework/Versions/A/Resources/zh_TW_NEUTER.lproj/locale.pak",
+      "sha256": "ca73097bd968b363b7145e86b64f3c595e533808b0763dc8863a27fc363cfa51"
+    },
+    {
+      "path": "Electron Framework.framework/Versions/A/_CodeSignature/CodeResources",
+      "sha256": "0815f51f210de51c40a61388fd12a5e15a4ba40f3b7ae1809218e4cbdfc86445"
+    },
+    {
+      "path": "Electron Framework.framework/Versions/Current",
+      "target": "A"
+    },
+    {
+      "path": "Mantle.framework/Mantle",
+      "target": "Versions/Current/Mantle"
+    },
+    {
+      "path": "Mantle.framework/Resources",
+      "target": "Versions/Current/Resources"
+    },
+    {
+      "path": "Mantle.framework/Versions/A/Mantle",
+      "sha256": "592dba18d4f1b2afb3dd1e07ad0f42bf33f81d53d63418b44aa3125ac49038cb"
+    },
+    {
+      "path": "Mantle.framework/Versions/A/Resources/Info.plist",
+      "sha256": "e93f0b4aaebea9bc158392ffa0c1150c16a0f30aecf11501b7871ce485f1a823"
+    },
+    {
+      "path": "Mantle.framework/Versions/A/_CodeSignature/CodeResources",
+      "sha256": "41b27daab76e01def237a2fb452d86d6442b461fa28013fc3abfd1a86d89c743"
+    },
+    {
+      "path": "Mantle.framework/Versions/Current",
+      "target": "A"
+    },
+    {
+      "path": "Notices/LICENSE.electron.txt",
+      "sha256": "5154e165bd6c2cc0cfbcd8916498c7abab0497923bafcd5cb07673fe8480087d"
+    },
+    {
+      "path": "Notices/LICENSES.chromium.html",
+      "sha256": "214152f78cc0b611f63ff8faefcc6670c4605ffbff05f092bb671e6df80ce741"
+    },
+    {
+      "path": "ReactiveObjC.framework/ReactiveObjC",
+      "target": "Versions/Current/ReactiveObjC"
+    },
+    {
+      "path": "ReactiveObjC.framework/Resources",
+      "target": "Versions/Current/Resources"
+    },
+    {
+      "path": "ReactiveObjC.framework/Versions/A/ReactiveObjC",
+      "sha256": "36f35e485db52a7752f92473b9e3f22c065e30ca4bcd7ec29b710862a6f12fdc"
+    },
+    {
+      "path": "ReactiveObjC.framework/Versions/A/Resources/Info.plist",
+      "sha256": "4ded0fe1f4647f5b1862a2a98998aa7c3ade9bd925d097258e24667c446e7496"
+    },
+    {
+      "path": "ReactiveObjC.framework/Versions/A/_CodeSignature/CodeResources",
+      "sha256": "95920ec9421fbb6d2efe69b0b33724d9e685b6c563f467ec8baa8c0a8df5444a"
+    },
+    {
+      "path": "ReactiveObjC.framework/Versions/Current",
+      "target": "A"
+    },
+    {
+      "path": "Squirrel.framework/Resources",
+      "target": "Versions/Current/Resources"
+    },
+    {
+      "path": "Squirrel.framework/Squirrel",
+      "target": "Versions/Current/Squirrel"
+    },
+    {
+      "path": "Squirrel.framework/Versions/A/Resources/Info.plist",
+      "sha256": "f61ab349887360a2d84603ecff17ab6633cb7fe2e8e72861f4e38e9120f472bf"
+    },
+    {
+      "path": "Squirrel.framework/Versions/A/Resources/ShipIt",
+      "sha256": "11bb784168ce49f496227dcd59bdffc2c8ad52f18df0a5e2c7cebf70272d1149"
+    },
+    {
+      "path": "Squirrel.framework/Versions/A/Squirrel",
+      "sha256": "636bf7b93011488eda63a5289cf2f0329f3d0266dbe1b93ce8325c49f2ae803a"
+    },
+    {
+      "path": "Squirrel.framework/Versions/A/_CodeSignature/CodeResources",
+      "sha256": "c072c3b30db100bbec05639ebb7a6143f86dc39d9198cce26e0c85d0cb3d193f"
+    },
+    {
+      "path": "Squirrel.framework/Versions/Current",
+      "target": "A"
+    }
+  ],
+  "sourceFingerprint": "f26cdc0673da0e0d41e3de3fc899e81fd083bb3a5ab8ff3b7e5f781e8769bf0f",
+  "signingIdentity": "-"
+}

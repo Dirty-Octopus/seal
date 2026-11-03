@@ -1,6 +1,6 @@
 # Seal desktop
 
-The active Seal 1.2 frontend uses the Electron application shell from [AYMDevKitUI](https://github.com/Dirty-Octopus/AYMDevKitUI), pinned to `ad8f98bd617cc90d6cc8dd6a53c6373d65475642`. It runs offline and calls macOS tools through a sandboxed preload and an allowlisted main-process service.
+The active Seal frontend uses the Electron application shell from [AYMDevKitUI](https://github.com/Dirty-Octopus/AYMDevKitUI), pinned to `ad8f98bd617cc90d6cc8dd6a53c6373d65475642`. It runs offline and calls macOS tools through a sandboxed preload and an allowlisted main-process service.
 
 ```sh
 npm ci
@@ -10,7 +10,7 @@ npm test
 npm run test:app
 ```
 
-From the repository root, `bash scripts/build.sh` creates and ad-hoc signs `dist/Seal.app` for Apple Silicon. It does not install or publish the app. `bash scripts/package_release.sh` is the separate universal DMG/ZIP packaging path; the packaged app workflow is validated on Apple Silicon, and the release includes arm64/x86_64 binaries.
+From the repository root, `bash scripts/build.sh` now creates a thin shared-runtime installer and ZIP in `dist/shared-arm64/`, with a complete local test app in `local/Seal.app`. The default build reuses the official AYM arm64 runtime. See [shared-runtime/README.md](./shared-runtime/README.md). `scripts/build_standalone.sh` and `scripts/package_standalone.sh` retain the previous independent app and universal DMG/ZIP flows.
 
 `SEAL_DEV_URL=http://127.0.0.1:1420 npm run desktop:dev` loads the optional Vite development server. Packaged apps always load bundled assets. `npm run dev` starts Vite. Node 22.12+ is required; the local build uses Node 24.
 
@@ -33,10 +33,12 @@ Paths are authorized when selected in the native picker, dropped through Electro
 
 Bulk attribute clearing requires a native confirmation dialog. Individual removals are direct. The list shows top-level attributes; the recursive switch affects deletions. macOS may retain or recreate protected metadata such as `com.apple.provenance`.
 
-Language, appearance, display treatment, sound, motion, CRT, softness, onboarding and window presets are persisted locally. Existing Swift-app language/window settings are imported once. Queues, identities, signing options and the last 100 activity entries are session-only. The application has no updater, account or upload service. Optional certificate timestamping may contact Apple through `codesign`.
+Language, appearance, display treatment, sound, motion, CRT, softness, onboarding and window presets are persisted locally. Existing Swift-app language/window settings are imported once. Queues, identities, signing options and the last 100 activity entries are session-only. The running application has no updater, account or upload service. Its native installer downloads a pinned runtime and the app archive when installing/updating; installed apps run offline. Optional certificate timestamping may contact Apple through `codesign`.
 
 ## Upstream and licenses
 
 See [AYMDevKitUI-LICENSE](./AYMDevKitUI-LICENSE), [UPSTREAM.md](./UPSTREAM.md) and `licenses/` for the interface and bundled font licenses. The previous SwiftUI implementation remains in the repository's `Sources/` and `Package.swift` as reference; it is not the active desktop runtime.
 
-For a predownloaded official Electron runtime, set `SEAL_ELECTRON_DIST` to a folder containing `electron-v45.1.0-darwin-arm64.zip` and `electron-v45.1.0-darwin-x64.zip` before running the root release script. Verify both against `node_modules/electron/checksums.json`; the override only changes the runtime source and does not publish artifacts.
+For a predownloaded official Electron runtime, set `SEAL_ELECTRON_DIST` to a folder containing `electron-v45.1.0-darwin-arm64.zip` and `electron-v45.1.0-darwin-x64.zip` before running `scripts/package_standalone.sh`. Verify both against `node_modules/electron/checksums.json`; the override only changes the runtime source and does not publish artifacts.
+
+The signing service protects hard-linked shared files and immutable production/development caches from in-place writes. Shared-runtime integration tests: `npm run runtime:test -- ../dist/shared-arm64` from this directory.

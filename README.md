@@ -3,7 +3,7 @@
 <p align="center"><a href="./README.md">English</a> · <a href="./README.zh-CN.md">简体中文</a></p>
 <p align="center"><a href="https://repology.org/projects/?search=seal"><img src="https://img.shields.io/badge/Repology-Packaging%20status-blue" alt="Repology package status" /></a></p>
 
-Seal inspects, verifies and re-signs apps, frameworks, Mach-O binaries and audio plugins. Version 1.2 uses the [AYMDevKitUI](https://github.com/Dirty-Octopus/AYMDevKitUI) Electron application shell with a local macOS process service. Files stay on your Mac; no account or upload is involved.
+Seal inspects, verifies and re-signs apps, frameworks, Mach-O binaries and audio plugins. The interface uses the [AYMDevKitUI](https://github.com/Dirty-Octopus/AYMDevKitUI) Electron application shell with a local macOS process service. Files stay on your Mac; no account or upload is involved.
 
 ## Workspaces
 
@@ -19,6 +19,14 @@ Supported bundles include `.app`, `.framework`, `.xpc`, `.appex`, `.bundle`, `.p
 The AYM shell provides CRT curvature with mapped pointer input, a 16 × 16 blue utility mark, bundled Barlow Condensed / IBM Plex Mono, panel transitions and interface sounds. Settings include Chinese/English, system/light/dark appearance, display treatment, motion, sound, CRT, softness and window presets. Welcome appears on first launch and can be replayed from Settings.
 
 ![Seal interface](./docs/preview-light.png)
+
+## Shared runtime (1.3 development)
+
+The default build now follows AYMDevKitUI's shared-runtime installer flow. Seal ships a thin application ZIP and a native online `.pkg`; it reuses the published Electron 45.1.0 runtime rather than shipping another framework archive with each app.
+
+Installed apps live in `/Applications/Andy Yu/`. Regular framework files share physical storage through hard links to an immutable runtime cache. Each app retains its own bundle ID, process and profile. The first compatible install downloads the pinned runtime; later installs reuse it. Application installation/updates still download the small app ZIP, and installed apps run offline. Finder can continue to show the full logical size.
+
+The upstream shared-runtime preview currently supports **Apple Silicon only**. Seal retains its macOS 14+ requirement. These new 1.3 artifacts are local development builds; their application download URLs become usable when the corresponding release assets are published. The standalone 1.2.0 release remains available below.
 
 ## Download and install
 
@@ -37,25 +45,28 @@ open /Applications/Seal.app
 
 ## Local build and testing
 
-Building from source requires macOS 14+ and Node 22.12+. The app and signing workflow are tested on Apple Silicon; the universal package includes both architectures.
+Building requires macOS 14+, Node 22.12+, Python 3 and Command Line Tools for the native installer helper. Target Macs need no developer tools. The current shared-runtime build targets Apple Silicon.
 
 ```sh
 bash scripts/build.sh
-open dist/Seal.app
+open dist/shared-arm64/local/Seal.app
 ```
 
-The build creates an ad-hoc signed app at `dist/Seal.app`. It does not overwrite `/Applications/Seal.app` or publish anything. The optional `bash scripts/install.sh` installs it separately.
+The build creates `dist/shared-arm64/`: a thin app ZIP, an online installer, SHA-256 checksums and a complete local test app under `local/Seal.app`. The local test app already shares the cached runtime. It does not modify `/Applications`. `scripts/install.sh` opens the native installer, whose pinned application ZIP must first be available at its release URL.
 
 ```sh
 npm test --prefix desktop
-npm run test:app --prefix desktop
+npm run runtime:test --prefix desktop -- ../dist/shared-arm64
+SEAL_PACKAGED_APP="$PWD/dist/shared-arm64/local/Seal.app" npm run test:app --prefix desktop
 ```
 
-The first command covers the local services and interface primitives. The second launches real Electron, uses temporary targets for signing and attribute operations, and captures screenshots in `dist/qa/`. Command Line Tools are required to compile the disposable test fixture.
+The service tests cover signing and shared-file write protection. The runtime tests exercise the actual native helper in private, unprivileged test roots: two-app inode sharing, runtime reuse/offline reuse, failed-download recovery, strict signatures, process/profile isolation and the full Seal workflow. The packaged-app test uses temporary signing targets and saves screenshots in `dist/qa/`. Tests do not install into the real `/Applications`.
 
-`bash scripts/package_release.sh` builds the universal app, verifies its signature, and generates DMG/ZIP packages with SHA-256 checksums. It does not publish them. The release is not notarized. The previous Swift source remains available as reference; `scripts/build_native.sh` builds it separately to `dist/Seal-native.app`. See [desktop/README.md](./desktop/README.md) for architecture and development details.
+`bash scripts/package_release.sh` produces the thin shared-runtime installer and app assets without publishing them. The runtime ZIP remains hosted by AYMDevKitUI. The current preview is ad-hoc signed, with an unsigned installer and no notarization. For an independent standalone build, use `scripts/build_standalone.sh`; `scripts/package_standalone.sh` retains universal DMG/ZIP packaging. The previous Swift source remains available as reference; `scripts/build_native.sh` builds it separately to `dist/Seal-native.app`. See [desktop/README.md](./desktop/README.md) for architecture and development details.
 
 ## Signing and permissions
+
+Seal refuses in-place signing or attribute writes on shared hard-linked files and immutable runtime caches. Recursive operations check the entire selected target before changing it. Copy an app to an independent location before re-signing it; never re-sign installed shared frameworks in place. Private top-level directory attributes can still be managed separately.
 
 Seal uses `codesign`, `xattr`, `security` and `spctl` with the current user's permissions. It does not invoke `sudo`. Copy read-only targets to a writable location before modifying them.
 

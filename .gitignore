@@ -10,3 +10,7 @@ desktop/dist/
 desktop/release/
 desktop/test-results/
 desktop/playwright-report/
+
+# Build-time Python caches
+__pycache__/
+*.pyc

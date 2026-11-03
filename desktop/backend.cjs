@@ -33,6 +33,24 @@ function run(tool, args, { timeout = 180000, input, onCommand, maxOutput = 20000
   });
 }
 const combined = (r) => [r.stdout.trim(), r.stderr.trim(), r.timedOut ? 'Operation timed out.' : ''].filter(Boolean).join('\n');
+// AYM projects immutable runtime files into multiple apps using hard links.
+// Refuse in-place writes to these inodes, including recursive xattr operations.
+async function assertIndependent(filePath, recursive) {
+  if (/(?:^|\/)(?:Applications\/Andy Yu\/Runtime|Library\/Caches\/Andy Yu\/SharedElectron)(?:\/|$)/.test(filePath)) {
+    throw new Error('Shared runtime cache is immutable. / 不能直接修改共享运行时缓存。');
+  }
+  async function visit(entry) {
+    const stat = await fs.lstat(entry);
+    if (stat.isFile() && stat.nlink > 1) {
+      throw new Error('This target contains shared hard-linked files. Copy it to an independent location before modifying it. / 该目标包含共享硬链接文件，请先复制到独立位置再修改。');
+    }
+    if (recursive && stat.isDirectory()) {
+      const directory = await fs.opendir(entry);
+      for await (const child of directory) await visit(path.join(entry, child.name));
+    }
+  }
+  await visit(filePath);
+}
 function classify(filePath, directory, magic = '') {
   const ext = path.extname(filePath).slice(1).toLowerCase();
   if (directory) return ext === 'app' ? 'app' : PLUGINS.has(ext) ? 'plugin' : BUNDLES.has(ext) ? 'bundle' : 'folder';
@@ -153,6 +171,7 @@ class SealService {
       const target = await this.target(filePath);
       if (!target.canSign) throw new Error('Ordinary folders cannot be signed.');
       if (!target.writable) throw new Error('The target is read-only. Copy it to a writable location.');
+      await assertIndependent(filePath, true);
       if (options.entitlements && !this.entitlements.has(options.entitlements)) throw new Error('Choose an entitlements file in Seal first.');
       if (options.entitlements) await fs.access(options.entitlements);
       const before = await this.inspectSignature(target);
@@ -172,6 +191,7 @@ class SealService {
     return this.withMutation(async () => {
       await this.target(filePath);
       if (typeof name !== 'string' || !name || name.startsWith('-') || name.includes('\0')) throw new Error('Invalid attribute name.');
+      await assertIndependent(filePath, recursive);
       const result = await this.command('xattr', [recursive ? '-drs' : '-ds', name, filePath]);
       if (!result.succeeded && !/No such xattr/i.test(combined(result))) throw new Error(combined(result));
       return this.inspect(filePath);
@@ -180,10 +200,11 @@ class SealService {
   async clearXattrs(filePath, recursive) {
     return this.withMutation(async () => {
       await this.target(filePath);
+      await assertIndependent(filePath, recursive);
       const result = await this.command('xattr', [recursive ? '-crs' : '-cs', filePath]);
       if (!result.succeeded) throw new Error(combined(result));
       return this.inspect(filePath);
     });
   }
 }
-module.exports = { SealService, run, combined, classify, signArguments, parseSignature, decodeXattr, commandText };
+module.exports = { SealService, run, combined, classify, signArguments, parseSignature, decodeXattr, commandText, assertIndependent };
